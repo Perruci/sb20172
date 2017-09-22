@@ -1,4 +1,7 @@
 #include <iostream>
+#include <fstream>
+#include <string>
+#include <sstream>
 
 using namespace std;
 
@@ -19,27 +22,48 @@ int main (int argc, char* argv[]){
         //avalia as diretivas EQU e IF.
         case 'p':
             cout << "Definir algo para fazer a operacao de preprocessamento\n";
-            return 0;
             break;
 
         //Operação de processamento de macros, coloca a estensão “.mcr” no arquivo e somente avalia 
         //as diretivas EQU e IF e substitue as MACROS.
         case 'm':
             cout << "Definir algo para fazer a operacao de processamento\n";
-            return 0;
             break;
 
         //Operação de motagem, coloca a estensão “.o” realiza a montagem de programa usando o PROCESSO DE PASSAGEM ÚNICA.
         case 'o':
             cout << "Definir algo para fazer a operacao de montagem\n";
-            return 0;
             break;
 
         //So entrara no caso default se for uma operacao nao esperada, portanto significa que e erro
         default:
             cout << "ERRO: O argumento " << argv[1] << " passado, nao condiz com nenhum modo de operacao\n";
-            return 0;
-
+            break;
     }
 
+    //Pega o nome do arquivo de entrada passado por argumento da linha de comando e abre esse arquivo para leitura usando a 
+    //classe ifstream e chamando o arquivo de code.
+    ifstream code (argv[2]);
+
+    //string de suporte para capturar os tokens
+    string aux;
+
+    //Loop para ler todas as linhas do codigo aberto e "tokenizar" elas (o token leva o : em consideracao ainda)
+    while (getline(code, aux)){
+
+        stringstream lineStream (aux);
+        string token;
+
+        while (lineStream >> token){
+            cout << token << " ";
+        }
+    
+        cout << endl;
+    }
+
+    //fecha o arquivo contendo o codigo assembly
+    code.close();
+
+
+    return 0;
 }
