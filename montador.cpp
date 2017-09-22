@@ -30,15 +30,14 @@ int main (int argc, char* argv[]){
             break;
 
         //Operação de motagem, coloca a estensão “.o” realiza a montagem de programa usando o PROCESSO DE PASSAGEM ÚNICA.
-        case '-o':
+        case 'o':
             cout << "Definir algo para fazer a operacao de montagem\n";
             return 0;
             break;
 
         //So entrara no caso default se for uma operacao nao esperada, portanto significa que e erro
         default:
-            cout << "ERRO: O argumento " << argv[1] << " passado, nao condiz com nenhum
-            modo de operacao\n"
+            cout << "ERRO: O argumento " << argv[1] << " passado, nao condiz com nenhum modo de operacao\n";
             return 0;
 
     }
