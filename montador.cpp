@@ -43,7 +43,10 @@ int main (int argc, char* argv[]){
 
     //Pega o nome do arquivo de entrada passado por argumento da linha de comando e abre esse arquivo para leitura usando a 
     //classe ifstream e chamando o arquivo de code.
-    ifstream code (argv[2]);
+    ifstream code(argv[2]);
+    
+    //Cria o arquivo de saida que ira conter o resultado da montagem do programa com o nome indicado no ultimo argumento da linha de comando
+    ofstream saida(argv[3]);
 
     //string de suporte para capturar os tokens
     string aux;
@@ -55,14 +58,15 @@ int main (int argc, char* argv[]){
         string token;
 
         while (lineStream >> token){
-            cout << token << " ";
+            saida << token << " ";
         }
     
-        cout << endl;
+        saida << endl;
     }
 
-    //fecha o arquivo contendo o codigo assembly
+    //fecha o arquivo contendo o codigo assembly e o arquivo de saida
     code.close();
+    saida.close();
 
 
     return 0;
