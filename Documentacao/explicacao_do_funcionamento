@@ -1,4 +1,5 @@
-Desculpa pelo textao, mas acho que a sincronia na hora de fazer o codigo eh importante para que possamos trabalhar juntos em pequenas partes do codigo e sempre com o mesmo objetivo final. Se tiver qualquer ideia de como fazer algo de outra maneira ou nao gostar de alguma coisa que eu botei aqui so falar comigo que a gente ve o que eh melhor.
+Desculpa pelo textao, mas acho que a sincronia na hora de fazer o codigo eh importante para que possamos trabalhar juntos em pequenas partes do codigo e sempre com o mesmo objetivo final.
+Se tiver qualquer ideia de como fazer algo de outra maneira ou nao gostar de alguma coisa que eu botei aqui so falar comigo que a gente ve o que eh melhor.
 E desculpa pelo portugues ruim (preguica) e pela falta de acentuacao e cedilha (meu teclado ta meio zoado no ubuntu)
 
 
@@ -70,3 +71,7 @@ E desculpa pelo portugues ruim (preguica) e pela falta de acentuacao e cedilha (
 			todas dinamicas que serao criadas em tempo de execucao e terao varios objetos das suas classes respectivas para uso posterior no codigo
 			(Vejo a importancia nessas listas, pois os tokens serao lidos, analisados, escritos no arquivo de saida e depois apagados, portanto obejtos de rotulos,por exemplo, so terao acesso pela lista de rotulos e assim por diante)
 
+	-Updates:
+		* Classe Token implementada
+		* Criados diretórios include/ e src/ para dependências
+		* Makefile criada para a compilação do programa
