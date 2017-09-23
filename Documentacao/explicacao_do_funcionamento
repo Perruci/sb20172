@@ -1,0 +1,72 @@
+Desculpa pelo textao, mas acho que a sincronia na hora de fazer o codigo eh importante para que possamos trabalhar juntos em pequenas partes do codigo e sempre com o mesmo objetivo final. Se tiver qualquer ideia de como fazer algo de outra maneira ou nao gostar de alguma coisa que eu botei aqui so falar comigo que a gente ve o que eh melhor.
+E desculpa pelo portugues ruim (preguica) e pela falta de acentuacao e cedilha (meu teclado ta meio zoado no ubuntu)
+
+
+-Estrutura do programa:
+
+	1-> o programa ira testar se foram passados 4 argumentos de entrada, caso correto segue.
+	2-> Abertura do arquivo cujo nome eh o terceiro argumento de entrada.
+	3-> Analise do segundo argumento de entrada (-algo) e utilizacao dele dentro de um switch:
+
+	-Casos do switch:
+
+		caso "-p":
+			O arquivo de saida deve ser o codigo assembly com extensao .pre e ja tendo pre-processado os EQU e IF
+			Portanto, chamaremos uma funcao que analisa o arquivo de entrada e gera esse novo arquivo .pre.
+
+		caso "-m":
+			O arquivo de saida deve ser o codigo assembly com extensao .mcr e ja tendo processado os EQU e IF (ja tratados no arquivo .pre, logo ele sera usado de entrada para gerar o .mcr) e as macros que serao processadas agora.
+			Portanto, chamaremos a mesma funcao chamada no caso "-p" e depois chamaremos uma funcao que trate apenas as macros e gere o nosso arquivo .mcr a partir do arquivo .pre
+
+		caso "-o":
+			O arquivo de saida deve ser o codigo objeto tendo tratado tudo
+			Portanto, chamaremos a funcao do caso "-p" a partir do codigo de entrada, depois chamaremos a funcao "-m" a partir do arquivo .pre gerado anteriormente, depois chamaremos uma funcao final gerando o codigo objeto a partir do arquivo .mcr
+
+		caso "default":
+			Ocorre se o argumento de entrada nao for nenhum dos anteriores e portanto significa que ocorreu um erro.
+
+	-Estrutura das funcoes:
+
+		Todas as funcoes de processamento apresentarao um loop que vai separando o arquivo em estudo em tokens, acho que ficarao melhores explicadas olhando o codigo kkk
+
+	-Classes: (obs: as classes podem ter muitos mais metodos e caracteristicas que essas, foram as ideias iniciais que eu tive e conforme formos programando vamos enxergando as outras necessidades)
+
+		Classe Token (generica):
+			.contem uma string com o token propriamente dita
+			.contem um meetodo que determina o tipo de token que ela representa (menomonico, rotulo, macro, argumento ou diretiva)
+
+		Classe Rotulo:
+			.contem uma classe token (onde estara a string ou "nome" dela)
+			.contem um int que eh o endereco onde esse rotulo foi declarado
+			.contem um int de flag para sabermos se ja encontramos o endereco da declaracao ou nao
+			.contem um metodo que vai atualizar a lista (ou tabela) de rotulos
+			.contem um metodo que vai corrigir o arquivo de saida colocando o endereco dela quando acharmos a sua declaracao
+
+		Classe Menomonico:
+			.contem uma classe token (onde estara a string ou "nome" dela)
+			.contem um int que indica quantos argumentos sao passados para ele
+
+		Classe Macro:
+			.contem uma classe token (onde estara a string ou "nome" dela)
+			.contem o codigo dela (ainda nao gosto muito dessa solucao, mas nao pensei em nada muito melhor)
+			.contem um metodo que vai atualizar a lista (ou tabela) de macros
+
+		Classe Argumento:
+			.contem uma classe token (onde estara a string ou "nome" dela)
+			.contem algum tipo de variavel que nos indique a qual menomonico esse argumento se refere (para checarmos se faz sentido)
+
+		Classe Diretiva:
+			.contem uma classe token (onde estara a string ou "nome" dela)
+			.contem o tipo dela (SPACE ou CONST..)
+			.contem quantos enderecos ela ocupa
+			.contem um metodo que vai atualizar a lista (ou tabela) de rotulos
+
+	-Listas:
+
+		Lista dos menomonicos:
+			Sera uma lista estatica contendo varios objetos da classe menomonico e criada 100% no codigo, usaremos ela para checar quando um token eh menomonico e quando for para determinar o funcionamento dele
+
+		Listas de rotulos, diretivas e macros:
+			todas dinamicas que serao criadas em tempo de execucao e terao varios objetos das suas classes respectivas para uso posterior no codigo
+			(Vejo a importancia nessas listas, pois os tokens serao lidos, analisados, escritos no arquivo de saida e depois apagados, portanto obejtos de rotulos,por exemplo, so terao acesso pela lista de rotulos e assim por diante)
+

@@ -71,3 +71,11 @@ int main (int argc, char* argv[]){
 
     return 0;
 }
+
+
+class Token {
+    public:
+        string nome;
+
+    
+}
