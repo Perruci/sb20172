@@ -29,10 +29,7 @@ void Montador::tokenizar()
 
         while (lineStream >> token.nome){
             this->tokensList.push_back(token);
-            this->fileOutput << token.nome << " ";
         }
-
-        this->fileOutput << std::endl;
     }
 }
 
@@ -49,4 +46,14 @@ void Montador::printTokens()
         std::cout << tokensList[i].nome << " " << '\n';
     }
     std::cout << '\n';
+}
+
+/* Escreve um arquivo de saida a partir de tokensList */
+void Montador::writeTokensToOutput()
+{
+    for(size_t i = 0; i < tokensList.size(); i++)
+    {
+        this->fileOutput << tokensList[i].nome << '\n';
+    }
+    this->fileOutput << std::endl;
 }

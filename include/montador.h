@@ -27,5 +27,6 @@ public:
     ~Montador();
     void tokenizar();
     void printTokens();
+    void writeTokensToOutput();
 };
 #endif
