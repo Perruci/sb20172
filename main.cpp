@@ -4,6 +4,7 @@
 #include <sstream>
 #include <string.h>
 
+#include "include/montador.h"
 #include "include/token.h"
 
 using namespace std;
@@ -57,37 +58,12 @@ int main (int argc, char* argv[]){
             cout << "ERRO: O argumento " << argv[1] << " passado, nao condiz com nenhum modo de operacao\n";
             break;
     }
+    std::string inputFile(argv[2]);
+    std::string outputFile(argv[3]);
 
-    //Daqui pra baixo eu tinha feito para teste e para ver como ler o arquivo token por token, ainda quero tirar essa parte do main e colocar ela em cada uma das fucoes de pre-processamento,
-    //processamento e montagem (ainda nao tive tempo pra terminar).
+    Montador montador(inputFile, outputFile);
 
-    //Pega o nome do arquivo de entrada passado por argumento da linha de comando e abre esse arquivo para leitura usando a
-    //classe ifstream e chamando o arquivo de code.
-    ifstream code(argv[2]);
-
-    //Cria o arquivo de saida que ira conter o resultado da montagem do programa com o nome indicado no ultimo argumento da linha de comando
-    ofstream saida(argv[3]);
-
-    //string de suporte para capturar os tokens
-    string aux;
-
-    //Loop para ler todas as linhas do codigo aberto e "tokenizar" elas (o token leva o : em consideracao ainda)
-    while (getline(code, aux)){
-
-        stringstream lineStream (aux);
-        Token token(aux);
-
-        while (lineStream >> token.nome){
-            saida << token.nome << " ";
-        }
-
-        saida << endl;
-    }
-
-    //fecha o arquivo contendo o codigo assembly e o arquivo de saida
-    code.close();
-    saida.close();
-
+    montador.tokenizar();
 
     return 0;
 }
