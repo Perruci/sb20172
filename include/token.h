@@ -2,9 +2,6 @@
 #define _TOKEN_H_
 
 #include <iostream>
-#include <fstream>
-#include <string>
-#include <sstream>
 #include <string.h>
 
 // Tipos de token
