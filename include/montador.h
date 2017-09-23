@@ -6,6 +6,7 @@
 #include <string>
 #include <sstream>
 #include <string.h>
+#include <vector>
 
 #include "token.h"
 
@@ -17,11 +18,14 @@ private:
     std::string inputFileName;
     std::string outputFileName;
 
+    std::vector<Token> tokensList;
+
     std::ifstream fileText;
     std::ofstream fileOutput;
 public:
     Montador(std::string, std::string);
     ~Montador();
     void tokenizar();
+    void printTokens();
 };
 #endif

@@ -28,9 +28,25 @@ void Montador::tokenizar()
         Token token(aux);
 
         while (lineStream >> token.nome){
+            this->tokensList.push_back(token);
             this->fileOutput << token.nome << " ";
         }
 
         this->fileOutput << std::endl;
     }
+}
+
+/* Imprime Tokens guardades em tokensList */
+void Montador::printTokens()
+{
+    if(this->tokensList.empty())
+    {
+        std::cout << "Token list empty" << '\n';
+        return;
+    }
+    for(size_t i = 0; i < tokensList.size(); i++)
+    {
+        std::cout << tokensList[i].nome << " " << '\n';
+    }
+    std::cout << '\n';
 }

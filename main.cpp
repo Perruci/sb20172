@@ -65,6 +65,8 @@ int main (int argc, char* argv[]){
 
     montador.tokenizar();
 
+    montador.printTokens();
+
     return 0;
 }
 
