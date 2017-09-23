@@ -1,5 +1,5 @@
 TARGET=montador
-CC=g++
+CC=g++ -Wall
 CFLAGS=-I
 HEADERS=include/
 SRC=src/*.cpp
