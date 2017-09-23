@@ -7,7 +7,7 @@ SRC=src/*.cpp
 default: main
 
 main:
-	$(CC) -o $(TARGET) montador.cpp $(SRC) $(CFLAGS) $(HEADERS)
+	$(CC) -o $(TARGET) main.cpp $(SRC) $(CFLAGS) $(HEADERS)
 
 clean:
 	rm -f montador
