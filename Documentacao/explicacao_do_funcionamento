@@ -75,3 +75,6 @@ E desculpa pelo portugues ruim (preguica) e pela falta de acentuacao e cedilha (
 		* Classe Token implementada
 		* Criados diretórios include/ e src/ para dependências
 		* Makefile criada para a compilação do programa
+		* Classe Montador implementada
+		* Antiga funcionalidade da main tornouse um método
+			* Montador::tokenizar
