@@ -6,7 +6,8 @@ Montador::Montador(std::string inputFile, std::string outputFile)
     this->inputFileName =  inputFile;
     this->outputFileName = outputFile;
     this->fileText.open(inputFileName);
-    this->fileOutput.open(outputFileName);
+    //this->fileOutput.open(outputFileName); Deixar para abrir o arquivo de output dentro das funcoes de pre-processamento,
+    //processamento e montagem, pq assim facilita para determinarmos as extensoes.
 }
 // Destruidor do montador
 Montador::~Montador()

@@ -28,5 +28,8 @@ public:
     void tokenizar();
     void printTokens();
     void writeTokensToOutput();
+    void pre_processamento();
+    void processamento();
+    void montagem();
 };
 #endif

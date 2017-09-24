@@ -24,10 +24,13 @@ int main (int argc, char* argv[]){
     char operation = *(argv[1]+1);
 
     //Pega o nome do arquivo de entrada onde esta o codigo a ser analisado
-    string arq_entrada = argv[2];
+    string inputFile = argv[2];
 
     //Pega o nome do arquivo de saida que sera criado pelo nosso codigo, no entanto pega o nome do arquivo sem a extensao, pois podemos criar ele com ate 3 extensoes diferentes no programa
-    string arq_saida = pega_nome (argv[3]);
+    string outputFile = pega_nome (argv[3]);
+
+    //Cria o objeto montador
+    Montador montador(inputFile, outputFile);
 
     switch (operation){
         //Operação de preprocessamento, coloca a estensão “.pre” no arquivo e somente
@@ -58,10 +61,6 @@ int main (int argc, char* argv[]){
             cout << "ERRO: O argumento " << argv[1] << " passado, nao condiz com nenhum modo de operacao\n";
             break;
     }
-    std::string inputFile(argv[2]);
-    std::string outputFile(argv[3]);
-
-    Montador montador(inputFile, outputFile);
 
     montador.tokenizar();
 
