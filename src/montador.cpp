@@ -23,8 +23,8 @@ void Montador::tokenizar()
     std::string aux;
     //Loop para ler todas as linhas do codigo aberto e "tokenizar" elas (o token leva o : em consideracao ainda)
     while (getline(this->fileText, aux)){
-        char* ptr;
-        ptr = &(aux[0]);
+        char* ptr;  //ponteiro de suporte para o funcionamento do strlen dentro da funcao minuscula
+        ptr = &(aux[0]);  //ponteiro apontando pro primeiro caracter da string
         aux = Montador::minuscula (ptr);
 
 
