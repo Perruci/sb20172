@@ -29,8 +29,9 @@ int main (int argc, char* argv[]){
     //Pega o nome do arquivo de saida que sera criado pelo nosso codigo, no entanto pega o nome do arquivo sem a extensao, pois podemos criar ele com ate 3 extensoes diferentes no programa
     string outputFile = pega_nome (argv[3]);
 
-    //Cria o objeto montador
+    //Cria o objeto montador e ja tokeniza o arquivo de entrada
     Montador montador(inputFile, outputFile);
+    montador.tokenizar();
 
     switch (operation){
         //Operação de preprocessamento, coloca a estensão “.pre” no arquivo e somente
@@ -61,8 +62,6 @@ int main (int argc, char* argv[]){
             cout << "ERRO: O argumento " << argv[1] << " passado, nao condiz com nenhum modo de operacao\n";
             break;
     }
-
-    montador.tokenizar();
 
     montador.printTokens();
 

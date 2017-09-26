@@ -6,8 +6,7 @@ Montador::Montador(std::string inputFile, std::string outputFile)
     this->inputFileName =  inputFile;
     this->outputFileName = outputFile;
     this->fileText.open(inputFileName);
-    //this->fileOutput.open(outputFileName); Deixar para abrir o arquivo de output dentro das funcoes de pre-processamento,
-    //processamento e montagem, pq assim facilita para determinarmos as extensoes.
+    this->fileOutput.open(outputFileName); 
 }
 // Destruidor do montador
 Montador::~Montador()
@@ -24,6 +23,10 @@ void Montador::tokenizar()
     std::string aux;
     //Loop para ler todas as linhas do codigo aberto e "tokenizar" elas (o token leva o : em consideracao ainda)
     while (getline(this->fileText, aux)){
+        char* ptr;
+        ptr = &(aux[0]);
+        aux = Montador::minuscula (ptr);
+
 
         std::stringstream lineStream (aux);
         Token token(aux);
@@ -57,4 +60,15 @@ void Montador::writeTokensToOutput()
         this->fileOutput << tokensList[i].nome << '\n';
     }
     this->fileOutput << std::endl;
+}
+
+//transforma toda a string em letras minusculas
+std::string Montador::minuscula (char* aux){
+    int tam = strlen (aux);
+    
+    for (int i = 0; i < tam; i++){
+        aux[i] = (char) std::tolower(aux[i]);
+    }
+
+    return aux;
 }

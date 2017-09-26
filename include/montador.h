@@ -27,6 +27,7 @@ public:
     ~Montador();
     void tokenizar();
     void printTokens();
+    std::string minuscula (char*);
     void writeTokensToOutput();
     void pre_processamento();
     void processamento();
