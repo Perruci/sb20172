@@ -80,4 +80,5 @@ E desculpa pelo portugues ruim (preguica) e pela falta de acentuacao e cedilha (
 			* Montador::tokenizar
 
 		*Tentativa de criar o metodo de pre-processamento, nao esta muito facil de entender (vou tentar comentar direito)
+		*Ainda nao foi tratada a exclusao de comentarios
 		
