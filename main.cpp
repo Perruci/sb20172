@@ -36,7 +36,7 @@ int main (int argc, char* argv[]){
         //Operação de preprocessamento, coloca a estensão “.pre” no arquivo e somente
         //avalia as diretivas EQU e IF.
         case 'p':
-            //pre-procesasmento (arq_entrada, arq_saida);
+            montador.pre_processamento();
             cout << "Definir algo para fazer a operacao de preprocessamento\n";
             break;
 
@@ -62,9 +62,9 @@ int main (int argc, char* argv[]){
             break;
     }
 
-    montador.printTokens();
+    //montador.printTokens();
 
-    montador.writeTokensToOutput();
+    //montador.writeTokensToOutput();
 
     return 0;
 }

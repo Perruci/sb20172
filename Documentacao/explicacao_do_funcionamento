@@ -78,3 +78,6 @@ E desculpa pelo portugues ruim (preguica) e pela falta de acentuacao e cedilha (
 		* Classe Montador implementada
 		* Antiga funcionalidade da main tornouse um método
 			* Montador::tokenizar
+
+		*Tentativa de criar o metodo de pre-processamento, nao esta muito facil de entender (vou tentar comentar direito)
+		
