@@ -9,8 +9,6 @@
 
 using namespace std;
 
-string pega_nome (char*);
-
 int main (int argc, char* argv[]){
 
     //Requisito do professor que sejam sempre passsados 3 argumentos de entrada
@@ -26,8 +24,9 @@ int main (int argc, char* argv[]){
     //Pega o nome do arquivo de entrada onde esta o codigo a ser analisado
     string inputFile = argv[2];
 
-    //Pega o nome do arquivo de saida que sera criado pelo nosso codigo, no entanto pega o nome do arquivo sem a extensao, pois podemos criar ele com ate 3 extensoes diferentes no programa
-    string outputFile = pega_nome (argv[3]);
+    //Pega o nome do arquivo de saida que sera criado pelo nosso codigo
+    string outputFile = argv[3];
+    
 
     //Cria o objeto montador e ja tokeniza o arquivo de entrada
     Montador montador(inputFile, outputFile);
@@ -70,18 +69,4 @@ int main (int argc, char* argv[]){
     return 0;
 }
 
-//Funcao que analisa o nome do arquivo de saida passado como argumento de entrada e pega so a parte do nome antes da extensao (por exemplo: pega um triangulo.o e transforma em triangulo)
-string pega_nome (char* nome){
-    string aux = nome;
-    string aux2;
-    int tam = strlen (nome); //numero de caracteres da string nome
 
-    for (int i = 0; i < tam; i++){
-        if(nome[i] == '.'){
-            break;
-        }
-        aux2 += nome[i];
-    }
-
-    return aux2;
-}

@@ -28,6 +28,7 @@ public:
     void tokenizar();
     void printTokens();
     std::string minuscula (char*);
+    std::string trunca_nome (char*, char);
     void writeTokensToOutput();
     void pre_processamento();
     void processamento();

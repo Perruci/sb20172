@@ -72,3 +72,26 @@ std::string Montador::minuscula (char* aux){
 
     return aux;
 }
+
+//Funcao que recebe o ponteiro pro inicio de uma string e trunca ela a partir do caracter indesejado, pode ser usada para ajeitar a extensao dos
+//arquivos e para retirar o : dos rotulos (ex: teste.h -> teste  ou rotulo: -> rotulo)
+std::string Montador::trunca_nome (char* nome, char indesejavel){
+    std::string aux = nome;
+    std::string aux2;
+    int tam = strlen (nome); //numero de caracteres da string nome
+
+    for (int i = 0; i < tam; i++){
+        if(nome[i] == indesejavel){
+            break;
+        }
+        aux2 += nome[i];
+    }
+
+    return aux2;
+}
+
+//Faz a etapa de pre-processamento e trata os EQU e IF
+void Montador::pre_processamento(){
+    int contador_equ = 0;   //conta quantos EQU tem no arquivo
+
+}
