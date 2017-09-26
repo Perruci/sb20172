@@ -164,6 +164,8 @@ void Montador::pre_processamento(){
                     }
                 }
             }
+
+            out_pre << token << " ";
         }
 
         out_pre << "\n";
