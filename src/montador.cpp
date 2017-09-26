@@ -93,7 +93,7 @@ std::string Montador::trunca_nome (char* nome, char indesejavel){
 //Faz a etapa de pre-processamento e trata os EQU e IF, funcao criada sem utilizar a tokenizacao, pois estou com receio de que
 //se fizermos a tokenizacao nessa parte estariamos violando a regra de passagem unica
 void Montador::pre_processamento(){
-    //int contador_equ = 0;   //conta quantos EQU tem no arquivo
+    int nao_imprime = 0;
     int check_section = 0;  //passa a ser 1 depois da primeira vez que aparecer a secao section pela primeira vez
     std::vector<std::string> rotulos;   //vetor contendo os nomes dos rotulos dos EQU's
     std::vector<char> true_or_false;   //vetor contendo se o rotulo de um EQU eh 1 ou 0, indice desse vetor indica o rotulo com o mesmo indice no vetor de rotulos
@@ -127,6 +127,7 @@ void Montador::pre_processamento(){
         token_aux = trunca_nome(ptr,':');
         
         while (lineStream >> token){
+            nao_imprime = 0;
             if (token == "section"){
                 check_section = 1;
             }
@@ -136,10 +137,13 @@ void Montador::pre_processamento(){
                 lineStream >> token;
                 char help = token[0];
                 true_or_false.push_back(help);
-                break;
-            }
+                nao_imprime = 1;
+                out_pre.close();
+                out_pre.open(OutputFile);
+                }
 
             if (token == "if"){
+                nao_imprime = 1;
                 lineStream >> token; //pega o rotulo que vem depois do if
                 for (int i = 0; i < rotulos.size(); i++){
                     //Se for verdade pega a linha debaixo e imprime ela no arquivo de saida
@@ -164,11 +168,14 @@ void Montador::pre_processamento(){
                     }
                 }
             }
-
+            
+            if (nao_imprime == 0){            
             out_pre << token << " ";
+            }
         }
-
+        if (check_section == 1){
         out_pre << "\n";
+        }
     }
 
 
