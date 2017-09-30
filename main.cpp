@@ -26,11 +26,12 @@ int main (int argc, char* argv[]){
 
     //Pega o nome do arquivo de saida que sera criado pelo nosso codigo
     string outputFile = argv[3];
-    
+
 
     //Cria o objeto montador e ja tokeniza o arquivo de entrada
     Montador montador(inputFile, outputFile);
-    montador.tokenizar();
+    montador.loadInstructions("tables/instructions.txt");
+    montador.printIntstructions();
 
     switch (operation){
         //Operação de preprocessamento, coloca a estensão “.pre” no arquivo e somente
@@ -68,5 +69,3 @@ int main (int argc, char* argv[]){
 
     return 0;
 }
-
-

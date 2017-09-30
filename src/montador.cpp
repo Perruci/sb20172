@@ -6,7 +6,7 @@ Montador::Montador(std::string inputFile, std::string outputFile)
     this->inputFileName =  inputFile;
     this->outputFileName = outputFile;
     this->fileText.open(inputFileName);
-    this->fileOutput.open(outputFileName); 
+    this->fileOutput.open(outputFileName);
 }
 // Destruidor do montador
 Montador::~Montador()
@@ -14,6 +14,59 @@ Montador::~Montador()
     // Sem preocupações com o close
     fileText.close();
     fileOutput.close();
+}
+
+/* Carrega instruções a partir da tabela de instruções */
+void Montador::loadInstructions(std::string tablePath)
+{
+    /* Open and closes instruction table file */
+    std::ifstream instructionTable(tablePath);
+    //string de suporte para capturar os elementos
+    std::string aux;
+    //Loop para ler todas as linhas do codigo aberto e "tokenizar" elas (o token leva o : em consideracao ainda)
+    while (getline(instructionTable, aux)){
+        // char* ptr;  //ponteiro de suporte para o funcionamento do strlen dentro da funcao minuscula
+        // ptr = &(aux[0]);  //ponteiro apontando pro primeiro caracter da string
+        // aux = Montador::minuscula (ptr);
+
+        std::stringstream lineStream (aux);
+        Mnemonic instruction;
+        /* Fill mnemonic with data from this line */
+        std::string word;
+        lineStream >> word;
+        /* Set name */
+        instruction.setName(word);
+        lineStream >> word;
+        /* Set noperands */
+        instruction.setNOperands(atoi(word.c_str()));
+        lineStream >> word;
+        /* Set opcode */
+        instruction.setOpcode(atoi(word.c_str()));
+        lineStream >> word;
+        /* Set size */
+        instruction.setSize(atoi(word.c_str()));
+        /* Push to instructionList */
+        this->instructionList.push_back(instruction);
+    }
+    instructionTable.close();
+}
+
+/* Imprime Tokens guardades em tokensList */
+void Montador::printIntstructions()
+{
+    if(this->instructionList.empty())
+    {
+        std::cout << "Instructions list empty" << '\n';
+        return;
+    }
+    for(size_t i = 0; i < instructionList.size(); i++)
+    {
+        std::cout << "Instruction name: " << instructionList[i].nome      << " "
+                  << "noperands: "        << instructionList[i].noperands << " "
+                  << "opcode: "           << instructionList[i].opcode    << " "
+                  << "size: "             << instructionList[i].size      << '\n';
+    }
+    std::cout << '\n';
 }
 
 // Função teste: extrair cada token do arquivo de entrada e escrevê-los de forma padrão na saída
@@ -65,7 +118,7 @@ void Montador::writeTokensToOutput()
 //transforma toda a string em letras minusculas
 std::string Montador::minuscula (char* aux){
     int tam = strlen (aux);
-    
+
     for (int i = 0; i < tam; i++){
         aux[i] = (char) std::tolower(aux[i]);
     }
@@ -125,7 +178,7 @@ void Montador::pre_processamento(){
         lineStream_aux >> token_aux;
         ptr = &(token_aux[0]);
         token_aux = trunca_nome(ptr,':');
-        
+
         while (lineStream >> token){
             nao_imprime = 0;
             if (token == "section"){
@@ -152,7 +205,7 @@ void Montador::pre_processamento(){
                         ptr = &(aux[0]);
                         aux = Montador::minuscula(ptr);
                         std::stringstream lineStream_aux2(aux);
-                        
+
                         while (lineStream_aux2 >> token){
                             out_pre << token << " ";
                         }
@@ -168,8 +221,8 @@ void Montador::pre_processamento(){
                     }
                 }
             }
-            
-            if (nao_imprime == 0){            
+
+            if (nao_imprime == 0){
             out_pre << token << " ";
             }
         }
