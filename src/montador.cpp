@@ -143,6 +143,20 @@ std::string Montador::trunca_nome (char* nome, char indesejavel){
     return aux2;
 }
 
+/* pre-processamento ----------------------------------------------------- */
+
+std::string Montador::getOutputPrefix()
+{
+    std::string outputFile;
+    //prepara o nome e abre o arquivo de saida
+    char* ptr;
+    ptr = &(this->outputFileName[0]);
+    outputFile = Montador::trunca_nome(ptr,'.');
+    outputFile += ".pre";
+
+    return outputFile;
+}
+
 //Faz a etapa de pre-processamento e trata os EQU e IF, funcao criada sem utilizar a tokenizacao, pois estou com receio de que
 //se fizermos a tokenizacao nessa parte estariamos violando a regra de passagem unica
 void Montador::pre_processamento(){
@@ -150,19 +164,14 @@ void Montador::pre_processamento(){
     int check_section = 0;  //passa a ser 1 depois da primeira vez que aparecer a secao section pela primeira vez
     std::vector<std::string> rotulos;   //vetor contendo os nomes dos rotulos dos EQU's
     std::vector<char> true_or_false;   //vetor contendo se o rotulo de um EQU eh 1 ou 0, indice desse vetor indica o rotulo com o mesmo indice no vetor de rotulos
-    std::string OutputFile;
 
     //prepara o nome e abre o arquivo de saida
-    char* ptr;
-    ptr = &(this->outputFileName[0]);
-    OutputFile = Montador::trunca_nome(ptr,'.');
-    OutputFile += ".pre";
+    std::string OutputFile = getOutputPrefix();
     std::ofstream out_pre;
     out_pre.open (OutputFile);
 
     //Fecha e abre o arquivo do codigo para atualizar o ponteiro de arquivo, caso alguma outra funcao tenha usado ele
-    this->fileText.close();
-    this->fileText.open(this->inputFileName);
+    this->reopenCodeFile();
 
     std::string aux;
     std::string token;

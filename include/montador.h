@@ -24,6 +24,14 @@ private:
 
     std::ifstream fileText;
     std::ofstream fileOutput;
+
+    //Fecha e abre o arquivo do codigo para atualizar o ponteiro de arquivo, caso alguma outra funcao tenha usado ele
+    inline bool reopenCodeFile()
+    {
+        this->fileText.close();
+        this->fileText.open(this->inputFileName);
+        return(fileText.is_open());
+    };
 public:
     Montador(std::string, std::string);
     ~Montador();
@@ -36,8 +44,10 @@ public:
     std::string minuscula (char*);
     std::string trunca_nome (char*, char);
     void writeTokensToOutput();
-    /* Montador */
+    /* pre-processamento */
     void pre_processamento();
+    std::string getOutputPrefix();
+
     void processamento();
     void montagem();
 };
