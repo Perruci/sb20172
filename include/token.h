@@ -28,6 +28,6 @@ class Token
         std::string nome;
         Token(std::string);
 
-        bool isRotulo (Token, std::string);
+        bool isRotulo (std::stringstream);
 };
 #endif

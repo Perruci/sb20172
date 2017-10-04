@@ -10,6 +10,7 @@
 
 #include "token.h"
 #include "mnemonic.h"
+#include "rotulo.h"
 
 // Declaracao da classe Montador
 // Esta classe abriga os métodos desenvolvidos para traduzir e montar o programa

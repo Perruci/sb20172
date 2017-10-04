@@ -6,6 +6,6 @@ Token::Token(std::string a){
     this -> type = token_type::undefined;
 };
 
-bool Token::isRotulo(Token aux, std::string){
+bool Token::isRotulo(std::stringstream Line){
 
 }

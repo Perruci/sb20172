@@ -183,7 +183,12 @@ void Montador::pre_processamento(){
         std::stringstream lineStream (aux);
 
         while (lineStream >> token){
+            //coloca o token na lista, testa para ver se o token atual eh um rotulo e incrementa o contador de tokens
             this->tokensList.push_back(token);
+            //if (tokensList[contador_tokens].isRotulo(lineStream)){
+
+           //}
+            contador_tokens++;
 
             if (token == "text"){
                 check_section_text = true;
@@ -193,7 +198,7 @@ void Montador::pre_processamento(){
                 
                 }
 
-            if (token == "if"){
+           /* if (token == "if"){
                 lineStream >> token; //pega o rotulo que vem depois do if
                 for (int i = 0; i < rotulos.size(); i++){
                     //Se for verdade pega a linha debaixo e imprime ela no arquivo de saida
@@ -217,16 +222,7 @@ void Montador::pre_processamento(){
                         }
                     }
                 }
-            }
-
-            if (nao_imprime == 0){
-            out_pre << token << " ";
-            }
-        }
-        if (check_section == 1){
-        out_pre << "\n";
+            }*/
         }
     }
-
-
 }
