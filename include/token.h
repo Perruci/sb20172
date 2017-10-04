@@ -31,7 +31,7 @@ class Token
         std::string nome;
         Token(std::string);
 
-        bool isRotulo (std::string, std::string, std::vector<Mnemonic>);
+        int isRotulo (std::string, std::string, std::vector<Mnemonic>);
         bool have2points (std::string); //checa se tem : no final do token
 };
 #endif

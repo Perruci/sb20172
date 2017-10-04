@@ -189,13 +189,34 @@ bool Montador::pre_processamento(){
         while (lineStream >> token){
             //coloca o token na lista, testa para ver se o token atual eh um rotulo e incrementa o contador de tokens
             this->tokensList.push_back(token);
-            if (tokensList[contador_tokens].isRotulo(token, aux, instructionList)){
-                if (haveRotuloInLine == 1){
-                    std::cout << "Mais de um Rotulo na linha " << contador_de_linhas << "\n";
-                    return false;
-                }               
+            switch (tokensList[contador_tokens].isRotulo(token, aux, instructionList)){
+                //nao eh rotulo
+                case 0:
+                    break;
+
+                //eh declaracao de um rotulo
+                case 1:
+                    if (haveRotuloInLine == 1){
+                        std::cout << "Mais de um Rotulo na linha " << contador_de_linhas << "\n";
+                        return false;
+                    } else {
+                        haveRotuloInLine = 1;
+                        
+                        //atualiza a lista de rotulos da maneira correta
+                        switch (Montador::RotuloAlreadyFound(token)){
+                            //primeira vez que encontramos esse rotulo
+                            case 0:
+                                rotulosList.push_back(token, true, contador_endereco);
+                                break;
+                            
+                            //Ja encontramos esse rotulo e ele ja foi declarado
+                            case 1:
+                              break;  
+                        }
+                        
+                    }               
                 
-                haveRotuloInLine = 1;
+                
             }
             contador_tokens++;
 

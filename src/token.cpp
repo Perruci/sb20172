@@ -7,12 +7,17 @@ Token::Token(std::string a){
 };
 
 //Analisa se um determinado Token eh rotulo, tambem recebe a linha que esse token esta contido pra possiveis analises
-bool Token::isRotulo(std::string token, std::string Line, std::vector<Mnemonic> instructionList){
+//Retorna um inteiro que determina qual o "tipo" do rotulo
+// 0-> nao eh rotulo
+// 1-> eh declaracao de um rotulo
+// 2-> eh chamada a um rotulo
+// Ideia: talvez seja interessante a gente dividir as chamadas a rotulos entre chamadas a rotulos de diretivas ou de instrucoes
+int Token::isRotulo(std::string token, std::string Line, std::vector<Mnemonic> instructionList){
     if (Token::have2points(token)){
-        return true;
+        return 1;
     }
 
-    return false;
+    return 0;
 }
 
 bool Token::have2points(std::string token){
