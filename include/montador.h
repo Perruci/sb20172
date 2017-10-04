@@ -47,7 +47,7 @@ public:
     std::string trunca_nome (char*, char);
     void writeTokensToOutput();
     /* pre-processamento */
-    void pre_processamento();
+    bool pre_processamento();
     std::string getOutputPrefix();
 
     void processamento();

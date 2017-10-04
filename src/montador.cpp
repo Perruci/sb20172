@@ -159,10 +159,12 @@ std::string Montador::getOutputPrefix()
 
 //Faz a etapa de pre-processamento e trata os EQU e IF, funcao criada sem utilizar a tokenizacao, pois estou com receio de que
 //se fizermos a tokenizacao nessa parte estariamos violando a regra de passagem unica
-void Montador::pre_processamento(){
+bool Montador::pre_processamento(){
     bool check_section_text = false;  //passa a ser true quando acharmos a secao text
     int contador_tokens = 0;          //sera utilizado para navegar pela tokensList
     int contador_endereco = 0;        //sera utilizado para determinar o endereco de cada token do programa
+    int haveRotuloInLine = 0;            //controle para caso aparecam dois rotulos na mesma linha
+    int contador_de_linhas = 0;       //Controle para saber em qual linha do programa esta algum erro
 
     //prepara o nome e abre o arquivo de saida
     std::string OutputFile = getOutputPrefix();
@@ -180,14 +182,20 @@ void Montador::pre_processamento(){
         ptr = &(aux[0]);  //ponteiro apontando pro primeiro caracter da string
         aux = Montador::minuscula (ptr);
 
+        contador_de_linhas++;               //incrementa a linha
         std::stringstream lineStream (aux);
+        haveRotuloInLine = 0;               //prepara a variavel para  analisar o proximo rotulo
 
         while (lineStream >> token){
             //coloca o token na lista, testa para ver se o token atual eh um rotulo e incrementa o contador de tokens
             this->tokensList.push_back(token);
-            if (tokensList[contador_tokens].isRotulo(token, aux)){
-                std::cout<<token<<std::endl;
-
+            if (tokensList[contador_tokens].isRotulo(token)){
+                if (haveRotuloInLine == 1){
+                    std::cout << "Mais de um Rotulo na linha " << contador_de_linhas << "\n";
+                    return false;
+                }               
+                
+                haveRotuloInLine = 1;
             }
             contador_tokens++;
 
