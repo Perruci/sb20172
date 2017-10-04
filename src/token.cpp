@@ -6,6 +6,24 @@ Token::Token(std::string a){
     this -> type = token_type::undefined;
 };
 
-bool Token::isRotulo(std::stringstream Line){
+//Analisa se um determinado Token eh rotulo, tambem recebe a linha que esse token esta contido pra possiveis analises
+bool Token::isRotulo(std::string token, std::string Line){
+    if (Token::have2points(token)){
+        return true;
+    }
 
+    return false;
+}
+
+bool Token::have2points(std::string token){
+    char* ptr;
+    ptr = &(token[0]);
+    int tam = strlen(ptr);
+
+    for(int i = 0; i < tam; i++){
+        if ((token[i] == ':') &&(tam - i == 1)){
+            return true;
+        }
+    }
+    return false;
 }

@@ -28,6 +28,7 @@ class Token
         std::string nome;
         Token(std::string);
 
-        bool isRotulo (std::stringstream);
+        bool isRotulo (std::string);
+        bool have2points (std::string, std::string); //checa se tem : no final do token
 };
 #endif

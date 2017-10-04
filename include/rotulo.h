@@ -17,6 +17,7 @@ class Rotulo
         std::vector<int> addressList; //lista dos enderecos onde ele foi utilizado
         bool isEqu;
         bool EquValue;
+        bool isMem;             //caso o rotulo indique uma diretiva e nao um endereco de pulo
 
         inline void addList(int endereco){this->addressList.push_back(endereco);};
         void setState(int inicial);

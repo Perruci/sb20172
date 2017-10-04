@@ -185,9 +185,10 @@ void Montador::pre_processamento(){
         while (lineStream >> token){
             //coloca o token na lista, testa para ver se o token atual eh um rotulo e incrementa o contador de tokens
             this->tokensList.push_back(token);
-            //if (tokensList[contador_tokens].isRotulo(lineStream)){
+            if (tokensList[contador_tokens].isRotulo(token, aux)){
+                std::cout<<token<<std::endl;
 
-           //}
+            }
             contador_tokens++;
 
             if (token == "text"){
