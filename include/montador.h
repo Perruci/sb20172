@@ -21,6 +21,7 @@ private:
 
     std::vector<Token> tokensList;
     std::vector<Mnemonic> instructionList;
+    std::vector<Rotulo> rotulosList;
 
     std::ifstream fileText;
     std::ofstream fileOutput;
