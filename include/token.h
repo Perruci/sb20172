@@ -3,6 +3,9 @@
 
 #include <iostream>
 #include <string.h>
+#include <vector>
+
+#include "mnemonic.h"
 
 // Tipos de token
 // declarados fora da classe para que qualquer arquivo possa utilizá-los
@@ -28,7 +31,7 @@ class Token
         std::string nome;
         Token(std::string);
 
-        bool isRotulo (std::string);
+        bool isRotulo (std::string, std::string, std::vector<Mnemonic>);
         bool have2points (std::string); //checa se tem : no final do token
 };
 #endif

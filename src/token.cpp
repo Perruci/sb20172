@@ -7,7 +7,7 @@ Token::Token(std::string a){
 };
 
 //Analisa se um determinado Token eh rotulo, tambem recebe a linha que esse token esta contido pra possiveis analises
-bool Token::isRotulo(std::string token){
+bool Token::isRotulo(std::string token, std::string Line, std::vector<Mnemonic> instructionList){
     if (Token::have2points(token)){
         return true;
     }
