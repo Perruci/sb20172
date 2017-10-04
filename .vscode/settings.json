@@ -4,6 +4,7 @@
         "array": "cpp",
         "slist": "cpp",
         "initializer_list": "cpp",
-        "istream": "cpp"
+        "istream": "cpp",
+        "typeinfo": "cpp"
     }
 }

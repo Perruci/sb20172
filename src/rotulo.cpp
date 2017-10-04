@@ -1,8 +1,8 @@
 #include "../include/rotulo.h"
 
 //construtor
-Rotulo::Rotulo(Token token_aux, bool flag, int inicio){
-    this->token = token_aux;
+Rotulo::Rotulo(std::string nome, bool flag, int inicio){
+    this->name = nome;
     this->alreadyDeclared = flag;
     
     if (flag){
