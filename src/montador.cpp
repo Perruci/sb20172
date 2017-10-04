@@ -160,10 +160,9 @@ std::string Montador::getOutputPrefix()
 //Faz a etapa de pre-processamento e trata os EQU e IF, funcao criada sem utilizar a tokenizacao, pois estou com receio de que
 //se fizermos a tokenizacao nessa parte estariamos violando a regra de passagem unica
 void Montador::pre_processamento(){
-    int nao_imprime = 0;
-    int check_section = 0;  //passa a ser 1 depois da primeira vez que aparecer a secao section
-    std::vector<std::string> rotulos;   //vetor contendo os nomes dos rotulos dos EQU's
-    std::vector<char> true_or_false;   //vetor contendo se o rotulo de um EQU eh 1 ou 0, indice desse vetor indica o rotulo com o mesmo indice no vetor de rotulos
+    bool check_section_text = false;  //passa a ser true quando acharmos a secao text
+    int contador_tokens = 0;          //sera utilizado para navegar pela tokensList
+    int contador_endereco = 0;        //sera utilizado para determinar o endereco de cada token do programa
 
     //prepara o nome e abre o arquivo de saida
     std::string OutputFile = getOutputPrefix();
@@ -175,7 +174,6 @@ void Montador::pre_processamento(){
 
     std::string aux;
     std::string token;
-    std::string token_aux;
     //Loop para fazer o pre-processamento
     while (getline(this->fileText, aux)){
         char* ptr;  //ponteiro de suporte para o funcionamento do strlen dentro da funcao minuscula
@@ -183,29 +181,19 @@ void Montador::pre_processamento(){
         aux = Montador::minuscula (ptr);
 
         std::stringstream lineStream (aux);
-        std::stringstream lineStream_aux (aux);
-        lineStream_aux >> token_aux;
-        ptr = &(token_aux[0]);
-        token_aux = trunca_nome(ptr,':');
 
         while (lineStream >> token){
-            nao_imprime = 0;
-            if (token == "section"){
-                check_section = 1;
+            this->tokensList.push_back(token);
+
+            if (token == "text"){
+                check_section_text = true;
             }
 
-            if ((token == "equ") && (check_section == 0)){
-                rotulos.push_back(token_aux);
-                lineStream >> token;
-                char help = token[0];
-                true_or_false.push_back(help);
-                nao_imprime = 1;
-                out_pre.close();
-                out_pre.open(OutputFile);
+            if ((token == "equ")){
+                
                 }
 
             if (token == "if"){
-                nao_imprime = 1;
                 lineStream >> token; //pega o rotulo que vem depois do if
                 for (int i = 0; i < rotulos.size(); i++){
                     //Se for verdade pega a linha debaixo e imprime ela no arquivo de saida

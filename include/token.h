@@ -27,5 +27,7 @@ class Token
         int type;
         std::string nome;
         Token(std::string);
+
+        bool isRotulo (Token, std::string);
 };
 #endif

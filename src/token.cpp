@@ -5,3 +5,7 @@ Token::Token(std::string a){
     this -> nome = a;
     this -> type = token_type::undefined;
 };
+
+bool Token::isRotulo(Token aux, std::string){
+
+}

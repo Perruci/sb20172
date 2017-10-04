@@ -14,6 +14,8 @@ class Rotulo
         bool alreadyDeclared; //se ele ja foi declarado ou apenas chamado por uma instrucao
         std::string name;
         std::vector<int> addressList; //lista dos enderecos onde ele foi utilizado
+        bool isEqu;
+        bool EquValue;
 
         inline void addList(int endereco){this->addressList.push_back(endereco);};
         void setState(int inicial);
