@@ -87,7 +87,7 @@ E desculpa pelo portugues ruim (preguica) e pela falta de acentuacao e cedilha (
 			.Poder criar um rótulo, dar quebra de linha e continuar a linha depois (o rótulo seria equivalente a linha seguinte)
 			.declarações e rótulos ausentes
 			.declarações e rótulos repetidos		
-			.dois rótulos na mesma linha
+			.dois rótulos na mesma linha	-DONE
 			.seção TEXT faltante
 			.Identificar erros durante a montagem. Montado sempre o programa inteiro e mostrando na tela a(s) LINHA(S) e TIPO DOS ERROS
 			(segundo a relação a seguir e indicar se é LÉXICO, SINTÁTICO OU SEMANTICO).
