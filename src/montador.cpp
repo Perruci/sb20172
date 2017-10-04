@@ -161,7 +161,7 @@ std::string Montador::getOutputPrefix()
 //se fizermos a tokenizacao nessa parte estariamos violando a regra de passagem unica
 void Montador::pre_processamento(){
     int nao_imprime = 0;
-    int check_section = 0;  //passa a ser 1 depois da primeira vez que aparecer a secao section pela primeira vez
+    int check_section = 0;  //passa a ser 1 depois da primeira vez que aparecer a secao section
     std::vector<std::string> rotulos;   //vetor contendo os nomes dos rotulos dos EQU's
     std::vector<char> true_or_false;   //vetor contendo se o rotulo de um EQU eh 1 ou 0, indice desse vetor indica o rotulo com o mesmo indice no vetor de rotulos
 
