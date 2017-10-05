@@ -4,6 +4,7 @@
 #include <iostream>
 #include <string.h>
 #include <vector>
+#include <sstream>
 
 #include "mnemonic.h"
 

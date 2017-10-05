@@ -47,8 +47,8 @@ public:
     std::string trunca_nome (char*, char);
     void writeTokensToOutput();
     /* Rotulos */
-    void Montador::Trata_rotulos ();
-    int Montador::RotuloAlreadyFound(std::string);
+    void Trata_rotulos (std::string, int);
+    int RotuloAlreadyFound(std::string);
     /* pre-processamento */
     bool pre_processamento();
     std::string getOutputPrefix();

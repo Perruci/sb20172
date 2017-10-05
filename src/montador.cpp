@@ -251,7 +251,7 @@ bool Montador::pre_processamento(){
 // 2xx-> rotulo ja encontrado, mas ainda nao declarado (xx vide de cima)
 int Montador::RotuloAlreadyFound(std::string token){
     //percorre a lista de rotulos procurando pelo rotulo
-    for (int i = 0; i < rotulosList; i++){
+    for (int i = 0; i < rotulosList.size() ; i++){
         //se encontrar o rotulo
         if (rotulosList[i].name == token){
             if (rotulosList[i].alreadyDeclared){
@@ -264,45 +264,6 @@ int Montador::RotuloAlreadyFound(std::string token){
     return 0;
 }
 
-void Montador::Trata_rotulos (){
-    switch (tokensList[contador_tokens].isRotulo(token, aux, instructionList)){
-        //nao eh rotulo
-        case 0:
-            break;
-
-        //eh declaracao de um rotulo
-        case 1:
-            if (haveRotuloInLine == 1){
-                std::cout << "Mais de um Rotulo na linha " << contador_de_linhas << "\n";
-                return false;
-            } else {
-                haveRotuloInLine = 1;
-                
-                //atualiza a lista de rotulos da maneira correta (ver declaracao da funcao rotulo Alreadyfound pra entender)
-                int flag_rotulo = Montador::RotuloAlreadyFound(token); 
-                switch (flag % 100){
-                    //primeira vez que encontramos esse rotulo
-                    case 0:
-                        rotulosList.push_back(token, true, contador_endereco);
-                        break;
-                    
-                    //Ja encontramos esse rotulo e ele ja foi declarado
-                    case 1:
-                        //adiciona o endereco atual na lista de enderecos desse rotulo
-                        rotulosList[flag-100].addList(contador_endereco);
-                        break;  
-
-                    //Ja encontramos esse rotulo, mas ele ainda nao foi declarado
-                    case 2:
-                        rotulosList[flag-200].address = contador_endereco;
-                        rotulosList[flag-200].alreadyDeclared = true;
-                }
-                
-            } 
-        //eh rotulo, mas nao eh declaracao
-        case 2:
-            if
-        
-        
-    }
+void Montador::Trata_rotulos (std::string token, int tipo_rotulo){
+  
 }

@@ -18,7 +18,7 @@ bool Token::isRotulo(std::string token, std::string linha, std::vector<Mnemonic>
     }
 
     //Cria uma stringstream com a linha que ta sendo analisada
-    std::stringstream line (linha);
+    std::stringstream lineStream (linha);
 
     
 
