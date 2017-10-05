@@ -214,7 +214,10 @@ bool Montador::pre_processamento(){
                               break;  
                         }
                         
-                    }               
+                    } 
+                //eh rotulo, mas nao eh declaracao
+                case 2:
+                    if
                 
                 
             }
@@ -255,4 +258,23 @@ bool Montador::pre_processamento(){
             }*/
         }
     }
+}
+
+//checa a lista de rotulos procurando se determinado rotulo ja foi visto antes, retorno com o seguinte significado
+// 0-> primeira vez que encontramos o rotulo
+// 1xx-> rotulo ja encontrado e ja declarado (xx eh o indice da lista de rotulos onde esse rotulo se encontra)
+// 2xx-> rotulo ja encontrado, mas ainda nao declarado (xx vide de cima)
+int Montador::RotuloAlreadyFound(std::string token){
+    //percorre a lista de rotulos procurando pelo rotulo
+    for (int i = 0; i < rotulosList; i++){
+        //se encontrar o rotulo
+        if (rotulosList[i].name == token){
+            if (rotulosList[i].alreadyDeclared){
+                return (100 + i);
+            } else {
+                return (200 + i);
+            }
+        }
+    }
+    return 0;
 }
