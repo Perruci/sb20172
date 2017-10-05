@@ -202,8 +202,9 @@ bool Montador::pre_processamento(){
                     } else {
                         haveRotuloInLine = 1;
                         
-                        //atualiza a lista de rotulos da maneira correta
-                        switch (Montador::RotuloAlreadyFound(token)){
+                        //atualiza a lista de rotulos da maneira correta (ver declaracao da funcao rotulo Alreadyfound pra entender)
+                        int flag_rotulo = Montador::RotuloAlreadyFound(token); 
+                        switch (flag % 100){
                             //primeira vez que encontramos esse rotulo
                             case 0:
                                 rotulosList.push_back(token, true, contador_endereco);
@@ -211,7 +212,14 @@ bool Montador::pre_processamento(){
                             
                             //Ja encontramos esse rotulo e ele ja foi declarado
                             case 1:
-                              break;  
+                                //adiciona o endereco atual na lista de enderecos desse rotulo
+                                rotulosList[flag-100].addList(contador_endereco);
+                                break;  
+
+                            //Ja encontramos esse rotulo, mas ele ainda nao foi declarado
+                            case 2:
+                                rotulosList[flag-200].address = contador_endereco;
+                                rotulosList[flag-200].alreadyDeclared = true;
                         }
                         
                     } 
