@@ -12,14 +12,25 @@ Token::Token(std::string a){
 // 1-> eh declaracao de um rotulo
 // 2-> eh chamada a um rotulo
 // Ideia: talvez seja interessante a gente dividir as chamadas a rotulos entre chamadas a rotulos de diretivas ou de instrucoes
-int Token::isRotulo(std::string token, std::string Line, std::vector<Mnemonic> instructionList){
+bool Token::isRotulo(std::string token, std::string linha, std::vector<Mnemonic> instructionList){
     if (Token::have2points(token)){
-        return 1;
+        return true;
     }
 
-    return 0;
+    //Cria uma stringstream com a linha que ta sendo analisada
+    std::stringstream line (linha);
+
+    
+
+    return false;
 }
 
+//Retorna 1 para rotulos de declaracao e 2 para chamadas de rotulo
+int Token::KindOfRotulo(std::string token){
+
+}
+
+//testa se o ultimo char da string eh ':', pois isso indica que ele eh uma declaracao de rotulo
 bool Token::have2points(std::string token){
     char* ptr;
     ptr = &(token[0]);

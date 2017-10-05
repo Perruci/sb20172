@@ -176,6 +176,7 @@ bool Montador::pre_processamento(){
 
     std::string aux;
     std::string token;
+
     //Loop para fazer o pre-processamento
     while (getline(this->fileText, aux)){
         char* ptr;  //ponteiro de suporte para o funcionamento do strlen dentro da funcao minuscula
@@ -186,48 +187,24 @@ bool Montador::pre_processamento(){
         std::stringstream lineStream (aux);
         haveRotuloInLine = 0;               //prepara a variavel para  analisar o proximo rotulo
 
+        //Loop para analisar cada token um a um 
         while (lineStream >> token){
-            //coloca o token na lista, testa para ver se o token atual eh um rotulo e incrementa o contador de tokens
+            //coloca o token na lista
             this->tokensList.push_back(token);
-            switch (tokensList[contador_tokens].isRotulo(token, aux, instructionList)){
-                //nao eh rotulo
-                case 0:
-                    break;
 
-                //eh declaracao de um rotulo
-                case 1:
+            //se o token for um rotulo, trata ele
+            if (tokensList[contador_tokens].isRotulo(token, aux, instructionList)){
+                int tipo_rotulo = tokensList[contador_tokens].KindOfRotulo(token);
+                
+                //testa se eh uma declaracao de rotulo e se ja tem outra declaracao na mesma linha
+                if (tipo_rotulo == 1){
+                
+                    //se ja tiver uma declaracao na linha sera erro
                     if (haveRotuloInLine == 1){
                         std::cout << "Mais de um Rotulo na linha " << contador_de_linhas << "\n";
-                        return false;
-                    } else {
-                        haveRotuloInLine = 1;
-                        
-                        //atualiza a lista de rotulos da maneira correta (ver declaracao da funcao rotulo Alreadyfound pra entender)
-                        int flag_rotulo = Montador::RotuloAlreadyFound(token); 
-                        switch (flag % 100){
-                            //primeira vez que encontramos esse rotulo
-                            case 0:
-                                rotulosList.push_back(token, true, contador_endereco);
-                                break;
-                            
-                            //Ja encontramos esse rotulo e ele ja foi declarado
-                            case 1:
-                                //adiciona o endereco atual na lista de enderecos desse rotulo
-                                rotulosList[flag-100].addList(contador_endereco);
-                                break;  
-
-                            //Ja encontramos esse rotulo, mas ele ainda nao foi declarado
-                            case 2:
-                                rotulosList[flag-200].address = contador_endereco;
-                                rotulosList[flag-200].alreadyDeclared = true;
-                        }
-                        
-                    } 
-                //eh rotulo, mas nao eh declaracao
-                case 2:
-                    if
-                
-                
+                    }
+                }
+                Trata_rotulos(token, tipo_rotulo);
             }
             contador_tokens++;
 
@@ -285,4 +262,47 @@ int Montador::RotuloAlreadyFound(std::string token){
         }
     }
     return 0;
+}
+
+void Montador::Trata_rotulos (){
+    switch (tokensList[contador_tokens].isRotulo(token, aux, instructionList)){
+        //nao eh rotulo
+        case 0:
+            break;
+
+        //eh declaracao de um rotulo
+        case 1:
+            if (haveRotuloInLine == 1){
+                std::cout << "Mais de um Rotulo na linha " << contador_de_linhas << "\n";
+                return false;
+            } else {
+                haveRotuloInLine = 1;
+                
+                //atualiza a lista de rotulos da maneira correta (ver declaracao da funcao rotulo Alreadyfound pra entender)
+                int flag_rotulo = Montador::RotuloAlreadyFound(token); 
+                switch (flag % 100){
+                    //primeira vez que encontramos esse rotulo
+                    case 0:
+                        rotulosList.push_back(token, true, contador_endereco);
+                        break;
+                    
+                    //Ja encontramos esse rotulo e ele ja foi declarado
+                    case 1:
+                        //adiciona o endereco atual na lista de enderecos desse rotulo
+                        rotulosList[flag-100].addList(contador_endereco);
+                        break;  
+
+                    //Ja encontramos esse rotulo, mas ele ainda nao foi declarado
+                    case 2:
+                        rotulosList[flag-200].address = contador_endereco;
+                        rotulosList[flag-200].alreadyDeclared = true;
+                }
+                
+            } 
+        //eh rotulo, mas nao eh declaracao
+        case 2:
+            if
+        
+        
+    }
 }
