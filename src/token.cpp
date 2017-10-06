@@ -27,10 +27,21 @@ bool Token::isRotulo(std::string token, std::string linha, std::vector<Mnemonic>
         }
     }
 
-    
+    //testa se eh uma instrucao
+    for (int i = 0; i < instructionList.size(); i++){
+        if (token == instructionList[i].nome){
+            return false;
+        }
+    }
+
+    //testa outros comandos que nao podem ser rotulos
+    if ((token == "equ") || (token == "if") || (token == "macro") || (token == "end") || 
+        (token == "space") || (token == "const") || (isInteger(token))){
+        return false;
+    }
 
 
-    return false;
+    return true;
 }
 
 //Retorna 1 para rotulos de declaracao e 2 para chamadas de rotulo
@@ -57,4 +68,17 @@ bool Token::have2points(std::string token){
         }
     }
     return false;
+}
+
+
+bool Token::isInteger(const std::string & aux)
+{
+   if(aux.empty() || ((!isdigit(aux[0])) && (aux[0] != '-') && (aux[0] != '+'))){
+    return false;
+   } 
+
+   char* ptr;
+   strtol(aux.c_str(), &ptr, 10);
+
+   return (*ptr == 0) ;
 }

@@ -35,5 +35,6 @@ class Token
         bool isRotulo (std::string, std::string, std::vector<Mnemonic>);
         bool have2points (std::string); //checa se tem : no final do token
         int KindOfRotulo(std::string);
+        bool isInteger(const std::string &);
 };
 #endif

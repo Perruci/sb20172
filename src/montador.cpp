@@ -194,7 +194,10 @@ bool Montador::pre_processamento(){
 
             //se o token for um rotulo, trata ele
             if (tokensList[contador_tokens].isRotulo(token, aux, instructionList)){
-                int tipo_rotulo = tokensList[contador_tokens].KindOfRotulo(token);
+                int tipo_rotulo = 0;
+                tipo_rotulo = tokensList[contador_tokens].KindOfRotulo(token);
+                std::cout << token << ' ';
+                std::cout << tipo_rotulo << std::endl;
                 
                 //testa se eh uma declaracao de rotulo e se ja tem outra declaracao na mesma linha
                 if (tipo_rotulo == 1){
@@ -204,7 +207,7 @@ bool Montador::pre_processamento(){
                         std::cout << "Mais de um Rotulo na linha " << contador_de_linhas << "\n";
                     }
                 }
-                Trata_rotulos(token, tipo_rotulo);
+                //Trata_rotulos(token, tipo_rotulo);
             }
             contador_tokens++;
 
