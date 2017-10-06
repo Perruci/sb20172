@@ -197,20 +197,21 @@ bool Montador::pre_processamento(){
 
             //se o token for um rotulo, trata ele
             if (tokensList[contador_tokens].isRotulo(token, aux, instructionList)){
-                int tipo_rotulo = 0;
-                tipo_rotulo = tokensList[contador_tokens].KindOfRotulo(token);
-                std::cout << token << ' ';
-                std::cout << tipo_rotulo << std::endl;
+                int tipo_rotulo = tokensList[contador_tokens].KindOfRotulo(token);
                 
                 //testa se eh uma declaracao de rotulo e se ja tem outra declaracao na mesma linha
                 if (tipo_rotulo == 1){
-                
                     //se ja tiver uma declaracao na linha sera erro
                     if (haveRotuloInLine == 1){
                         std::cout << "Mais de um Rotulo na linha " << contador_de_linhas << "\n";
+                    } else{
+                        haveRotuloInLine == 1;
+                        Montador::Trata_rotulos(token, tipo_rotulo, contador_endereco);
                     }
                 }
-                //Trata_rotulos(token, tipo_rotulo);
+                if (tipo_rotulo == 2){
+                    Montador::Trata_rotulos(token, tipo_rotulo, contador_endereco);
+                }
             }
             contador_tokens++;
 
@@ -249,6 +250,8 @@ bool Montador::pre_processamento(){
             }*/
         }
     }
+    //Ta aqui so pra debugar
+    Montador::printRotulos();
 }
 
 //checa a lista de rotulos procurando se determinado rotulo ja foi visto antes, retorno com o seguinte significado
@@ -270,6 +273,61 @@ int Montador::RotuloAlreadyFound(std::string token){
     return 0;
 }
 
-void Montador::Trata_rotulos (std::string token, int tipo_rotulo){
+void Montador::Trata_rotulos (std::string token, int tipo_rotulo, int endereco){
+    //Retira, caso tenha, o :
+    std::cout << "PASSOU AQUI" << std::endl;
+    char* ptr;
+    ptr = &(token[0]);
+    token = Montador::trunca_nome(ptr, ':');
+    //se for a declaracao de um rotulo, chama a rotina pra tratar isso
+    if(tipo_rotulo == 1){
+        for (int i = 0; i < rotulosList.size(); i++){
+            //se ele ja existir na lista, devemos apenas atualizar o endereco de declaracao dele e o estado
+            if (token == rotulosList[i].name){
+                rotulosList[i].address = endereco;
+                rotulosList[i].alreadyDeclared = true;
+                //ADD UMA ROTINA PARA TRATAR ONDE O ROTULO JA FOI ENCONTRADO ANTES, OU SEJA,
+                //VOLTAR NO ARQUIVO E ATUALIZAR OS ENDERECOS. PRECISO NA MONTAGEM
+                return;
+            }
+        }
+        //se ele ainda nao existir na lista, criamos ele agora
+        Rotulo rotulo (token, true, endereco);
+        rotulosList.push_back(rotulo);
+        return;
+    }
+
+    //se for chamada de um rotulo, chama a rotina pra tratar isso
+    if (tipo_rotulo == 2){
+        for (int i = 0; i < rotulosList.size(); i++){
+            //se ele ja existir na lista, devemos colocar no lugar o endereco dele caso ja esteja declarado, ou adicionar
+            //esse endereco na lista de lugares onde ele eh chamado para tratar depois
+            if (token == rotulosList[i].name){
+                if(rotulosList[i].alreadyDeclared){
+                    //ADD UMA ROTINA PARA TRATAR A PARTE DA MONTAGEM
+                    return;
+                } else {
+                    rotulosList[i].addressList.push_back(endereco);
+                    return;
+                }
+            } //Caso ainda nao exista um rotulo com esse nome 
+            else {
+                Rotulo rotulo (token, false, 0);
+                rotulo.addressList.push_back(endereco);
+                rotulosList.push_back(rotulo);
+            }
+        }
+    }
   
+}
+
+
+void Montador::printRotulos(){
+    for (int i = 0; i < rotulosList.size(); i++){
+        std::cout << rotulosList[i].name << ' ';
+        for(int j = 0; j < rotulosList[i].addressList.size(); j++){
+            std::cout << rotulosList[i].addressList[j] << ' ';
+        }
+        std::cout << std::endl;
+    }
 }
