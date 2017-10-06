@@ -189,6 +189,9 @@ bool Montador::pre_processamento(){
 
         //Loop para analisar cada token um a um 
         while (lineStream >> token){
+            if (token[0] == ';'){
+                break;
+            }
             //coloca o token na lista
             this->tokensList.push_back(token);
 

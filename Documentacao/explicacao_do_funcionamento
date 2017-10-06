@@ -83,7 +83,7 @@ E desculpa pelo portugues ruim (preguica) e pela falta de acentuacao e cedilha (
 		*Ainda nao foi tratada a exclusao de comentarios
 
 		Coisas a serem tratadas no pre-processamento:
-			.Capacidade de aceitar comentários indicados pelo sı́mbolo “;”
+			.Capacidade de aceitar comentários indicados pelo sı́mbolo “;”	-DONE
 			.Poder criar um rótulo, dar quebra de linha e continuar a linha depois (o rótulo seria equivalente a linha seguinte)
 			.declarações e rótulos ausentes
 			.declarações e rótulos repetidos		
