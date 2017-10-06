@@ -187,7 +187,7 @@ bool Montador::pre_processamento(){
         std::stringstream lineStream (aux);
         haveRotuloInLine = 0;               //prepara a variavel para  analisar o proximo rotulo
 
-        //Loop para analisar cada token um a um 
+        //Loop para analisar cada token um a um
         while (lineStream >> token){
             if (token[0] == ';'){
                 break;
@@ -198,14 +198,14 @@ bool Montador::pre_processamento(){
             //se o token for um rotulo, trata ele
             if (tokensList[contador_tokens].isRotulo(token, aux, instructionList)){
                 int tipo_rotulo = tokensList[contador_tokens].KindOfRotulo(token);
-                
+
                 //testa se eh uma declaracao de rotulo e se ja tem outra declaracao na mesma linha
                 if (tipo_rotulo == 1){
                     //se ja tiver uma declaracao na linha sera erro
                     if (haveRotuloInLine == 1){
                         std::cout << "Mais de um Rotulo na linha " << contador_de_linhas << "\n";
                     } else{
-                        haveRotuloInLine == 1;
+                        haveRotuloInLine = 1;
                         Montador::Trata_rotulos(token, tipo_rotulo, contador_endereco);
                     }
                 }
@@ -214,13 +214,14 @@ bool Montador::pre_processamento(){
                 }
             }
             contador_tokens++;
+            contador_endereco++;
 
             if (token == "text"){
                 check_section_text = true;
             }
 
             if ((token == "equ")){
-                
+
                 }
 
            /* if (token == "if"){
@@ -278,7 +279,7 @@ void Montador::Trata_rotulos (std::string token, int tipo_rotulo, int endereco){
     std::cout << "PASSOU AQUI" << std::endl;
     char* ptr;
     ptr = &(token[0]);
-    token = Montador::trunca_nome(ptr, ':');
+    token = this->trunca_nome(ptr, ':');
     //se for a declaracao de um rotulo, chama a rotina pra tratar isso
     if(tipo_rotulo == 1){
         for (int i = 0; i < rotulosList.size(); i++){
@@ -310,7 +311,7 @@ void Montador::Trata_rotulos (std::string token, int tipo_rotulo, int endereco){
                     rotulosList[i].addressList.push_back(endereco);
                     return;
                 }
-            } //Caso ainda nao exista um rotulo com esse nome 
+            } //Caso ainda nao exista um rotulo com esse nome
             else {
                 Rotulo rotulo (token, false, 0);
                 rotulo.addressList.push_back(endereco);
@@ -318,7 +319,7 @@ void Montador::Trata_rotulos (std::string token, int tipo_rotulo, int endereco){
             }
         }
     }
-  
+
 }
 
 
