@@ -12,10 +12,23 @@ bool Token::isRotulo(std::string token, std::string linha, std::vector<Mnemonic>
         return true;
     }
 
-    //Cria uma stringstream com a linha que ta sendo analisada
-    std::stringstream lineStream (linha);
+    //algumas strings que queremos comparar, esta sendo feito assim pq de outras maneiras nao poderiamos ter um rotulo
+    std::stringstream Line (linha);
+    std::string aux;
+
+    //pega o primeiro elemento da linha
+    Line >> aux;
+
+    //ve se a linha eh uma linha do tipo section
+    if (aux == "section"){
+        Line >> aux;
+        if((aux == "data") || (aux == "text")){
+            return false;
+        }
+    }
 
     
+
 
     return false;
 }
