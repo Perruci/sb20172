@@ -92,7 +92,12 @@ bool Pre_Processamento::run(){
 
             if ((word == "equ"))
             {
-
+                if(haveRotuloInLine < 1)
+                {
+                        std::cout << "EQU não refere-se a nenhum rótulo. Linha: " << contador_de_linhas << '\n';
+                }
+                // atualiza o último rótulo
+                trata_equ(line, contador_de_linhas);
             }
 
            /* if (word == "if"){
@@ -221,5 +226,14 @@ void Pre_Processamento::printRotulos(){
             std::cout << rotulosList[i].addressList[j] << ' ';
         }
         std::cout << std::endl;
+    }
+}
+
+/* Tratamento de EQU */
+void Pre_Processamento::trata_equ(std::string line, size_t contador_de_linhas)
+{
+    if(!rotulosList.back().setEQU(line))
+    {
+        std::cout << "Error on line: " << contador_de_linhas << " while assigning EQU value" << '\n';
     }
 }

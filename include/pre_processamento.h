@@ -46,5 +46,7 @@ public:
     void chamada_de_rotulo(std::string, int);
     int RotuloAlreadyFound(std::string);
     void printRotulos();
+    /* EQU */
+    void trata_equ(std::string, size_t);
 };
 #endif
