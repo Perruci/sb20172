@@ -4,7 +4,7 @@ Pre_Processamento::Pre_Processamento(std::string inputFile, std::string outputFi
 {
     this->inputFileName =  inputFile;
     this->outputFileName = outputFile;
-    this->getOutputPrefix();
+    this->setOutputExtension(".pre");
     this->fileText.open(inputFileName);
     this->fileOutput.open(outputFileName);
     /* Pass as reference the instructionList */
@@ -18,16 +18,11 @@ Pre_Processamento::~Pre_Processamento()
     fileOutput.close();
 }
 
-std::string Pre_Processamento::getOutputPrefix()
+std::string Pre_Processamento::setOutputExtension(std::string extension)
 {
-    std::string outputFile;
-    //prepara o nome e abre o arquivo de saida
-    char* ptr;
-    ptr = &(this->outputFileName[0]);
-    outputFile = this->trunca_nome(ptr,'.');
-    outputFile += ".pre";
+    this->outputFileName = string_ops::setOutputExtension(outputFileName, extension);
 
-    return outputFile;
+    return outputFileName;
 }
 
 //Faz a etapa de pre-processamento e trata os EQU e IF, funcao criada sem utilizar a tokenizacao, pois estou com receio de que
@@ -47,9 +42,7 @@ bool Pre_Processamento::run(){
 
     //Loop para fazer o pre-processamento
     while (getline(this->fileText, aux)){
-        char* ptr;  //ponteiro de suporte para o funcionamento do strlen dentro da funcao minuscula
-        ptr = &(aux[0]);  //ponteiro apontando pro primeiro caracter da string
-        aux = this->minuscula (ptr);
+        aux = string_ops::minuscula (aux);
 
         contador_de_linhas++;               //incrementa a linha
         std::stringstream lineStream (aux);
@@ -145,7 +138,7 @@ void Pre_Processamento::Trata_rotulos (std::string token, int tipo_rotulo, int e
     //Retira, caso tenha, o :
     char* ptr;
     ptr = &(token[0]);
-    token = this->trunca_nome(ptr, ':');
+    token = string_ops::trunca_nome(ptr, ':');
     //se for a declaracao de um rotulo, chama a rotina pra tratar isso
     if(tipo_rotulo == 1){
         for (size_t i = 0; i < rotulosList.size(); i++){
@@ -195,33 +188,4 @@ void Pre_Processamento::printRotulos(){
         }
         std::cout << std::endl;
     }
-}
-
-
-//transforma toda a string em letras minusculas
-std::string Pre_Processamento::minuscula (char* aux){
-    int tam = strlen (aux);
-
-    for (int i = 0; i < tam; i++){
-        aux[i] = (char) std::tolower(aux[i]);
-    }
-
-    return aux;
-}
-
-//Funcao que recebe o ponteiro pro inicio de uma string e trunca ela a partir do caracter indesejado, pode ser usada para ajeitar a extensao dos
-//arquivos e para retirar o : dos rotulos (ex: teste.h -> teste  ou rotulo: -> rotulo)
-std::string Pre_Processamento::trunca_nome (char* nome, char indesejavel){
-    std::string aux = nome;
-    std::string aux2;
-    int tam = strlen (nome); //numero de caracteres da string nome
-
-    for (int i = 0; i < tam; i++){
-        if(nome[i] == indesejavel){
-            break;
-        }
-        aux2 += nome[i];
-    }
-
-    return aux2;
 }

@@ -11,6 +11,7 @@
 #include "token.h"
 #include "mnemonic.h"
 #include "rotulo.h"
+#include "string_ops.h"
 
 // Declaracao da classe Montador
 // Esta classe abriga os métodos desenvolvidos para traduzir e montar o programa
@@ -38,9 +39,7 @@ public:
     ~Pre_Processamento();
     bool run();
     /* Utilidades */
-    std::string getOutputPrefix();
-    std::string minuscula (char*);
-    std::string trunca_nome (char*, char);
+    std::string setOutputExtension(std::string);
     /* Rotulos */
     void Trata_rotulos (std::string, int, int);
     int RotuloAlreadyFound(std::string);
