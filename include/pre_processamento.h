@@ -7,6 +7,7 @@
 #include <sstream>
 #include <string.h>
 #include <vector>
+#include <tuple>
 
 #include "token.h"
 #include "mnemonic.h"
@@ -48,5 +49,9 @@ public:
     void printRotulos();
     /* EQU */
     bool trata_equ(std::string, size_t);
+    /* IF */
+    std::tuple<bool, bool> trata_if(std::string, size_t);
+
+    void writeTokensToOutput();
 };
 #endif

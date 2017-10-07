@@ -104,36 +104,33 @@ bool Pre_Processamento::run(){
                     return false;
                 }
             }
-
-           /* if (word == "if"){
-                lineStream >> word; //pega o rotulo que vem depois do if
-                for (int i = 0; i < rotulos.size(); i++){
-                    //Se for verdade pega a linha debaixo e imprime ela no arquivo de saida
-                    if ((word == rotulos[i]) && (true_or_false[i] != '0')){
-                        getline(this->fileText, aux);
-                        ptr = &(aux[0]);
-                        aux = Pre_Processamento::minuscula(ptr);
-                        std::stringstream lineStream_aux2(aux);
-
-                        while (lineStream_aux2 >> word){
-                            out_pre << word << " ";
-                        }
-                    }
-                    //Se o if representar uma mentira (rotulo = 0), nao imprime a linha debaixo no arquivo
-                    if ((word == rotulos[i]) && (true_or_false[i] == '0')){
-                        getline (this->fileText, aux);
-                        std::stringstream lineStream_aux2(aux);
-
-                        while (lineStream_aux2 >> word){
-                            //do nothing
-                        }
-                    }
+            if(word == "if")
+            {
+                //pega o rotulo que vem depois do if
+                if(!(lineStream >> word))
+                {
+                    std::cout << "linha " << contador_de_linhas
+                              << " IF não se refere a nenhum rótulo" << '\n';
+                    return false;
                 }
-            }*/
+                bool sintaxeCorrect, statementResult;
+                std::tie(sintaxeCorrect, statementResult) = trata_if(word, contador_de_linhas);
+                if(!sintaxeCorrect)
+                {
+                    return false;
+                }
+                // se o resultado do IF for negativo
+                if(!statementResult)
+                {
+                    // Pula uma linha
+                    getline(this->fileText, line); // != melhor solucao
+                }
+            }
         }
     }
     //Ta aqui so pra debugar
     this->printRotulos();
+    this->writeTokensToOutput();
     return true;
 }
 
@@ -245,3 +242,77 @@ bool Pre_Processamento::trata_equ(std::string line, size_t contador_de_linhas)
     }
     return true;
 }
+
+/* Tratamento de IF */
+std::tuple<bool,bool> Pre_Processamento::trata_if(std::string word, size_t contador_de_linhas)
+{
+    // variaveis de retorno
+    bool sintaxeCorrect = false;
+    bool statementResult;
+
+    int value;
+    // Vertifica se word já é um rótulo declarado po EQU
+    for (size_t i = 0; i < rotulosList.size() && !sintaxeCorrect; i++)
+        if(word == rotulosList[i].name)
+        {
+            if(rotulosList[i].isEqu)
+            {
+                value = rotulosList[i].EquValue;
+                // Encontrado rotulo! IF tem sintaxe correta
+                sintaxeCorrect = true;
+            } else
+            {
+                std::cout << "linha "<< contador_de_linhas
+                          << ": Rótulo encontrado não foi declarado como EQU" << '\n';
+                return std::make_tuple(false, false);
+            }
+        }
+    if(!sintaxeCorrect)
+    {
+        std::cout << "linha: "<< contador_de_linhas
+                  << ": rótulo referente ao IF não encontrado"<< '\n';
+      return std::make_tuple(false, false);
+    }
+
+    if(value == 0)
+        statementResult = false;
+    else
+        statementResult = true;
+
+    return std::make_tuple(sintaxeCorrect, statementResult);
+}
+
+void Pre_Processamento::writeTokensToOutput()
+{
+    for(size_t i = 0; i < tokensList.size(); i++)
+    {
+        this->fileOutput << tokensList[i].nome << '\n';
+    }
+    this->fileOutput << std::endl;
+}
+
+/* if (word == "if"){
+     lineStream >> word; //pega o rotulo que vem depois do if
+     for (int i = 0; i < rotulos.size(); i++){
+         //Se for verdade pega a linha debaixo e imprime ela no arquivo de saida
+         if ((word == rotulos[i]) && (true_or_false[i] != '0')){
+             getline(this->fileText, aux);
+             ptr = &(aux[0]);
+             aux = Pre_Processamento::minuscula(ptr);
+             std::stringstream lineStream_aux2(aux);
+
+             while (lineStream_aux2 >> word){
+                 out_pre << word << " ";
+             }
+         }
+         //Se o if representar uma mentira (rotulo = 0), nao imprime a linha debaixo no arquivo
+         if ((word == rotulos[i]) && (true_or_false[i] == '0')){
+             getline (this->fileText, aux);
+             std::stringstream lineStream_aux2(aux);
+
+             while (lineStream_aux2 >> word){
+                 //do nothing
+             }
+         }
+     }
+ }*/
