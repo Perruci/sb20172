@@ -30,10 +30,6 @@ public:
     /* Mnemonic */
     void loadInstructions(std::string);
     void printIntstructions();
-    /* Tokens */
-    void tokenizar();
-    void printTokens();
-    void writeTokensToOutput();
     /* pre-processamento */
     bool pre_processamento();
     /* Processamento */
