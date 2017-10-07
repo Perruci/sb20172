@@ -37,41 +37,49 @@ bool Pre_Processamento::run(){
     //Fecha e abre o arquivo do codigo para atualizar o ponteiro de arquivo, caso alguma outra funcao tenha usado ele
     this->reopenCodeFile();
 
-    std::string aux;
+    std::string line;
     std::string token;
 
     //Loop para fazer o pre-processamento
-    while (getline(this->fileText, aux)){
-        aux = string_ops::minuscula (aux);
+    // para cada linha..
+    while (getline(this->fileText, line))
+    {
+        // transforma para minuscula
+        line = string_ops::minuscula (line);
 
         contador_de_linhas++;               //incrementa a linha
-        std::stringstream lineStream (aux);
+        std::stringstream lineStream (line);
         haveRotuloInLine = 0;               //prepara a variavel para  analisar o proximo rotulo
 
         //Loop para analisar cada token um a um
-        while (lineStream >> token){
-            if (token[0] == ';'){
+        while (lineStream >> token)
+        {
+            // se encontra um comentário, pula a linha
+            if (token[0] == ';')
                 break;
-            }
+
             //coloca o token na lista
             this->tokensList.push_back(token);
 
             //se o token for um rotulo, trata ele
-            if (tokensList[contador_tokens].isRotulo(token, aux, instructionList)){
-                int tipo_rotulo = tokensList[contador_tokens].KindOfRotulo(token);
+            if (tokensList[contador_tokens].isRotulo(token, line, instructionList)){
+                int tipo = tokensList[contador_tokens].KindOfRotulo(token);
 
                 //testa se eh uma declaracao de rotulo e se ja tem outra declaracao na mesma linha
-                if (tipo_rotulo == 1){
+                if (tipo == tipo_rotulo::declaracao)
+                {
                     //se ja tiver uma declaracao na linha sera erro
-                    if (haveRotuloInLine == 1){
+                    if (haveRotuloInLine == 1)
+                    {
                         std::cout << "Mais de um Rotulo na linha " << contador_de_linhas << "\n";
-                    } else{
+                    } else
+                    {
                         haveRotuloInLine = 1;
-                        this->Trata_rotulos(token, tipo_rotulo, contador_endereco);
+                        this->trata_rotulos(token, tipo, contador_endereco);
                     }
                 }
-                if (tipo_rotulo == 2){
-                    this->Trata_rotulos(token, tipo_rotulo, contador_endereco);
+                if (tipo == tipo_rotulo::declaracao){
+                    this->trata_rotulos(token, tipo, contador_endereco);
                 }
             }
             contador_tokens++;
@@ -115,6 +123,8 @@ bool Pre_Processamento::run(){
     this->printRotulos();
 }
 
+/* Tratamento de Rótulos */
+
 //checa a lista de rotulos procurando se determinado rotulo ja foi visto antes, retorno com o seguinte significado
 // 0-> primeira vez que encontramos o rotulo
 // 1xx-> rotulo ja encontrado e ja declarado (xx eh o indice da lista de rotulos onde esse rotulo se encontra)
@@ -134,50 +144,71 @@ int Pre_Processamento::RotuloAlreadyFound(std::string token){
     return 0;
 }
 
-void Pre_Processamento::Trata_rotulos (std::string token, int tipo_rotulo, int endereco){
+void Pre_Processamento::trata_rotulos (std::string token, int tipo_rotulo, int endereco){
     //Retira, caso tenha, o :
-    char* ptr;
-    ptr = &(token[0]);
-    token = string_ops::trunca_nome(ptr, ':');
+    token = string_ops::trunca_nome(token, ':');
+
     //se for a declaracao de um rotulo, chama a rotina pra tratar isso
-    if(tipo_rotulo == 1){
-        for (size_t i = 0; i < rotulosList.size(); i++){
-            //se ele ja existir na lista, devemos apenas atualizar o endereco de declaracao dele e o estado
-            if (token == rotulosList[i].name){
-                rotulosList[i].setState(endereco);
-                //ADD UMA ROTINA PARA TRATAR ONDE O ROTULO JA FOI ENCONTRADO ANTES, OU SEJA,
-                //VOLTAR NO ARQUIVO E ATUALIZAR OS ENDERECOS. PRECISO NA MONTAGEM
-                return;
-            }
-        }
-        //se ele ainda nao existir na lista, criamos ele agora
-        Rotulo rotulo (token, true, endereco);
-        rotulosList.push_back(rotulo);
+    if(tipo_rotulo == tipo_rotulo::declaracao)
+    {
+        declaracao_de_rotulo(token, endereco);
         return;
     }
 
     //se for chamada de um rotulo, chama a rotina pra tratar isso
-    if (tipo_rotulo == 2){
-        for (size_t i = 0; i < rotulosList.size(); i++){
-            //se ele ja existir na lista, devemos colocar no lugar o endereco dele caso ja esteja declarado, ou adicionar
-            //esse endereco na lista de lugares onde ele eh chamado para tratar depois
-            if (token == rotulosList[i].name){
-                if(rotulosList[i].alreadyDeclared){
-                    //ADD UMA ROTINA PARA TRATAR A PARTE DA MONTAGEM
-                    return;
-                } else {
-                    rotulosList[i].addressList.push_back(endereco);
-                    return;
-                }
-            }
-        }
-        //Caso ainda nao exista um rotulo com esse nome
-        Rotulo rotulo (token, false, 0);
-        rotulo.addressList.push_back(endereco);
-        rotulosList.push_back(rotulo);
+    if (tipo_rotulo == tipo_rotulo::chamada)
+    {
+        chamada_de_rotulo(token, endereco);
         return;
     }
 
+    return;
+}
+
+void Pre_Processamento::declaracao_de_rotulo(std::string token, int endereco)
+{
+    for (size_t i = 0; i < rotulosList.size(); i++)
+    {
+        //se ele ja existir na lista, devemos apenas atualizar o endereco de declaracao dele e o estado
+        if (token == rotulosList[i].name)
+        {
+            rotulosList[i].setState(endereco);
+            //ADD UMA ROTINA PARA TRATAR ONDE O ROTULO JA FOI ENCONTRADO ANTES, OU SEJA,
+            //VOLTAR NO ARQUIVO E ATUALIZAR OS ENDERECOS. PRECISO NA MONTAGEM
+            return;
+        }
+    }
+    //se ele ainda nao existir na lista, criamos ele agora
+    Rotulo rotulo (token, true, endereco);
+    rotulosList.push_back(rotulo);
+    return;
+}
+
+void Pre_Processamento::chamada_de_rotulo(std::string token, int endereco)
+{
+    for (size_t i = 0; i < rotulosList.size(); i++)
+    {
+        //se ele ja existir na lista, devemos colocar no lugar o endereco dele caso ja esteja declarado, ou adicionar
+        //esse endereco na lista de lugares onde ele eh chamado para tratar depois
+        if (token == rotulosList[i].name)
+        {
+            if(rotulosList[i].alreadyDeclared)
+            {
+                //ADD UMA ROTINA PARA TRATAR A PARTE DA MONTAGEM
+                return;
+            } else
+            {
+                rotulosList[i].addressList.push_back(endereco);
+                return;
+            }
+        }
+    }
+    //Caso ainda nao exista um rotulo com esse nome
+    // Cria um novo rótulo e adiciona-o a lista
+    Rotulo rotulo (token, false, 0);
+    rotulo.addressList.push_back(endereco);
+    rotulosList.push_back(rotulo);
+    return;
 }
 
 void Pre_Processamento::printRotulos(){

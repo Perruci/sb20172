@@ -47,11 +47,14 @@ bool Token::isRotulo(std::string token, std::string linha, std::vector<Mnemonic>
 //Retorna 1 para rotulos de declaracao e 2 para chamadas de rotulo
 //Se essa funcao for chamada, ja sabemos que se trata de um rotulo, portanto faz apenas o teste de ser declaracao
 //se nao for,eh pq eh chamada
-int Token::KindOfRotulo(std::string token){
-    if (Token::have2points(token)){
-        return 1;
-    } else {
-        return 2;
+int Token::KindOfRotulo(std::string token)
+{
+    if (Token::have2points(token))
+    {
+        return tipo_rotulo::declaracao;
+    } else
+    {
+        return tipo_rotulo::chamada;
     }
 
 }

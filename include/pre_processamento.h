@@ -41,7 +41,9 @@ public:
     /* Utilidades */
     std::string setOutputExtension(std::string);
     /* Rotulos */
-    void Trata_rotulos (std::string, int, int);
+    void trata_rotulos (std::string, int, int);
+    void declaracao_de_rotulo(std::string, int);
+    void chamada_de_rotulo(std::string, int);
     int RotuloAlreadyFound(std::string);
     void printRotulos();
 };

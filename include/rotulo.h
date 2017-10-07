@@ -5,6 +5,14 @@
 #include <string.h>
 #include <vector>
 
+namespace tipo_rotulo
+{
+    enum
+    {
+        declaracao,
+        chamada
+    };
+};
 
 // Rotulos(labels) do programa
 class Rotulo

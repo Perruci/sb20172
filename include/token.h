@@ -7,6 +7,7 @@
 #include <sstream>
 
 #include "mnemonic.h"
+#include "rotulo.h"
 
 // Tipos de token
 // declarados fora da classe para que qualquer arquivo possa utilizá-los
