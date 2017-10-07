@@ -41,10 +41,10 @@ bool Rotulo::setEQU(std::string line)
     }
     // cria uma substring a partir de equ até o final
     std::string substring = line.substr(equ_pos + 3);
-    // extrai-se um valor inteiro e recebe sua posição seguinte
     // tratamento de exeção
     try
     {
+        // extrai-se um valor inteiro e recebe sua posição seguinte
         size_t pos_int;
         int value = std::stoi(substring, &pos_int);
         std::cout << "EQU value: " << value << '\n';
