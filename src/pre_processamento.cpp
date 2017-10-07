@@ -38,32 +38,32 @@ bool Pre_Processamento::run(){
     this->reopenCodeFile();
 
     std::string line;
-    std::string token;
+    std::string word;
 
     //Loop para fazer o pre-processamento
     // para cada linha..
     while (getline(this->fileText, line))
     {
         // transforma para minuscula
-        line = string_ops::minuscula (line);
-
+        line = string_ops::minuscula(line);
         contador_de_linhas++;               //incrementa a linha
+
         std::stringstream lineStream (line);
         haveRotuloInLine = 0;               //prepara a variavel para  analisar o proximo rotulo
 
-        //Loop para analisar cada token um a um
-        while (lineStream >> token)
+        //Loop para analisar cada termo um a um
+        while (lineStream >> word)
         {
             // se encontra um comentário, pula a linha
-            if (token[0] == ';')
+            if (word[0] == ';')
                 break;
 
-            //coloca o token na lista
-            this->tokensList.push_back(token);
+            //coloca o termo na lista
+            this->tokensList.push_back(Token(word));
 
             //se o token for um rotulo, trata ele
-            if (tokensList[contador_tokens].isRotulo(token, line, instructionList)){
-                int tipo = tokensList[contador_tokens].KindOfRotulo(token);
+            if (tokensList[contador_tokens].isRotulo(word, line, instructionList)){
+                int tipo = tokensList[contador_tokens].KindOfRotulo(word);
 
                 //testa se eh uma declaracao de rotulo e se ja tem outra declaracao na mesma linha
                 if (tipo == tipo_rotulo::declaracao)
@@ -75,43 +75,46 @@ bool Pre_Processamento::run(){
                     } else
                     {
                         haveRotuloInLine = 1;
-                        this->trata_rotulos(token, tipo, contador_endereco);
+                        this->trata_rotulos(word, tipo, contador_endereco);
                     }
                 }
-                if (tipo == tipo_rotulo::declaracao){
-                    this->trata_rotulos(token, tipo, contador_endereco);
+                if (tipo == tipo_rotulo::chamada)
+                {
+                    this->trata_rotulos(word, tipo, contador_endereco);
                 }
             }
             contador_tokens++;
 
-            if (token == "text"){
+            if (word == "text")
+            {
                 check_section_text = true;
             }
 
-            if ((token == "equ")){
+            if ((word == "equ"))
+            {
 
-                }
+            }
 
-           /* if (token == "if"){
-                lineStream >> token; //pega o rotulo que vem depois do if
+           /* if (word == "if"){
+                lineStream >> word; //pega o rotulo que vem depois do if
                 for (int i = 0; i < rotulos.size(); i++){
                     //Se for verdade pega a linha debaixo e imprime ela no arquivo de saida
-                    if ((token == rotulos[i]) && (true_or_false[i] != '0')){
+                    if ((word == rotulos[i]) && (true_or_false[i] != '0')){
                         getline(this->fileText, aux);
                         ptr = &(aux[0]);
                         aux = Pre_Processamento::minuscula(ptr);
                         std::stringstream lineStream_aux2(aux);
 
-                        while (lineStream_aux2 >> token){
-                            out_pre << token << " ";
+                        while (lineStream_aux2 >> word){
+                            out_pre << word << " ";
                         }
                     }
                     //Se o if representar uma mentira (rotulo = 0), nao imprime a linha debaixo no arquivo
-                    if ((token == rotulos[i]) && (true_or_false[i] == '0')){
+                    if ((word == rotulos[i]) && (true_or_false[i] == '0')){
                         getline (this->fileText, aux);
                         std::stringstream lineStream_aux2(aux);
 
-                        while (lineStream_aux2 >> token){
+                        while (lineStream_aux2 >> word){
                             //do nothing
                         }
                     }
