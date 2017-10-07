@@ -7,6 +7,7 @@ SRC=src/*.cpp
 default: main
 
 main:
+	clear
 	$(CC) -o $(TARGET) main.cpp $(SRC) $(CFLAGS) $(HEADERS)
 
 clean:
