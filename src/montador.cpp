@@ -206,11 +206,11 @@ bool Montador::pre_processamento(){
                         std::cout << "Mais de um Rotulo na linha " << contador_de_linhas << "\n";
                     } else{
                         haveRotuloInLine = 1;
-                        Montador::Trata_rotulos(token, tipo_rotulo, contador_endereco);
+                        this->Trata_rotulos(token, tipo_rotulo, contador_endereco);
                     }
                 }
                 if (tipo_rotulo == 2){
-                    Montador::Trata_rotulos(token, tipo_rotulo, contador_endereco);
+                    this->Trata_rotulos(token, tipo_rotulo, contador_endereco);
                 }
             }
             contador_tokens++;
@@ -252,7 +252,7 @@ bool Montador::pre_processamento(){
         }
     }
     //Ta aqui so pra debugar
-    Montador::printRotulos();
+    this->printRotulos();
 }
 
 //checa a lista de rotulos procurando se determinado rotulo ja foi visto antes, retorno com o seguinte significado
@@ -276,7 +276,6 @@ int Montador::RotuloAlreadyFound(std::string token){
 
 void Montador::Trata_rotulos (std::string token, int tipo_rotulo, int endereco){
     //Retira, caso tenha, o :
-    std::cout << "PASSOU AQUI" << std::endl;
     char* ptr;
     ptr = &(token[0]);
     token = this->trunca_nome(ptr, ':');
@@ -285,8 +284,7 @@ void Montador::Trata_rotulos (std::string token, int tipo_rotulo, int endereco){
         for (int i = 0; i < rotulosList.size(); i++){
             //se ele ja existir na lista, devemos apenas atualizar o endereco de declaracao dele e o estado
             if (token == rotulosList[i].name){
-                rotulosList[i].address = endereco;
-                rotulosList[i].alreadyDeclared = true;
+                rotulosList[i].setState(endereco);
                 //ADD UMA ROTINA PARA TRATAR ONDE O ROTULO JA FOI ENCONTRADO ANTES, OU SEJA,
                 //VOLTAR NO ARQUIVO E ATUALIZAR OS ENDERECOS. PRECISO NA MONTAGEM
                 return;
@@ -311,13 +309,13 @@ void Montador::Trata_rotulos (std::string token, int tipo_rotulo, int endereco){
                     rotulosList[i].addressList.push_back(endereco);
                     return;
                 }
-            } //Caso ainda nao exista um rotulo com esse nome
-            else {
-                Rotulo rotulo (token, false, 0);
-                rotulo.addressList.push_back(endereco);
-                rotulosList.push_back(rotulo);
-            }
+            } 
         }
+        //Caso ainda nao exista um rotulo com esse nome
+        Rotulo rotulo (token, false, 0);
+        rotulo.addressList.push_back(endereco);
+        rotulosList.push_back(rotulo);
+        return;
     }
 
 }
