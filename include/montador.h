@@ -8,6 +8,7 @@
 #include <string.h>
 #include <vector>
 
+#include "pre_processamento.h"
 #include "token.h"
 #include "mnemonic.h"
 #include "rotulo.h"
@@ -20,22 +21,11 @@ private:
     std::string inputFileName;
     std::string outputFileName;
 
-    std::vector<Token> tokensList;
     std::vector<Mnemonic> instructionList;
-    std::vector<Rotulo> rotulosList;
 
-    std::ifstream fileText;
-    std::ofstream fileOutput;
-
-    //Fecha e abre o arquivo do codigo para atualizar o ponteiro de arquivo, caso alguma outra funcao tenha usado ele
-    inline bool reopenCodeFile()
-    {
-        this->fileText.close();
-        this->fileText.open(this->inputFileName);
-        return(fileText.is_open());
-    };
+    Pre_Processamento* _pre_process;
 public:
-    Montador(std::string, std::string);
+    Montador(std::string inputFile, std::string outputFile, std::string tablePath = "tables/instructions.txt");
     ~Montador();
     /* Mnemonic */
     void loadInstructions(std::string);
@@ -43,18 +33,12 @@ public:
     /* Tokens */
     void tokenizar();
     void printTokens();
-    std::string minuscula (char*);
-    std::string trunca_nome (char*, char);
     void writeTokensToOutput();
-    /* Rotulos */
-    void Trata_rotulos (std::string, int, int);
-    int RotuloAlreadyFound(std::string);
-    void printRotulos();
     /* pre-processamento */
     bool pre_processamento();
-    std::string getOutputPrefix();
-
+    /* Processamento */
     void processamento();
+    /* Montagem */
     void montagem();
 };
 #endif

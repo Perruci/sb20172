@@ -30,7 +30,6 @@ int main (int argc, char* argv[]){
 
     //Cria o objeto montador e ja tokeniza o arquivo de entrada
     Montador montador(inputFile, outputFile);
-    montador.loadInstructions("tables/instructions.txt");
     montador.printIntstructions();
 
     switch (operation){
