@@ -47,6 +47,6 @@ public:
     int RotuloAlreadyFound(std::string);
     void printRotulos();
     /* EQU */
-    void trata_equ(std::string, size_t);
+    bool trata_equ(std::string, size_t);
 };
 #endif
