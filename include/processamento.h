@@ -36,6 +36,8 @@ public:
     std::string getCode ();
     std::string getRotulo(std::string);
 
+    void printLineToOutput(std::string);
+
     std::string setOutputExtension(std::string);
     std::string setInputExtension(std::string);
 };

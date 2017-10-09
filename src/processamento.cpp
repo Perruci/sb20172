@@ -64,6 +64,7 @@ bool Processamento::run(){
                 this->macrosList.push_back(macro);
             }
         }
+        this->printLineToOutput(line);
     }
     this-> printMacros();
     return true;
@@ -112,7 +113,8 @@ std::string Processamento::getCode (){
         //pega token a token e vai salvando no code, ate achar end
         while (lineStream >> word){
             if (word == "end"){
-                //terminou a macro
+                //terminou a macro, imprime-a e retorna
+                //this-> fileOutput << code;
                 return code;
             }
             //se nao for end, salva em code
@@ -130,8 +132,38 @@ std::string Processamento::getCode (){
 
 //Metodo para debug
 void Processamento::printMacros(){
-    for (size_t i = 0; i < macrosList.size(); i++){
-        std::cout << "macro name = " << macrosList[i].name << std::endl;
-        std::cout << "macro code = " << macrosList[i].codigo << std::endl;
+    for (size_t i = 0; i < this->macrosList.size(); i++){
+        std::cout << "macro name = " << this->macrosList[i].name << std::endl;
+        std::cout << "macro code = " << this->macrosList[i].codigo << std::endl;
     }
+}
+
+//Metodo para decidir se precisa ou nao imprimir a linha atual no arquivo de saida
+void Processamento::printLineToOutput(std::string line){
+    std::string word;
+    std::stringstream lineStream (line);
+
+    //Pega o primeiro token da linha e joga para a palavra
+    lineStream >> word;
+
+    //ve se o primeiro token da linha eh uma chamada de macro
+    for (size_t i = 0; i < this->macrosList.size(); i++){
+        if (word == this->macrosList[i].name){
+            this-> fileOutput << this->macrosList[i].codigo;
+            return;
+        }
+    }
+
+    if(word == "macro"){
+        return;
+    }
+
+    while (lineStream >> word){
+        if(word == "macro"){
+            return;
+        }
+    }
+
+    //Se chegar aqui eh pq essa linha deve ser impressa
+    this-> fileOutput << line << std::endl;
 }
