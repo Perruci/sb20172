@@ -7,6 +7,7 @@ Montador::Montador(std::string inputFile, std::string outputFile, std::string ta
     this->outputFileName = outputFile;
     this->loadInstructions(tablePath);
     this->_pre_process = new Pre_Processamento(inputFileName, outputFileName, instructionList);
+    this->_processamento = new Processamento(inputFileName, outputFileName);
 }
 // Destruidor do montador
 Montador::~Montador()
@@ -71,4 +72,10 @@ void Montador::printIntstructions()
 bool Montador::pre_processamento()
 {
     return this->_pre_process->run();
+}
+
+/* processamento ----------------------------------------------------- */
+bool Montador::processamento()
+{
+    return this->_processamento->run();
 }

@@ -9,6 +9,7 @@
 #include <vector>
 
 #include "pre_processamento.h"
+#include "processamento.h"
 #include "token.h"
 #include "mnemonic.h"
 #include "rotulo.h"
@@ -24,6 +25,7 @@ private:
     std::vector<Mnemonic> instructionList;
 
     Pre_Processamento* _pre_process;
+    Processamento* _processamento;
 public:
     Montador(std::string inputFile, std::string outputFile, std::string tablePath = "tables/instructions.txt");
     ~Montador();
@@ -33,7 +35,7 @@ public:
     /* pre-processamento */
     bool pre_processamento();
     /* Processamento */
-    void processamento();
+    bool processamento();
     /* Montagem */
     void montagem();
 };

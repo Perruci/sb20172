@@ -334,28 +334,3 @@ void Pre_Processamento::printLine(std::string Line){
     //Se chegar aqui eh pq essa linha deve ser impressa
     this-> fileOutput << Line << std::endl;
 }
-/* if (word == "if"){
-     lineStream >> word; //pega o rotulo que vem depois do if
-     for (int i = 0; i < rotulos.size(); i++){
-         //Se for verdade pega a linha debaixo e imprime ela no arquivo de saida
-         if ((word == rotulos[i]) && (true_or_false[i] != '0')){
-             getline(this->fileText, aux);
-             ptr = &(aux[0]);
-             aux = Pre_Processamento::minuscula(ptr);
-             std::stringstream lineStream_aux2(aux);
-
-             while (lineStream_aux2 >> word){
-                 out_pre << word << " ";
-             }
-         }
-         //Se o if representar uma mentira (rotulo = 0), nao imprime a linha debaixo no arquivo
-         if ((word == rotulos[i]) && (true_or_false[i] == '0')){
-             getline (this->fileText, aux);
-             std::stringstream lineStream_aux2(aux);
-
-             while (lineStream_aux2 >> word){
-                 //do nothing
-             }
-         }
-     }
- }*/

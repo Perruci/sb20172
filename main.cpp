@@ -37,21 +37,19 @@ int main (int argc, char* argv[]){
         //avalia as diretivas EQU e IF.
         case 'p':
             montador.pre_processamento();
-            cout << "Definir algo para fazer a operacao de preprocessamento\n";
             break;
 
         //Operação de processamento de macros, coloca a estensão “.mcr” no arquivo e somente avalia
         //as diretivas EQU e IF e substitue as MACROS.
         case 'm':
-            //pre-procesasmento (arq_entrada, arq_saida);
-            //procesasmento (arq_saida);
-            cout << "Definir algo para fazer a operacao de processamento\n";
+            montador.pre_processamento();
+            montador.processamento();
             break;
 
         //Operação de motagem, coloca a estensão “.o” realiza a montagem de programa usando o PROCESSO DE PASSAGEM ÚNICA.
         case 'o':
-            //pre-procesasmento (arq_entrada, arq_saida);
-            //procesasmento (arq_saida);
+            montador.pre_processamento();
+            montador.processamento();
             //montador (arq_saida);
             cout << "Definir algo para fazer a operacao de montagem\n";
             break;
