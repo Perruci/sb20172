@@ -22,6 +22,8 @@ private:
     std::ifstream fileText;
     std::ofstream fileOutput;
 
+    std::vector <std::string> macrosList;
+
 public:
     Processamento(std::string, std::string);
     ~Processamento();

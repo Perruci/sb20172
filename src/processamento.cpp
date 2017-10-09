@@ -33,5 +33,21 @@ std::string Processamento::setInputExtension(std::string extension)
 
 //Metodo principal que vai realizar o processamento
 bool Processamento::run(){
+    
+    std::string line;
+    std::string word;
+
+    //loop linha a linha para analisar o arquivo de entrada
+    while (getline(this->fileText, line)){
+        std::stringstream lineStream(line);
+
+        //loop palavra a palavra para procurar as macros
+        while (lineStream >> word){
+            //caso ache uma macro, a palavra antes dela eh o seu rotulo
+            if (word == "macro"){
+
+            }
+        }
+    }
     return true;
 }
