@@ -34,6 +34,9 @@ bool Pre_Processamento::run(){
     int haveRotuloInLine = 0;            //controle para caso aparecam dois rotulos na mesma linha
     int contador_de_linhas = 0;       //Controle para saber em qual linha do programa esta algum erro
 
+    //inicializa as condicoes de IF como falsas
+    this->lastIF = false;
+
     //Fecha e abre o arquivo do codigo para atualizar o ponteiro de arquivo, caso alguma outra funcao tenha usado ele
     this->reopenCodeFile();
 
@@ -123,14 +126,15 @@ bool Pre_Processamento::run(){
                 if(!statementResult)
                 {
                     // Pula uma linha
-                    getline(this->fileText, line); // != melhor solucao
+                    //getline(this->fileText, line); // != melhor solucao
                 }
             }
         }
+        this-> printLine(line);
     }
     //Ta aqui so pra debugar
     this->printRotulos();
-    this->writeTokensToOutput();
+    //this->writeTokensToOutput();
     return true;
 }
 
@@ -291,6 +295,45 @@ void Pre_Processamento::writeTokensToOutput()
     this->fileOutput << std::endl;
 }
 
+//Toma a decisao se imprime a linha ou nao e ja imprime
+void Pre_Processamento::printLine(std::string Line){
+    std::stringstream linha(Line);
+    std::string word;
+
+    while (linha >> word){
+        if (word == "equ"){
+            //nao imprime a linha
+            return;
+        }
+        if (word == "if"){
+            this-> lastIF = true;
+            //pego o rotulo associado ao if e verifico o estado dele
+            linha >> word;
+            for (size_t i = 0; i < rotulosList.size(); i++){
+                //procura o rotulo associado ao if
+                if (word == rotulosList[i].name){
+                    if ((rotulosList[i].EquValue == 0) && (rotulosList[i].isEqu)){
+                        this->lastIfState = false;
+                    } else {
+                        this-> lastIfState = true;
+                    }
+                }
+            }
+            return;
+        }
+    }
+
+    if ((this->lastIF) && (!this->lastIfState)){
+        //sginifica que a linha de cima era um EQU com valor 0, portanto nao imprime
+        //atualiza a variavel lastIF
+        this-> lastIF = false;
+        return;
+
+    }
+
+    //Se chegar aqui eh pq essa linha deve ser impressa
+    this-> fileOutput << Line << std::endl;
+}
 /* if (word == "if"){
      lineStream >> word; //pega o rotulo que vem depois do if
      for (int i = 0; i < rotulos.size(); i++){

@@ -51,7 +51,10 @@ public:
     bool trata_equ(std::string, size_t);
     /* IF */
     std::tuple<bool, bool> trata_if(std::string, size_t);
+    bool lastIF;
+    bool lastIfState;
 
     void writeTokensToOutput();
+    void printLine(std::string line);
 };
 #endif
