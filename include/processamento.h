@@ -13,6 +13,7 @@
 #include "mnemonic.h"
 #include "rotulo.h"
 #include "string_ops.h"
+#include "macro.h"
 
 class Processamento
 {
@@ -22,13 +23,18 @@ private:
     std::ifstream fileText;
     std::ofstream fileOutput;
 
-    std::vector <std::string> macrosList;
+    std::vector <Macro> macrosList;
 
 public:
     Processamento(std::string, std::string);
     ~Processamento();
 
     bool run();
+
+    /*Macros*/
+    void printMacros();
+    std::string getCode ();
+    std::string getRotulo(std::string);
 
     std::string setOutputExtension(std::string);
     std::string setInputExtension(std::string);

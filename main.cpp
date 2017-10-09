@@ -30,7 +30,7 @@ int main (int argc, char* argv[]){
 
     //Cria o objeto montador e ja tokeniza o arquivo de entrada
     Montador montador(inputFile, outputFile);
-    montador.printIntstructions();
+    //montador.printIntstructions();
 
     switch (operation){
         //Operação de preprocessamento, coloca a estensão “.pre” no arquivo e somente

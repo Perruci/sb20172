@@ -133,7 +133,7 @@ bool Pre_Processamento::run(){
         this-> printLine(line);
     }
     //Ta aqui so pra debugar
-    this->printRotulos();
+    //this->printRotulos();
     //this->writeTokensToOutput();
     return true;
 }
