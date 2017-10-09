@@ -91,3 +91,8 @@ E desculpa pelo portugues ruim (preguica) e pela falta de acentuacao e cedilha (
 			.seção TEXT faltante
 			.Identificar erros durante a montagem. Montado sempre o programa inteiro e mostrando na tela a(s) LINHA(S) e TIPO DOS ERROS
 			(segundo a relação a seguir e indicar se é LÉXICO, SINTÁTICO OU SEMANTICO).
+
+
+		Bugs encontrados:
+		Tanto no pre-processamento quanto no processamento, se aparecer um rotulo, pular linha e depois o que ele declara, imprimimos uma msg de erro
+		que nao eh o desejado pelo prof
