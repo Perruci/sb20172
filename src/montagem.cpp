@@ -129,19 +129,7 @@ bool Montagem::run(){
 
             //Testa se o token atual eh uma instrucao, caso seja prepara as variaveis para receber os argumentos
             if (this-> isInstruction(tokensList[contador_tokens])){
-                
-                //Se nao estivermos na secao de texto e uma instrucao aparecer, isso indica um erro
-                //P.S: desculpa pela logica invertida no if
-                if (!now_section_text){
-                    std::cout << "Erro semantico na linha " << contador_de_linhas << " instrucao fora da secao de texto\n";
-                }
-
-                this->lineIsInstruction = true;
-                //Pega a quantidade de operandos que essa instrucao requere
-                this->numberOfOperandsInLine = this-> InstructionOperand(tokensList[contador_tokens]);
-                
-                //Coloca o opcode da instrucao na lista para impressao e incrementa o contador de endereco
-                this->outputFileList.push_back(this->instructionOpcode(tokensList[contador_tokens]));
+                this->trata_instructions(contador_de_linhas, now_section_text, contador_tokens);
                 contador_endereco++;
             }
             contador_tokens++;
@@ -336,4 +324,19 @@ void Montagem::checkLexicalError(int line){
             std::cout<< "Erro lexico na linha "<< line << ", foram passados mais operandos que o esperado para a diretiva const.\n";
         }
     }
+}
+
+void Montagem::trata_instructions (int line, bool now_section_text, int contador_tokens){
+//Se nao estivermos na secao de texto e uma instrucao aparecer, isso indica um erro
+//P.S: desculpa pela logica invertida no if
+if (!now_section_text){
+     std::cout << "Erro semantico na linha " << line << " instrucao fora da secao de texto\n";
+}
+
+this->lineIsInstruction = true;
+//Pega a quantidade de operandos que essa instrucao requere
+this->numberOfOperandsInLine = this-> InstructionOperand(tokensList[contador_tokens]);
+                
+//Coloca o opcode da instrucao na lista para impressao e incrementa o contador de endereco
+this->outputFileList.push_back(this->instructionOpcode(tokensList[contador_tokens]));
 }

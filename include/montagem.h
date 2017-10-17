@@ -75,6 +75,7 @@ public:
      bool isInstruction(Token);
      int InstructionOperand(Token);
      int instructionOpcode(Token);
+     void trata_instructions (int, bool, int);
 
     std::string setOutputExtension(std::string);
     std::string setInputExtension(std::string);
