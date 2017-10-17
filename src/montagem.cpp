@@ -69,6 +69,33 @@ bool Montagem::run(){
             //coloca o termo na lista
             this->tokensList.push_back(Token(word));
 
+            if(word == "section"){
+                //pega o proximo token e analisa se ele eh data, text ou algum erro
+                lineStream >> word;
+
+                // esta na secao texto, atualiza variaveis 
+                if (word == "text"){
+                    check_section_text = true;
+                    now_section_text = true;
+                    now_section_data = false;
+                }
+                // esta na secao data, atualiza variaveis
+                else if (word == "data"){
+                    now_section_data = true;
+                    now_section_text = false;
+                }
+                else {
+                    std::cout << "Erro semantico na linha " << contador_de_linhas << " nao existe esse tipo de section\n";
+                }
+
+                //testa se ha algum token indesejado na linha do section
+                if (!(lineStream >> word)){
+                    std::cout << "Erro sintatico na linha " << contador_de_linhas << ", ha muitos termos na linha de section\n";
+                }
+                //vai para a proxima linha, nao ha necessidade de analisar mais nada nessa
+                break;
+            }
+            
             //se o token for um rotulo, trata ele
             if (tokensList[contador_tokens].isRotulo(word, line, instructionList)){
                 int tipo = tokensList[contador_tokens].KindOfRotulo(word);
@@ -111,6 +138,10 @@ bool Montagem::run(){
             }
             contador_tokens++;
         }
+    }
+    //Se nao encontrarmos a secao de text no arquivo, temos um erro
+    if (!check_section_text){
+        std::cout << "Erro semantico, nao ha secao text no arquivo\n";
     }
     this->printRotulos();
     return true;
