@@ -37,10 +37,13 @@ std::string Montagem::setInputExtension(std::string extension)
 //Metodo principal que vai realizar a montagem
 bool Montagem::run(){
     bool check_section_text = false;  //passa a ser true quando acharmos a secao text
+    bool now_section_text = false;    //indica que atualmente o programa esta na secao de texto
+    bool now_section_data = false;    //indica que atualmente o programa esta na secao de data
     int contador_tokens = 0;          //sera utilizado para navegar pela tokensList
     int contador_endereco = 0;        //sera utilizado para determinar o endereco de cada token do programa
     int haveRotuloInLine = 0;            //controle para caso aparecam dois rotulos na mesma linha
     int contador_de_linhas = 0;       //Controle para saber em qual linha do programa esta algum erro
+    int numberOfOperandsInLine = 0;     //vai ser um contador decrescente para checar se a quantidade de operandos requeridos por uma instrucao foi conferida
 
 
     //Fecha e abre o arquivo do codigo para atualizar o ponteiro de arquivo, caso alguma outra funcao tenha usado ele
@@ -88,6 +91,23 @@ bool Montagem::run(){
                 {
                     this->trata_rotulos(word, tipo, contador_endereco);
                 }
+            }
+
+            //Testa se o token atual eh uma instrucao, caso seja prepara as variaveis para receber os argumentos
+            if (this-> isInstruction(tokensList[contador_tokens])){
+                
+                //Se nao estivermos na secao de texto e uma instrucao aparecer, isso indica um erro
+                //P.S: desculpa pela logica invertida no if
+                if (!now_section_text){
+                    std::cout << "Erro semantico na linha " << contador_de_linhas << " instrucao fora da secao de texto\n"
+                }
+
+                //Pega a quantidade de operandos que essa instrucao requere
+                numberOfOperandsInLine = this-> InstructionOperand(tokensList[contador_tokens]);
+                
+                //Coloca o opcode da instrucao na lista para impressao e incrementa o contador de endereco
+                this->outputFileList.push_back(this->instructionOpcode(tokensList[contador_tokens]));
+                contador_endereco++;
             }
             contador_tokens++;
         }
@@ -191,5 +211,41 @@ bool Montagem::scannerLexico (std::string word, char operation){
             }
             return true;
     }
+
+    //default
+    return false;
     
+}
+
+//Confere se um certo token eh uma instrucao
+bool Montagem::isInstruction(Token token){
+    //percorre a lista de instrucao e testa para ver se o token eh instrucao
+    for(size_t i = 0; i < this->instructionList.size(); i++){
+        if (token.nome == this->instructionList[i].nome){
+            return true;
+        }
+    }
+    return false;
+}
+
+//Percorre a lista de intrucoes e retorna a quantidade de operandos que certa instrucao deseja receber
+int Montagem::InstructionOperand(Token token){
+    for (size_t i; i < this->instructionList.size(); i++){
+        if (token.nome == this->instructionList[i].nome){
+            return this->instructionList[i].noperands;
+        }
+    }
+    //se der erro retorna -1
+    return -1;
+}
+
+//retorna o opcode da instrucao que esta sedo trabalhada
+int Montagem::instructionOpcode(Token token){
+    for (size_t i; i < this->instructionList.size(); i++){
+        if (token.nome == this-> instructionList[i].nome){
+            return this->instructionList[i].opcode;
+        }
+    }
+    //se der erro retorna -1
+    return -1;
 }

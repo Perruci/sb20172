@@ -54,6 +54,11 @@ public:
      /*Erros Lexicos*/
      bool scannerLexico (std::string, char);
 
+     /*Instrucoes*/
+     bool isInstruction(Token);
+     int InstructionOperand(Token);
+     int instructionOpcode(Token);
+
     std::string setOutputExtension(std::string);
     std::string setInputExtension(std::string);
 };
