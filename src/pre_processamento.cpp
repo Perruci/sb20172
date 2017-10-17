@@ -28,7 +28,7 @@ std::string Pre_Processamento::setOutputExtension(std::string extension)
 //Faz a etapa de pre-processamento e trata os EQU e IF, funcao criada sem utilizar a tokenizacao, pois estou com receio de que
 //se fizermos a tokenizacao nessa parte estariamos violando a regra de passagem unica
 bool Pre_Processamento::run(){
-    bool check_section_text = false;  //passa a ser true quando acharmos a secao text
+    //bool check_section_text = false;  //passa a ser true quando acharmos a secao text
     int contador_tokens = 0;          //sera utilizado para navegar pela tokensList
     int contador_endereco = 0;        //sera utilizado para determinar o endereco de cada token do programa
     int haveRotuloInLine = 0;            //controle para caso aparecam dois rotulos na mesma linha
@@ -91,7 +91,7 @@ bool Pre_Processamento::run(){
 
             if (word == "text")
             {
-                check_section_text = true;
+             //   check_section_text = true;
             }
 
             if ((word == "equ"))

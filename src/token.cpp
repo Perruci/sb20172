@@ -28,7 +28,7 @@ bool Token::isRotulo(std::string token, std::string linha, std::vector<Mnemonic>
     }
 
     //testa se eh uma instrucao
-    for (int i = 0; i < instructionList.size(); i++){
+    for (size_t i = 0; i < instructionList.size(); i++){
         if (token == instructionList[i].nome){
             return false;
         }
