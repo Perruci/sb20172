@@ -51,6 +51,9 @@ public:
     void chamada_de_rotulo(std::string, int);
     void printRotulos();
 
+     /*Erros Lexicos*/
+     bool scannerLexico (std::string, char);
+
     std::string setOutputExtension(std::string);
     std::string setInputExtension(std::string);
 };

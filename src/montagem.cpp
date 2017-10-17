@@ -173,3 +173,23 @@ void Montagem::printRotulos(){
     }
 }
 
+//Analisa cada um dos tokens lexicamente, para checar se ele apresenta erro lexico
+//dependendo da posicao do token, regras diferentes devem ser analisadas para saber se o token eh valido,portanto seguem os modos de operacao
+//const = espera um numero
+//space = espera um numero
+//argumento(op = a) = espera um rotulo
+//rotulo = espera
+bool Montagem::scannerLexico (std::string word, char operation){
+    
+    switch (operation){
+        case 'a':
+            //vai apresentar erro lexico se tiver algum caracter especial no token ou ele se iniciar com numero
+            if ((word[0] == '0') || (word[0] == '1') || (word[0] == '2') || (word[0] == '3') || (word[0] == '4')
+            || (word[0] == '5') || (word[0] == '6') || (word[0] == '7') || (word[0] == '8') || (word[0] == '9'))
+            {
+                return false;
+            }
+            return true;
+    }
+    
+}
