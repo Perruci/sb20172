@@ -50,8 +50,7 @@ int main (int argc, char* argv[]){
         case 'o':
             montador.pre_processamento();
             montador.processamento();
-            //montador (arq_saida);
-            cout << "Definir algo para fazer a operacao de montagem\n";
+            montador.montagem ();
             break;
 
         //So entrara no caso default se for uma operacao nao esperada, portanto significa que e erro

@@ -13,6 +13,7 @@
 #include "token.h"
 #include "mnemonic.h"
 #include "rotulo.h"
+#include "montagem.h"
 
 // Declaracao da classe Montador
 // Esta classe abriga os métodos desenvolvidos para traduzir e montar o programa
@@ -26,6 +27,7 @@ private:
 
     Pre_Processamento* _pre_process;
     Processamento* _processamento;
+    Montagem* _montagem;
 public:
     Montador(std::string inputFile, std::string outputFile, std::string tablePath = "tables/instructions.txt");
     ~Montador();
@@ -37,6 +39,6 @@ public:
     /* Processamento */
     bool processamento();
     /* Montagem */
-    void montagem();
+    bool montagem();
 };
 #endif
