@@ -136,8 +136,9 @@ bool Montagem::run(){
                     std::cout << "Erro semantico na linha " << contador_de_linhas << " instrucao fora da secao de texto\n";
                 }
 
+                this->lineIsInstruction = true;
                 //Pega a quantidade de operandos que essa instrucao requere
-                numberOfOperandsInLine = this-> InstructionOperand(tokensList[contador_tokens]);
+                this->numberOfOperandsInLine = this-> InstructionOperand(tokensList[contador_tokens]);
                 
                 //Coloca o opcode da instrucao na lista para impressao e incrementa o contador de endereco
                 this->outputFileList.push_back(this->instructionOpcode(tokensList[contador_tokens]));
