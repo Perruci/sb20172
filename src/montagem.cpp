@@ -133,7 +133,7 @@ bool Montagem::run(){
                 //Se nao estivermos na secao de texto e uma instrucao aparecer, isso indica um erro
                 //P.S: desculpa pela logica invertida no if
                 if (!now_section_text){
-                    std::cout << "Erro semantico na linha " << contador_de_linhas << " instrucao fora da secao de texto\n"
+                    std::cout << "Erro semantico na linha " << contador_de_linhas << " instrucao fora da secao de texto\n";
                 }
 
                 //Pega a quantidade de operandos que essa instrucao requere
@@ -145,6 +145,8 @@ bool Montagem::run(){
             }
             contador_tokens++;
         }
+        //No fim de cada linha, verifica se houve algum erro lexico por falta ou excesso de argumentos
+        this-> checkLexicalError(contador_de_linhas);
     }
     //Se nao encontrarmos a secao de text no arquivo, temos um erro
     if (!check_section_text){
@@ -286,4 +288,51 @@ int Montagem::instructionOpcode(Token token){
     }
     //se der erro retorna -1
     return -1;
+}
+
+//Analisa as variaveis que tratam dos erros lexicos e checa se ha alguma inconsistencia
+void Montagem::checkLexicalError(int line){
+    //Verifica se a qtd de argumentos passadas para uma instrucao foi adequada
+    if (this->lineIsInstruction){
+        //se a quantidade de operandos estiver em 0 eh pq deu certo
+        if(this->numberOfOperandsInLine == 0){
+            return;
+        }
+        //se a quantidade de operandos estiver positiva eh pq faltam operandos na linha
+        if(this->numberOfOperandsInLine > 0){
+            std::cout<< "Erro lexico na linha " << line << ", faltaram " << this->numberOfOperandsInLine << " operandos.\n";
+            return;
+        }
+        ////se a quantidade de operandos estiver negativa eh pq foram passados operandos a mais na linha
+        if (this->numberOfOperandsInLine < 0){
+            std::cout<< "Erro lexico na linha " << line << ", foram passados mais operandos que o esperado para a instrucao.\n";
+            return;
+        }
+    }
+    //Verifica se a qtd de argumentos passados para um space foi adequado
+    if (this->lineIsSpace){
+        //se a quantidade de operandos for 0 ou 1, tudo certo
+        if(this->numberOfArgumentsInSpace >= 0){
+            return;
+        }
+        if (this->numberOfArgumentsInSpace < 0){
+            std::cout<< "Erro lexico na linha " << line << ", foram passados mais operandos que o esperado para a diretiva space.\n";
+        }
+
+    }
+    //verifica se a qtd de argumentos passados para uma const foi adequado
+    if (this->lineIsConst){
+        //Se a qtd de operandos for 0, tudo certo
+        if(this->numberOfArgumentsInConst == 0){
+            return;
+        }
+        //Se a qtd de operadnos dor maior que 0, eh pq nao foi passado nenhum operando
+        if (this->numberOfArgumentsInConst > 0){
+            std::cout<< "Erro lexico na linha "<< line << ", nao foi passado nenhum valor para a diretiva const.\n";
+        }
+        //Se a qtd de operandos for menor que 0, eh pq passaram operandos ate demais
+        if (this-> numberOfArgumentsInConst < 0){
+            std::cout<< "Erro lexico na linha "<< line << ", foram passados mais operandos que o esperado para a diretiva const.\n";
+        }
+    }
 }

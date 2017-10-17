@@ -69,6 +69,7 @@ public:
 
      /*Erros Lexicos*/
      bool scannerLexico (std::string, char);
+     void checkLexicalError(int);
 
      /*Instrucoes*/
      bool isInstruction(Token);
