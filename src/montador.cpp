@@ -8,7 +8,7 @@ Montador::Montador(std::string inputFile, std::string outputFile, std::string ta
     this->loadInstructions(tablePath);
     this->_pre_process = new Pre_Processamento(inputFileName, outputFileName, instructionList);
     this->_processamento = new Processamento(inputFileName, outputFileName);
-    this->_montagem = new Montagem(inputFileName, outputFileName);
+    this->_montagem = new Montagem(inputFileName, outputFileName, instructionList);
 }
 // Destruidor do montador
 Montador::~Montador()

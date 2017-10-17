@@ -1,6 +1,6 @@
 #include "../include/montagem.h"
 
-Montagem::Montagem(std::string inputFile, std::string outputFile)
+Montagem::Montagem(std::string inputFile, std::string outputFile, std::vector<Mnemonic>& instructionList)
 {
     this->inputFileName =  inputFile;
     this->outputFileName = outputFile;
@@ -8,6 +8,9 @@ Montagem::Montagem(std::string inputFile, std::string outputFile)
     this->setOutputExtension (".o");
     this->fileText.open(inputFileName);
     this->fileOutput.open(outputFileName);
+
+    /* Pass as reference the instructionList */
+    this->instructionList = instructionList;
 }
 
 Montagem::~Montagem()

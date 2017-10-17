@@ -23,8 +23,10 @@ private:
     std::ifstream fileText;
     std::ofstream fileOutput;
 
+    std::vector<Mnemonic> instructionList;
+
 public:
-    Montagem(std::string, std::string);
+    Montagem(std::string, std::string, std::vector<Mnemonic>&);
     ~Montagem();
 
     bool run();

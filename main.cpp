@@ -59,9 +59,5 @@ int main (int argc, char* argv[]){
             break;
     }
 
-    //montador.printTokens();
-
-    //montador.writeTokensToOutput();
-
     return 0;
 }
