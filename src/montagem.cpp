@@ -44,20 +44,6 @@ bool Montagem::run(){
     int haveRotuloInLine = 0;            //controle para caso aparecam dois rotulos na mesma linha
     int contador_de_linhas = 0;       //Controle para saber em qual linha do programa esta algum erro
 
-    /***********************************************************************************************************************************************************/
-    //Serie de variaveis booleanas para indicar do que a linha atual do programa se trata e facilitar a decisao do que deve ser feito
-    bool lineIsInstruction = false;     //caso ativo, significa que esperamos argumentos nos proximos tokens
-    int numberOfOperandsInLine = 0;     //vai ser um contador decrescente para checar se a quantidade de operandos requeridos por uma instrucao foi conferida
-                                        //Da suporte a variavel lineIsInstruction
-
-    bool lineIsSpace = false;           //caso ativo, significa que podemos nao ter proximo token ou ter um numero
-    int numberOfArgumentsInSpace = 0;   //vai ser um contador decrescente para checar se mais de um argumento foi passado para o space
-                                        //Da suporte a variavel lineIsSpace
-
-    bool lineIsConst = false;           //caso ativo, significa que esperamos um numero no proximo token
-    int numberOfArgumentsInConst = 0;   //vai ser um contador decrescente para checar se mais de um argumento foi passado para o const
-                                        //Da suporte a variavel lineIsConst
-    /***********************************************************************************************************************************************************/
 
     //Fecha e abre o arquivo do codigo para atualizar o ponteiro de arquivo, caso alguma outra funcao tenha usado ele
     this->reopenCodeFile();
@@ -75,6 +61,14 @@ bool Montagem::run(){
 
         std::stringstream lineStream (line);
         haveRotuloInLine = 0;               //prepara a variavel para  analisar o proximo rotulo
+
+        //antes de analisar cada linha, inicializa novamente as variaveis de controle do erro lexico
+        this->lineIsInstruction = false;     
+        this->numberOfOperandsInLine = 0;     
+        this->lineIsSpace = false;           
+        this->numberOfArgumentsInSpace = 0;   
+        this->lineIsConst = false;          
+        this->numberOfArgumentsInConst = 0;   
 
         //Loop para analisar cada termo um a um
         while (lineStream >> word)

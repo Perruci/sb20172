@@ -30,6 +30,22 @@ private:
     //lista de inteiros para preparar o arquivo objeto em memoria antes de imprimir no arquivo
     std::vector<int> outputFileList;
 
+    /***********************************************************************************************************************************************************/
+    //Serie de variaveis booleanas para indicar do que a linha atual do programa se trata e facilitar a decisao do que deve ser feito
+    //Declaradas na classe, pois serao utilizadas por varios metodos
+    bool lineIsInstruction;             //caso ativo, significa que esperamos argumentos nos proximos tokens
+    int numberOfOperandsInLine;         //vai ser um contador decrescente para checar se a quantidade de operandos requeridos por uma instrucao foi conferida
+                                        //Da suporte a variavel lineIsInstruction
+
+    bool lineIsSpace;                   //caso ativo, significa que podemos nao ter proximo token ou ter um numero
+    int numberOfArgumentsInSpace;       //vai ser um contador decrescente para checar se mais de um argumento foi passado para o space
+                                        //Da suporte a variavel lineIsSpace
+
+    bool lineIsConst;                   //caso ativo, significa que esperamos um numero no proximo token
+    int numberOfArgumentsInConst;       //vai ser um contador decrescente para checar se mais de um argumento foi passado para o const
+                                        //Da suporte a variavel lineIsConst
+    /***********************************************************************************************************************************************************/
+
 
     //Fecha e abre o arquivo do codigo para atualizar o ponteiro de arquivo, caso alguma outra funcao tenha usado ele
     inline bool reopenCodeFile()
