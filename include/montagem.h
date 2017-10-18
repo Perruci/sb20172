@@ -66,6 +66,7 @@ public:
     void declaracao_de_rotulo(std::string, int);
     void chamada_de_rotulo(std::string, int);
     void printRotulos();
+    void trataRotulo_altoNivel(int, std::string, int &, int &, int);
 
      /*Erros Lexicos*/
      bool scannerLexico (std::string, char);

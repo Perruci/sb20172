@@ -76,6 +76,7 @@ bool Montagem::run(){
             //coloca o termo na lista
             this->tokensList.push_back(Token(word));
 
+            //Caso apareca a secao de texto ou de data, ja trata ela
             if(word == "section"){
                 contador_tokens++;
                 this->trata_section(check_section_text, now_section_data, now_section_text, lineStream, word, contador_de_linhas);
@@ -85,26 +86,7 @@ bool Montagem::run(){
             
             //se o token for um rotulo, trata ele
             if (tokensList[contador_tokens].isRotulo(word, line, instructionList)){
-                int tipo = tokensList[contador_tokens].KindOfRotulo(word);
-
-                //testa se eh uma declaracao de rotulo e se ja tem outra declaracao na mesma linha
-                if (tipo == tipo_rotulo::declaracao)
-                {
-                    //se ja tiver uma declaracao na linha sera erro
-                    if (haveRotuloInLine == 1)
-                    {
-                        std::cout << "Mais de um Rotulo na linha " << contador_de_linhas << "\n";
-                        return false;
-                    } else
-                    {
-                        haveRotuloInLine = 1;
-                        this->trata_rotulos(word, tipo, contador_endereco);
-                    }
-                }
-                if (tipo == tipo_rotulo::chamada)
-                {
-                    this->trata_rotulos(word, tipo, contador_endereco);
-                }
+                this ->trataRotulo_altoNivel(contador_tokens, word, contador_endereco, haveRotuloInLine, contador_de_linhas);
             }
 
             //Testa se o token atual eh uma diretiva, caso seja prepara as variaveis para analisar o resto da linha
@@ -140,14 +122,14 @@ void Montagem::trata_rotulos (std::string token, int tipo_rotulo, int endereco){
     //se for a declaracao de um rotulo, chama a rotina pra tratar isso
     if(tipo_rotulo == tipo_rotulo::declaracao)
     {
-        declaracao_de_rotulo(token, endereco);
+        this->declaracao_de_rotulo(token, endereco);
         return;
     }
 
     //se for chamada de um rotulo, chama a rotina pra tratar isso
     if (tipo_rotulo == tipo_rotulo::chamada)
     {
-        chamada_de_rotulo(token, endereco);
+        this->chamada_de_rotulo(token, endereco);
         return;
     }
 
@@ -385,4 +367,24 @@ void Montagem::trata_section(bool &check_section_text, bool &now_section_data, b
     if (lineStream >> word){
         std::cout << "Erro sintatico na linha " << contador_de_linhas << ", ha muitos termos na linha de section\n";
     }
+}
+
+//Uma das funcoes para tratar o rotulo, a mais "alto nivel" delas
+void Montagem::trataRotulo_altoNivel(int contador_tokens, std::string word, int &contador_endereco, int &haveRotuloInLine, int contador_de_linhas){
+    int tipo = tokensList[contador_tokens].KindOfRotulo(word);
+
+    //testa se eh uma declaracao de rotulo e se ja tem outra declaracao na mesma linha
+    if (tipo == tipo_rotulo::declaracao){
+        //se ja tiver uma declaracao na linha sera erro
+        if (haveRotuloInLine == 1){
+            std::cout << "Erro lexico, declaracao de mais de um Rotulo na linha " << contador_de_linhas << "\n";
+            } else
+            {
+                haveRotuloInLine = 1;
+                this->trata_rotulos(word, tipo, contador_endereco);
+            }
+        }
+        if (tipo == tipo_rotulo::chamada){
+                    this->trata_rotulos(word, tipo, contador_endereco);
+        }
 }
