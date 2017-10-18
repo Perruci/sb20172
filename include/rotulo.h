@@ -26,6 +26,12 @@ class Rotulo
         bool isEqu;
         int EquValue;
         bool isMem;             //caso o rotulo indique uma diretiva e nao um endereco de pulo
+        
+        //Nao sei se eh o melhor jeito, mas e como pensei em fazer agora
+        bool isConst = false;
+        int constValue;
+        bool isSpace = false;
+        int spaceQuantity = 1;
 
         inline void addList(int endereco){this->addressList.push_back(endereco);};
         void setState(int inicial);

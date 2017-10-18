@@ -85,20 +85,19 @@ bool Montagem::run(){
             }
             
             //se o token for um rotulo, trata ele
-            if (tokensList[contador_tokens].isRotulo(word, line, instructionList)){
+            if (this->tokensList[contador_tokens].isRotulo(word, line, instructionList)){
                 this ->trataRotulo_altoNivel(contador_tokens, word, contador_endereco, haveRotuloInLine, contador_de_linhas);
             }
 
             //Testa se o token atual eh uma diretiva, caso seja prepara as variaveis para analisar o resto da linha
-            if(this->isDiretiva(tokensList[contador_tokens])){
+            if(this->isDiretiva(this->tokensList[contador_tokens])){
                 this->trata_diretivas(contador_de_linhas, now_section_data, contador_tokens);
                 //adiciona 1 no contador de enderecos, caso seja space com mais de um "campo" eh importante incrementar Y-1 enderecos depois
                 contador_endereco++;
             }
 
             //Testa se o token atual eh uma instrucao, caso seja prepara as variaveis para receber os argumentos
-            if (this-> isInstruction(tokensList[contador_tokens])){
-                //std::cout << "DEBBUG - O " << word << " foi considerado como uma instrucao\n";
+            if (this-> isInstruction(this->tokensList[contador_tokens])){
                 this->trata_instructions(contador_de_linhas, now_section_text, contador_tokens);
                 contador_endereco++;
             }
@@ -112,10 +111,11 @@ bool Montagem::run(){
         std::cout << "Erro semantico, nao ha secao text no arquivo\n";
     }
     this->printRotulos();
+    this->printOutput();
     return true;
 }
 
-void Montagem::trata_rotulos (std::string token, int tipo_rotulo, int endereco){
+void Montagem::trata_rotulos (std::string token, int tipo_rotulo, int &endereco){
     //Retira, caso tenha, o :
     token = string_ops::trunca_nome(token, ':');
 
@@ -136,16 +136,21 @@ void Montagem::trata_rotulos (std::string token, int tipo_rotulo, int endereco){
     return;
 }
 
-void Montagem::declaracao_de_rotulo(std::string token, int endereco)
+void Montagem::declaracao_de_rotulo(std::string token, int &endereco)
 {
-    for (size_t i = 0; i < rotulosList.size(); i++)
+    for (size_t i = 0; i < this->rotulosList.size(); i++)
     {
         //se ele ja existir na lista, devemos apenas atualizar o endereco de declaracao dele e o estado
-        if (token == rotulosList[i].name)
+        if (token == this->rotulosList[i].name)
         {
-            rotulosList[i].setState(endereco);
-            //ADD UMA ROTINA PARA TRATAR ONDE O ROTULO JA FOI ENCONTRADO ANTES, OU SEJA,
-            //VOLTAR NO ARQUIVO E ATUALIZAR OS ENDERECOS. PRECISO NA MONTAGEM
+            this->rotulosList[i].setState(endereco);
+            //Vai na saida e atualiza todos os lugares onde o rotulo foi chamado, colocando o endereco real dele
+            //Ainda nao vai tratar as consts e o sppaces com mais de 1 space
+
+            //No entanto se o rotulo 
+            for (size_t j = 0; this->rotulosList[i].addressList.size(); j++){
+               this->outputFileList[this->rotulosList[i].addressList[j]] = this->rotulosList[i].address;
+            }
             return;
         }
     }
@@ -155,21 +160,40 @@ void Montagem::declaracao_de_rotulo(std::string token, int endereco)
     return;
 }
 
-void Montagem::chamada_de_rotulo(std::string token, int endereco)
+void Montagem::chamada_de_rotulo(std::string token, int &endereco)
 {
-    for (size_t i = 0; i < rotulosList.size(); i++)
+    for (size_t i = 0; i < this->rotulosList.size(); i++)
     {
         //se ele ja existir na lista, devemos colocar no lugar o endereco dele caso ja esteja declarado, ou adicionar
         //esse endereco na lista de lugares onde ele eh chamado para tratar depois
-        if (token == rotulosList[i].name)
+        if (token == this->rotulosList[i].name)
         {
-            if(rotulosList[i].alreadyDeclared)
+            if(this->rotulosList[i].alreadyDeclared)
             {
-                //ADD UMA ROTINA PARA TRATAR A PARTE DA MONTAGEM
+                //se for uma constante, adiciona o valor dela no arquivo final e incrementa o contador de enderecos
+                if(this->rotulosList[i].isConst){
+                    this->outputFileList.push_back(rotulosList[i].constValue);
+                    endereco++;
+                    return;
+                }
+
+                //se for um space, coloca o endereco de declaracao do rotulo (NAO FUNCIONARA PARA SPACES DIFERENTES DE 1, TRATAR DEPOIS)
+                if(this->rotulosList[i].isSpace){
+                    this->outputFileList.push_back(rotulosList[i].address);
+                    endereco++;
+                    return;
+                }
+
+                //caso contrario, eh um rotulo qualquer, adiciona o endereco de declaracao dele
+                this->outputFileList.push_back(rotulosList[i].address);
+                endereco++;
                 return;
             } else
             {
-                rotulosList[i].addressList.push_back(endereco);
+                //Coloca na lista desse rotulo aquele endereco para ele ser arrumado posteriormente e incrementa o contador de enderecos e coloca 0 na lista de saida
+                this->rotulosList[i].addressList.push_back(endereco);
+                this->outputFileList.push_back(0);
+                endereco++;
                 return;
             }
         }
@@ -178,7 +202,9 @@ void Montagem::chamada_de_rotulo(std::string token, int endereco)
     // Cria um novo rótulo e adiciona-o a lista
     Rotulo rotulo (token, false, 0);
     rotulo.addressList.push_back(endereco);
-    rotulosList.push_back(rotulo);
+    this->rotulosList.push_back(rotulo);
+    this->outputFileList.push_back(0);
+    endereco++;
     return;
 }
 
@@ -230,7 +256,7 @@ bool Montagem::isInstruction(Token token){
 
 //Percorre a lista de intrucoes e retorna a quantidade de operandos que certa instrucao deseja receber
 int Montagem::InstructionOperand(Token token){
-    for (size_t i; i < this->instructionList.size(); i++){
+    for (size_t i = 0; i < this->instructionList.size(); i++){
         if (token.nome == this->instructionList[i].nome){
             return this->instructionList[i].noperands;
         }
@@ -241,7 +267,7 @@ int Montagem::InstructionOperand(Token token){
 
 //retorna o opcode da instrucao que esta sedo trabalhada
 int Montagem::instructionOpcode(Token token){
-    for (size_t i; i < this->instructionList.size(); i++){
+    for (size_t i = 0; i < this->instructionList.size(); i++){
         if (token.nome == this-> instructionList[i].nome){
             return this->instructionList[i].opcode;
         }
@@ -307,10 +333,10 @@ void Montagem::trata_instructions (int line, bool now_section_text, int contador
 
     this->lineIsInstruction = true;
     //Pega a quantidade de operandos que essa instrucao requere
-    this->numberOfOperandsInLine = this-> InstructionOperand(tokensList[contador_tokens]);
+    this->numberOfOperandsInLine = this-> InstructionOperand(this->tokensList[contador_tokens]);
                     
     //Coloca o opcode da instrucao na lista para impressao e incrementa o contador de endereco
-    this->outputFileList.push_back(this->instructionOpcode(tokensList[contador_tokens]));
+    this->outputFileList.push_back(this->instructionOpcode(this->tokensList[contador_tokens]));
 }
 
 //Confere se um token eh uma diretiva
@@ -387,4 +413,13 @@ void Montagem::trataRotulo_altoNivel(int contador_tokens, std::string word, int 
         if (tipo == tipo_rotulo::chamada){
                     this->trata_rotulos(word, tipo, contador_endereco);
         }
+}
+
+//Imprime a lista de saida para o arquivo final
+void Montagem::printOutput(){
+    for(size_t i = 0; i < this->outputFileList.size(); i++){
+        this-> fileOutput << this->outputFileList[i] << " ";
+        std::cout << this->outputFileList[i] << " ";
+    }
+    std::cout<< std::endl;
 }
