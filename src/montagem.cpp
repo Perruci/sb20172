@@ -144,13 +144,32 @@ void Montagem::declaracao_de_rotulo(std::string token, int &endereco)
         if (token == this->rotulosList[i].name)
         {
             this->rotulosList[i].setState(endereco);
+            
             //Vai na saida e atualiza todos os lugares onde o rotulo foi chamado, colocando o endereco real dele
             //Ainda nao vai tratar as consts e o sppaces com mais de 1 space
+            for (size_t j = 0; j < this->rotulosList[i].addressList.size(); j++){
+                //se o rotulo for uma const, atualiza com o valor da constante
+                if (this->rotulosList[i].isConst){
+                    this->outputFileList[this->rotulosList[i].addressList[j]] = this->rotulosList[i].constValue;
+                }
 
-            //No entanto se o rotulo 
-            for (size_t j = 0; this->rotulosList[i].addressList.size(); j++){
-               this->outputFileList[this->rotulosList[i].addressList[j]] = this->rotulosList[i].address;
+                //se o rotulo for um space, atualiza com o endereco mais o valor que ja se encontra la
+                else if (this->rotulosList[i].isSpace){
+                    //So atualiza se o endereco a mais que a pessoa quer faz parte do espaco guardado para o space
+                    if (this->outputFileList[this->rotulosList[i].addressList[j]] < this->rotulosList[i].spaceQuantity){
+                        this->outputFileList[this->rotulosList[i].addressList[j]] += this->rotulosList[i].address;
+                    } else {
+                        std::cout << "Erro semantico, espaco da diretiva space foi estourado\n";
+                        this->outputFileList[this->rotulosList[i].addressList[j]] += this->rotulosList[i].address;
+                    }
+                }
+                //No caso normal, so coloca o endereco de declaracao la
+                else {
+                    this->outputFileList[this->rotulosList[i].addressList[j]] = this->rotulosList[i].address;
+                }
+                
             }
+            
             return;
         }
     }
@@ -418,7 +437,7 @@ void Montagem::trataRotulo_altoNivel(int contador_tokens, std::string word, int 
 //Imprime a lista de saida para o arquivo final
 void Montagem::printOutput(){
     for(size_t i = 0; i < this->outputFileList.size(); i++){
-        this-> fileOutput << this->outputFileList[i] << " ";
+        this->fileOutput << this->outputFileList[i] << " ";
         std::cout << this->outputFileList[i] << " ";
     }
     std::cout<< std::endl;
