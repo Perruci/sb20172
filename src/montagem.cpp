@@ -77,6 +77,7 @@ bool Montagem::run(){
             this->tokensList.push_back(Token(word));
 
             if(word == "section"){
+                contador_tokens++;
                 //pega o proximo token e analisa se ele eh data, text ou algum erro
                 lineStream >> word;
 
@@ -96,7 +97,7 @@ bool Montagem::run(){
                 }
 
                 //testa se ha algum token indesejado na linha do section
-                if (!(lineStream >> word)){
+                if (lineStream >> word){
                     std::cout << "Erro sintatico na linha " << contador_de_linhas << ", ha muitos termos na linha de section\n";
                 }
                 //vai para a proxima linha, nao ha necessidade de analisar mais nada nessa
@@ -127,8 +128,16 @@ bool Montagem::run(){
                 }
             }
 
+            //Testa se o token atual eh uma diretiva, caso seja prepara as variaveis para analisar o resto da linha
+            if(this->isDiretiva(tokensList[contador_tokens])){
+                this->trata_diretivas(contador_de_linhas, now_section_data, contador_tokens);
+                //adiciona 1 no contador de enderecos, caso seja space com mais de um "campo" eh importante incrementar Y-1 enderecos depois
+                contador_endereco++;
+            }
+
             //Testa se o token atual eh uma instrucao, caso seja prepara as variaveis para receber os argumentos
             if (this-> isInstruction(tokensList[contador_tokens])){
+                //std::cout << "DEBBUG - O " << word << " foi considerado como uma instrucao\n";
                 this->trata_instructions(contador_de_linhas, now_section_text, contador_tokens);
                 contador_endereco++;
             }
@@ -251,6 +260,7 @@ bool Montagem::isInstruction(Token token){
     //percorre a lista de instrucao e testa para ver se o token eh instrucao
     for(size_t i = 0; i < this->instructionList.size(); i++){
         if (token.nome == this->instructionList[i].nome){
+            //std::cout << "DEBBUG - instrucao " << token.nome << std::endl;
             return true;
         }
     }
@@ -326,17 +336,48 @@ void Montagem::checkLexicalError(int line){
     }
 }
 
+//Faz toda a rotina para quando o token eh uma instrucao
 void Montagem::trata_instructions (int line, bool now_section_text, int contador_tokens){
-//Se nao estivermos na secao de texto e uma instrucao aparecer, isso indica um erro
-//P.S: desculpa pela logica invertida no if
-if (!now_section_text){
-     std::cout << "Erro semantico na linha " << line << " instrucao fora da secao de texto\n";
+    //Se nao estivermos na secao de texto e uma instrucao aparecer, isso indica um erro
+    //P.S: desculpa pela logica invertida no if
+    if (!now_section_text){
+        std::cout << "Erro semantico na linha " << line << " instrucao fora da secao de texto\n";
+    }
+
+    this->lineIsInstruction = true;
+    //Pega a quantidade de operandos que essa instrucao requere
+    this->numberOfOperandsInLine = this-> InstructionOperand(tokensList[contador_tokens]);
+                    
+    //Coloca o opcode da instrucao na lista para impressao e incrementa o contador de endereco
+    this->outputFileList.push_back(this->instructionOpcode(tokensList[contador_tokens]));
 }
 
-this->lineIsInstruction = true;
-//Pega a quantidade de operandos que essa instrucao requere
-this->numberOfOperandsInLine = this-> InstructionOperand(tokensList[contador_tokens]);
-                
-//Coloca o opcode da instrucao na lista para impressao e incrementa o contador de endereco
-this->outputFileList.push_back(this->instructionOpcode(tokensList[contador_tokens]));
+//Confere se um token eh uma diretiva
+bool Montagem::isDiretiva(Token token){
+    //caso seja uma const, ja prepara as variaveis para ele
+    if ((token.nome == "const") || (token.nome == "space")){
+        return true;
+    }
+    return false;
+}
+
+//Faz toda a rotina de tratar as diretivas
+void Montagem::trata_diretivas(int line, bool now_section_data, int contador_tokens){
+    //Caso esteja fora da secao de data, isso representa um erro
+    if(!now_section_data){
+        std::cout << "Erro semantico na linha " << line << " diretiva fora da secao de data\n";
+    }
+    
+    //Se for uma const, prepara as variaveis para const
+    if (this->tokensList[contador_tokens].nome == "const"){
+        this->lineIsConst = true;
+        this->numberOfArgumentsInConst = 1;
+        return;
+    }
+     //Se for uma const, prepara as variaveis para space
+     if (this->tokensList[contador_tokens].nome == "space"){
+        this->lineIsSpace = true;
+        this->numberOfArgumentsInSpace = 1;
+        return;
+    }
 }

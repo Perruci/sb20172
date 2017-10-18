@@ -77,6 +77,10 @@ public:
      int instructionOpcode(Token);
      void trata_instructions (int, bool, int);
 
+     /*Diretivas*/
+     bool isDiretiva(Token);
+     void trata_diretivas(int, bool, int);
+
     std::string setOutputExtension(std::string);
     std::string setInputExtension(std::string);
 };
