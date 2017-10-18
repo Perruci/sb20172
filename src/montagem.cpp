@@ -78,28 +78,7 @@ bool Montagem::run(){
 
             if(word == "section"){
                 contador_tokens++;
-                //pega o proximo token e analisa se ele eh data, text ou algum erro
-                lineStream >> word;
-
-                // esta na secao texto, atualiza variaveis 
-                if (word == "text"){
-                    check_section_text = true;
-                    now_section_text = true;
-                    now_section_data = false;
-                }
-                // esta na secao data, atualiza variaveis
-                else if (word == "data"){
-                    now_section_data = true;
-                    now_section_text = false;
-                }
-                else {
-                    std::cout << "Erro semantico na linha " << contador_de_linhas << " nao existe esse tipo de section\n";
-                }
-
-                //testa se ha algum token indesejado na linha do section
-                if (lineStream >> word){
-                    std::cout << "Erro sintatico na linha " << contador_de_linhas << ", ha muitos termos na linha de section\n";
-                }
+                this->trata_section(check_section_text, now_section_data, now_section_text, lineStream, word, contador_de_linhas);
                 //vai para a proxima linha, nao ha necessidade de analisar mais nada nessa
                 break;
             }
@@ -379,5 +358,31 @@ void Montagem::trata_diretivas(int line, bool now_section_data, int contador_tok
         this->lineIsSpace = true;
         this->numberOfArgumentsInSpace = 1;
         return;
+    }
+}
+
+//Faz toda a rotina para tratar as secoes section
+void Montagem::trata_section(bool &check_section_text, bool &now_section_data, bool &now_section_text, std::stringstream &lineStream, std::string &word, int &contador_de_linhas){
+    //pega o proximo token e analisa se ele eh data, text ou algum erro
+    lineStream >> word;
+    
+    // esta na secao texto, atualiza variaveis 
+    if (word == "text"){
+        check_section_text = true;
+        now_section_text = true;
+        now_section_data = false;
+    }
+    // esta na secao data, atualiza variaveis
+    else if (word == "data"){
+        now_section_data = true;
+        now_section_text = false;
+    }
+    else {
+        std::cout << "Erro semantico na linha " << contador_de_linhas << " nao existe esse tipo de section\n";
+    }
+    
+    //testa se ha algum token indesejado na linha do section
+    if (lineStream >> word){
+        std::cout << "Erro sintatico na linha " << contador_de_linhas << ", ha muitos termos na linha de section\n";
     }
 }

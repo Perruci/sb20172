@@ -81,6 +81,9 @@ public:
      bool isDiretiva(Token);
      void trata_diretivas(int, bool, int);
 
+     /*Section*/
+     void trata_section(bool &, bool &, bool &, std::stringstream &, std::string &, int &);
+
     std::string setOutputExtension(std::string);
     std::string setInputExtension(std::string);
 };
