@@ -83,6 +83,11 @@ bool Montagem::run(){
                 //vai para a proxima linha, nao ha necessidade de analisar mais nada nessa
                 break;
             }
+
+            //Caso ja tenhamos a informacao que a linha eh uma diretiva, chamamos uma funcao auxiliar para pegar o valor correto dessa diretiva
+            if (lineIsConst || lineIsSpace){
+                this->pegaValorDiretivas(word);
+            }
             
             //se o token for um rotulo, trata ele
             if (this->tokensList[contador_tokens].isRotulo(word, line, instructionList)){
@@ -103,11 +108,13 @@ bool Montagem::run(){
             }
             contador_tokens++;
             if (this->haveRotuloInLine){
-                std::cout << "O rotulo da linha " << contador_de_linhas << " chama-se " << lineRotuloName << std::endl;
             }
         }
         //No fim de cada linha, verifica se houve algum erro lexico por falta ou excesso de argumentos
         this-> checkLexicalError(contador_de_linhas);
+        if(this->haveRotuloInLine){
+            this-> rotuloAtualizaEnds (contador_de_linhas);
+        }
     }
     //Se nao encontrarmos a secao de text no arquivo, temos um erro
     if (!check_section_text){
@@ -150,32 +157,6 @@ void Montagem::declaracao_de_rotulo(std::string token, int &endereco)
         if (token == this->rotulosList[i].name)
         {
             this->rotulosList[i].setState(endereco);
-            
-            //Vai na saida e atualiza todos os lugares onde o rotulo foi chamado, colocando o endereco real dele
-            //Ainda nao vai tratar as consts e o sppaces com mais de 1 space
-            for (size_t j = 0; j < this->rotulosList[i].addressList.size(); j++){
-                //se o rotulo for uma const, atualiza com o valor da constante
-                if (this->rotulosList[i].isConst){
-                    this->outputFileList[this->rotulosList[i].addressList[j]] = this->rotulosList[i].constValue;
-                }
-
-                //se o rotulo for um space, atualiza com o endereco mais o valor que ja se encontra la
-                else if (this->rotulosList[i].isSpace){
-                    //So atualiza se o endereco a mais que a pessoa quer faz parte do espaco guardado para o space
-                    if (this->outputFileList[this->rotulosList[i].addressList[j]] < this->rotulosList[i].spaceQuantity){
-                        this->outputFileList[this->rotulosList[i].addressList[j]] += this->rotulosList[i].address;
-                    } else {
-                        std::cout << "Erro semantico, espaco da diretiva space foi estourado\n";
-                        this->outputFileList[this->rotulosList[i].addressList[j]] += this->rotulosList[i].address;
-                    }
-                }
-                //No caso normal, so coloca o endereco de declaracao la
-                else {
-                    this->outputFileList[this->rotulosList[i].addressList[j]] = this->rotulosList[i].address;
-                }
-                
-            }
-            
             return;
         }
     }
@@ -272,7 +253,6 @@ bool Montagem::isInstruction(Token token){
     //percorre a lista de instrucao e testa para ver se o token eh instrucao
     for(size_t i = 0; i < this->instructionList.size(); i++){
         if (token.nome == this->instructionList[i].nome){
-            //std::cout << "DEBBUG - instrucao " << token.nome << std::endl;
             return true;
         }
     }
@@ -384,12 +364,25 @@ void Montagem::trata_diretivas(int line, bool now_section_data, int contador_tok
     if (this->tokensList[contador_tokens].nome == "const"){
         this->lineIsConst = true;
         this->numberOfArgumentsInConst = 1;
+
+        //Atualiza a lista de rotulos, dizendo que o rotulo de declaracao da linha eh uma const
+        for(size_t i = 0; i < this->rotulosList.size(); i++){
+            if (this->rotulosList[i].name == this->lineRotuloName){
+                this->rotulosList[i].isConst = true;
+            }
+        }
         return;
     }
      //Se for uma const, prepara as variaveis para space
      if (this->tokensList[contador_tokens].nome == "space"){
         this->lineIsSpace = true;
         this->numberOfArgumentsInSpace = 1;
+        //Atualiza a lista de rotulos, dizendo que o rotulo de declaracao da linha eh uma const
+        for(size_t i = 0; i < this->rotulosList.size(); i++){
+            if (this->rotulosList[i].name == this->lineRotuloName){
+                this->rotulosList[i].isSpace = true;
+            }
+        }
         return;
     }
 }
@@ -447,4 +440,82 @@ void Montagem::printOutput(){
         std::cout << this->outputFileList[i] << " ";
     }
     std::cout<< std::endl;
+}
+
+//Metodo para pegar os valores das diretivas
+void Montagem::pegaValorDiretivas (std::string word){
+    //Analisa se a linha era uma const
+    if(lineIsConst){
+        std::string::size_type sz;   // alias of size_t, necessario para o funcionamento do stoi
+        //if (this->scannerLexico)
+        int value = std::stoi (word, &sz, 0);
+        //atualiza o rotulo de declaracao da linha com o valor da const
+        for (size_t i = 0; i < this->rotulosList.size(); i++){
+            if(this->lineRotuloName == this->rotulosList[i].name){
+                this->rotulosList[i].constValue = value;
+            }
+        }
+        //decrementa a quantidade de argumentos passado para a const
+        this->numberOfArgumentsInConst--;
+        return;
+    }
+
+    //Analisa se a linha era um space
+    if(lineIsSpace){
+        std::string::size_type sz;   // alias of size_t, necessario para o funcionamento do stoi
+        //if (this->scannerLexico)
+        int value = std::stoi (word, &sz, 0);
+        //atualiza o rotulo de declaracao da linha com o valor da const
+        for (size_t i; i < rotulosList.size(); i++){
+            if(this->lineRotuloName == this->rotulosList[i].name){
+                this->rotulosList[i].spaceQuantity = value;
+            }
+        }
+        //decrementa a quantidade de argumentos passados para o space
+        this->numberOfArgumentsInSpace--;
+
+        return;
+    }
+}
+
+//Metodo para atualizar os enderecos onde algum rotulo tinha sido chamado antes, caso a declaracao dele tenha sido encontrada
+void Montagem::rotuloAtualizaEnds (int contador_de_linhas){
+    for (size_t i = 0; i < this->rotulosList.size(); i++)
+    {
+        //se ele ja existir na lista, devemos apenas atualizar o endereco de declaracao dele e o estado
+        if (this->lineRotuloName == this->rotulosList[i].name)
+        {
+            
+            //Vai na saida e atualiza todos os lugares onde o rotulo foi chamado, colocando o endereco real dele
+            //Ainda nao vai tratar as consts e o sppaces com mais de 1 space
+            for (size_t j = 0; j < this->rotulosList[i].addressList.size(); j++){
+                //se o rotulo for uma const, atualiza com o valor da constante
+                if (this->rotulosList[i].isConst){
+                    this->outputFileList[this->rotulosList[i].addressList[j]] = this->rotulosList[i].constValue;
+                    //Se a const for 0 e a instrucao que chama ela for div, erro
+                    if ((this->rotulosList[i].constValue == 0) && (this->outputFileList[this->rotulosList[i].addressList[j] - 1] == 4)){
+                        std::cout << "Erro semantico na linha " << contador_de_linhas << ", tentativa de divisao por 0\n";
+                    }
+                }
+
+                //se o rotulo for um space, atualiza com o endereco mais o valor que ja se encontra la
+                else if (this->rotulosList[i].isSpace){
+                    //So atualiza se o endereco a mais que a pessoa quer faz parte do espaco guardado para o space
+                    if (this->outputFileList[this->rotulosList[i].addressList[j]] < (this->rotulosList[i].spaceQuantity - 1)){
+                        this->outputFileList[this->rotulosList[i].addressList[j]] += this->rotulosList[i].address;
+                    } else {
+                        std::cout << "Erro semantico, espaco da diretiva space foi estourado\n";
+                        this->outputFileList[this->rotulosList[i].addressList[j]] += this->rotulosList[i].address;
+                    }
+                }
+                //No caso normal, so coloca o endereco de declaracao la
+                else {
+                    this->outputFileList[this->rotulosList[i].addressList[j]] = this->rotulosList[i].address;
+                }
+                
+            }
+            
+            return;
+        }
+    }
 }

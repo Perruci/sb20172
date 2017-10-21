@@ -71,6 +71,7 @@ public:
     void chamada_de_rotulo(std::string, int &);
     void printRotulos();
     void trataRotulo_altoNivel(int, std::string, int &, int);
+    void rotuloAtualizaEnds (int);
 
      /*Erros Lexicos*/
      bool scannerLexico (std::string, char);
@@ -85,6 +86,7 @@ public:
      /*Diretivas*/
      bool isDiretiva(Token);
      void trata_diretivas(int, bool, int);
+     void pegaValorDiretivas (std::string);
 
      /*Section*/
      void trata_section(bool &, bool &, bool &, std::stringstream &, std::string &, int &);
