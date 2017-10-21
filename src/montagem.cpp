@@ -496,6 +496,11 @@ void Montagem::rotuloAtualizaEnds (int contador_de_linhas){
                     if ((this->rotulosList[i].constValue == 0) && (this->outputFileList[this->rotulosList[i].addressList[j] - 1] == 4)){
                         std::cout << "Erro semantico na linha " << contador_de_linhas << ", tentativa de divisao por 0\n";
                     }
+                    //Se for uma constante e em algum lugar tentaram pular para esse label,isso eh um pulo invalido e para secao invalida
+                    if((this->outputFileList[this->rotulosList[i].addressList[j] - 1] == 5) || (this->outputFileList[this->rotulosList[i].addressList[j] - 1] == 6) ||
+                       (this->outputFileList[this->rotulosList[i].addressList[j] - 1] == 7) || (this->outputFileList[this->rotulosList[i].addressList[j] - 1] == 8)){
+                        std::cout << "Erro semantico na linha " << contador_de_linhas << ", tentativa de pulo para uma constante\n";
+                       }
                 }
 
                 //se o rotulo for um space, atualiza com o endereco mais o valor que ja se encontra la
@@ -506,6 +511,12 @@ void Montagem::rotuloAtualizaEnds (int contador_de_linhas){
                     } else {
                         std::cout << "Erro semantico, espaco da diretiva space foi estourado\n";
                         this->outputFileList[this->rotulosList[i].addressList[j]] += this->rotulosList[i].address;
+                    }
+
+                    //Se for um space e em algum lugar tentaram pular para esse label,isso eh um pulo invalido e para secao invalida
+                    if((this->outputFileList[this->rotulosList[i].addressList[j] - 1] == 5) || (this->outputFileList[this->rotulosList[i].addressList[j] - 1] == 6) ||
+                    (this->outputFileList[this->rotulosList[i].addressList[j] - 1] == 7) || (this->outputFileList[this->rotulosList[i].addressList[j] - 1] == 8)){
+                     std::cout << "Erro semantico na linha " << contador_de_linhas << ", tentativa de pulo para um space\n";
                     }
                 }
                 //No caso normal, so coloca o endereco de declaracao la
