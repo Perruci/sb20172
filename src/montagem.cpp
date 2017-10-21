@@ -435,7 +435,18 @@ void Montagem::trataRotulo_altoNivel(int contador_tokens, std::string word, int 
             }
         }
         if (tipo == tipo_rotulo::chamada){
-                    this->trata_rotulos(word, tipo, contador_endereco, contador_de_linhas);
+            //Se a linha atual ainda nao tiver sido encontrada uma diretiva ou instrucao na linha e o token nao for nennhuma delas, 
+            //portanto ele eh um token invalido
+            if((!this->lineIsConst) && (!this->lineIsInstruction) && (!this->lineIsSpace)){
+                std::cout << "Erro lexico na linha " << contador_de_linhas << ", o token " << tokensList[contador_tokens].nome << " eh invalido.\n";
+                return;
+            }
+
+            //Se a linha for uma instrucao, podemos decrementar em 1 o contador de argumentos esperados
+            if(lineIsInstruction){
+                this->numberOfOperandsInLine--;
+            }
+            this->trata_rotulos(word, tipo, contador_endereco, contador_de_linhas);
         }
 }
 
