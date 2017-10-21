@@ -125,7 +125,7 @@ bool Montagem::run(){
     return true;
 }
 
-void Montagem::trata_rotulos (std::string token, int tipo_rotulo, int &endereco){
+void Montagem::trata_rotulos (std::string token, int tipo_rotulo, int &endereco, int contador_de_linhas){
     //Retira, caso tenha, o :
     token = string_ops::trunca_nome(token, ':');
     
@@ -135,7 +135,7 @@ void Montagem::trata_rotulos (std::string token, int tipo_rotulo, int &endereco)
     {
         //Salva o nome do rotulo de declaracao presente na linha
         this->lineRotuloName = token;
-        this->declaracao_de_rotulo(token, endereco);
+        this->declaracao_de_rotulo(token, endereco, contador_de_linhas);
         return;
     }
 
@@ -149,13 +149,19 @@ void Montagem::trata_rotulos (std::string token, int tipo_rotulo, int &endereco)
     return;
 }
 
-void Montagem::declaracao_de_rotulo(std::string token, int &endereco)
+void Montagem::declaracao_de_rotulo(std::string token, int &endereco, int contador_de_linhas)
 {
     for (size_t i = 0; i < this->rotulosList.size(); i++)
     {
         //se ele ja existir na lista, devemos apenas atualizar o endereco de declaracao dele e o estado
         if (token == this->rotulosList[i].name)
         {
+            //Se ele ja existir e ja tiver sido declarado antes, significa que houve repeticao de rotulo
+            if(rotulosList[i].alreadyDeclared){
+                std::cout << "Erro semantico na linha " << contador_de_linhas << ", o rotulo declarado nessa linha ja tinha sido declarado antes\n";
+                //caso ocorram rotulos repetidos, o primeiro endereco encontrado para ele sera o endereco de declaracao do mesmo
+                return;
+            }
             this->rotulosList[i].setState(endereco);
             return;
         }
@@ -425,11 +431,11 @@ void Montagem::trataRotulo_altoNivel(int contador_tokens, std::string word, int 
             } else
             {
                 this->haveRotuloInLine = 1;
-                this->trata_rotulos(word, tipo, contador_endereco);
+                this->trata_rotulos(word, tipo, contador_endereco, contador_de_linhas);
             }
         }
         if (tipo == tipo_rotulo::chamada){
-                    this->trata_rotulos(word, tipo, contador_endereco);
+                    this->trata_rotulos(word, tipo, contador_endereco, contador_de_linhas);
         }
 }
 

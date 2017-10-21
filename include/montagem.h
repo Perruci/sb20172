@@ -66,8 +66,8 @@ public:
     void printOutput();
 
     /* Rotulos */
-    void trata_rotulos (std::string, int, int &);
-    void declaracao_de_rotulo(std::string, int &);
+    void trata_rotulos (std::string, int, int &, int);
+    void declaracao_de_rotulo(std::string, int &, int);
     void chamada_de_rotulo(std::string, int &);
     void printRotulos();
     void trataRotulo_altoNivel(int, std::string, int &, int);
