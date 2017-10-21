@@ -72,6 +72,7 @@ public:
     void printRotulos();
     void trataRotulo_altoNivel(int, std::string, int &, int, bool, bool);
     void rotuloAtualizaEnds (int);
+    void checkRotulos();
 
      /*Erros Lexicos*/
      bool scannerLexico (std::string, char);

@@ -112,6 +112,8 @@ bool Montagem::run(){
         }
         //No fim de cada linha, verifica se houve algum erro lexico por falta ou excesso de argumentos
         this-> checkLexicalError(contador_de_linhas);
+
+        //Se nessa ultima linha teve uma declaracao de rotulo, atualiza os enderecos onde esse rotulo ja tinha sido declarado
         if(this->haveRotuloInLine){
             this-> rotuloAtualizaEnds (contador_de_linhas);
         }
@@ -120,6 +122,8 @@ bool Montagem::run(){
     if (!check_section_text){
         std::cout << "Erro semantico, nao ha secao text no arquivo\n";
     }
+    //checa se teve algum rotulo que foi chamado, mas nao foi declarado
+    this->checkRotulos();
     this->printRotulos();
     this->printOutput();
     return true;
@@ -553,6 +557,16 @@ void Montagem::rotuloAtualizaEnds (int contador_de_linhas){
             }
             
             return;
+        }
+    }
+}
+
+//Metodo para analisar se algum rotulo foi chamado, mas nao declarado
+void Montagem::checkRotulos(){
+    //percorre a lista de rotulos e verifica se algum dos rotulos foi criado por chamada, mas nao foi declarado em lugar algun
+    for (size_t i = 0; i < this->rotulosList.size(); i++){
+        if(!this->rotulosList[i].alreadyDeclared){
+            std::cout<< "Erro semantico, o rotulo " << rotulosList[i].name << " nao foi declarado em lugar algum do arquivo.\n";
         }
     }
 }
