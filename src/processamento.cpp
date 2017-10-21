@@ -66,7 +66,7 @@ bool Processamento::run(){
         }
         this->printLineToOutput(line);
     }
-    this-> printMacros();
+    //this-> printMacros();
     return true;
 }
 

@@ -124,7 +124,7 @@ bool Montagem::run(){
     }
     //checa se teve algum rotulo que foi chamado, mas nao foi declarado
     this->checkRotulos();
-    this->printRotulos();
+    //this->printRotulos();
     this->printOutput();
     return true;
 }
@@ -561,7 +561,7 @@ void Montagem::rotuloAtualizaEnds (int contador_de_linhas){
                 //se o rotulo for um space, atualiza com o endereco mais o valor que ja se encontra la
                 else if (this->rotulosList[i].isSpace){
                     //So atualiza se o endereco a mais que a pessoa quer faz parte do espaco guardado para o space
-                    if (this->outputFileList[this->rotulosList[i].addressList[j]] < (this->rotulosList[i].spaceQuantity - 1)){
+                    if (this->outputFileList[this->rotulosList[i].addressList[j]] <= (this->rotulosList[i].spaceQuantity - 1)){
                         this->outputFileList[this->rotulosList[i].addressList[j]] += this->rotulosList[i].address;
                     } else {
                         std::cout << "Erro semantico, espaco da diretiva space foi estourado\n";
