@@ -523,6 +523,10 @@ void Montagem::rotuloAtualizaEnds (int contador_de_linhas){
                        (this->outputFileList[this->rotulosList[i].addressList[j] - 1] == 7) || (this->outputFileList[this->rotulosList[i].addressList[j] - 1] == 8)){
                         std::cout << "Erro semantico na linha " << contador_de_linhas << ", tentativa de pulo para uma constante\n";
                        }
+                    //Se for uma constante e tentarem alterar esse valor
+                    if ((this->outputFileList[this->rotulosList[i].addressList[j] - 1] == 11)){
+                        std::cout << "Erro semantico na linha " << contador_de_linhas << ", tentativa de alteracao de um valor constante\n";
+                    }
                 }
 
                 //se o rotulo for um space, atualiza com o endereco mais o valor que ja se encontra la
