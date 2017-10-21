@@ -41,7 +41,6 @@ bool Montagem::run(){
     bool now_section_data = false;    //indica que atualmente o programa esta na secao de data
     int contador_tokens = 0;          //sera utilizado para navegar pela tokensList
     int contador_endereco = 0;        //sera utilizado para determinar o endereco de cada token do programa
-    int haveRotuloInLine = 0;            //controle para caso aparecam dois rotulos na mesma linha
     int contador_de_linhas = 0;       //Controle para saber em qual linha do programa esta algum erro
 
 
@@ -60,7 +59,8 @@ bool Montagem::run(){
         contador_de_linhas++;               //incrementa a linha
 
         std::stringstream lineStream (line);
-        haveRotuloInLine = 0;               //prepara a variavel para  analisar o proximo rotulo
+        this->haveRotuloInLine = 0;               //prepara a variavel para  analisar o proximo rotulo
+        this->lineRotuloName = "";
 
         //antes de analisar cada linha, inicializa novamente as variaveis de controle do erro lexico
         this->lineIsInstruction = false;     
@@ -86,7 +86,7 @@ bool Montagem::run(){
             
             //se o token for um rotulo, trata ele
             if (this->tokensList[contador_tokens].isRotulo(word, line, instructionList)){
-                this ->trataRotulo_altoNivel(contador_tokens, word, contador_endereco, haveRotuloInLine, contador_de_linhas);
+                this ->trataRotulo_altoNivel(contador_tokens, word, contador_endereco, contador_de_linhas);
             }
 
             //Testa se o token atual eh uma diretiva, caso seja prepara as variaveis para analisar o resto da linha
@@ -102,6 +102,9 @@ bool Montagem::run(){
                 contador_endereco++;
             }
             contador_tokens++;
+            if (this->haveRotuloInLine){
+                std::cout << "O rotulo da linha " << contador_de_linhas << " chama-se " << lineRotuloName << std::endl;
+            }
         }
         //No fim de cada linha, verifica se houve algum erro lexico por falta ou excesso de argumentos
         this-> checkLexicalError(contador_de_linhas);
@@ -118,10 +121,13 @@ bool Montagem::run(){
 void Montagem::trata_rotulos (std::string token, int tipo_rotulo, int &endereco){
     //Retira, caso tenha, o :
     token = string_ops::trunca_nome(token, ':');
+    
 
     //se for a declaracao de um rotulo, chama a rotina pra tratar isso
     if(tipo_rotulo == tipo_rotulo::declaracao)
     {
+        //Salva o nome do rotulo de declaracao presente na linha
+        this->lineRotuloName = token;
         this->declaracao_de_rotulo(token, endereco);
         return;
     }
@@ -415,17 +421,17 @@ void Montagem::trata_section(bool &check_section_text, bool &now_section_data, b
 }
 
 //Uma das funcoes para tratar o rotulo, a mais "alto nivel" delas
-void Montagem::trataRotulo_altoNivel(int contador_tokens, std::string word, int &contador_endereco, int &haveRotuloInLine, int contador_de_linhas){
+void Montagem::trataRotulo_altoNivel(int contador_tokens, std::string word, int &contador_endereco, int contador_de_linhas){
     int tipo = tokensList[contador_tokens].KindOfRotulo(word);
 
     //testa se eh uma declaracao de rotulo e se ja tem outra declaracao na mesma linha
     if (tipo == tipo_rotulo::declaracao){
         //se ja tiver uma declaracao na linha sera erro
-        if (haveRotuloInLine == 1){
+        if (this->haveRotuloInLine == 1){
             std::cout << "Erro lexico, declaracao de mais de um Rotulo na linha " << contador_de_linhas << "\n";
             } else
             {
-                haveRotuloInLine = 1;
+                this->haveRotuloInLine = 1;
                 this->trata_rotulos(word, tipo, contador_endereco);
             }
         }

@@ -46,6 +46,9 @@ private:
                                         //Da suporte a variavel lineIsConst
     /***********************************************************************************************************************************************************/
 
+    int haveRotuloInLine = 0;            //controle para caso aparecam dois rotulos na mesma linha
+    std::string lineRotuloName = "";     //salva o nome do rotulo daquela linha, caso exista um rotulo naquela linha
+
 
     //Fecha e abre o arquivo do codigo para atualizar o ponteiro de arquivo, caso alguma outra funcao tenha usado ele
     inline bool reopenCodeFile()
@@ -67,7 +70,7 @@ public:
     void declaracao_de_rotulo(std::string, int &);
     void chamada_de_rotulo(std::string, int &);
     void printRotulos();
-    void trataRotulo_altoNivel(int, std::string, int &, int &, int);
+    void trataRotulo_altoNivel(int, std::string, int &, int);
 
      /*Erros Lexicos*/
      bool scannerLexico (std::string, char);
