@@ -91,7 +91,7 @@ bool Montagem::run(){
             
             //se o token for um rotulo, trata ele
             if (this->tokensList[contador_tokens].isRotulo(word, line, instructionList)){
-                this ->trataRotulo_altoNivel(contador_tokens, word, contador_endereco, contador_de_linhas);
+                this ->trataRotulo_altoNivel(contador_tokens, word, contador_endereco, contador_de_linhas, now_section_data, now_section_text);
             }
 
             //Testa se o token atual eh uma diretiva, caso seja prepara as variaveis para analisar o resto da linha
@@ -420,7 +420,7 @@ void Montagem::trata_section(bool &check_section_text, bool &now_section_data, b
 }
 
 //Uma das funcoes para tratar o rotulo, a mais "alto nivel" delas
-void Montagem::trataRotulo_altoNivel(int contador_tokens, std::string word, int &contador_endereco, int contador_de_linhas){
+void Montagem::trataRotulo_altoNivel(int contador_tokens, std::string word, int &contador_endereco, int contador_de_linhas, bool now_section_data, bool now_section_text){
     int tipo = tokensList[contador_tokens].KindOfRotulo(word);
 
     //testa se eh uma declaracao de rotulo e se ja tem outra declaracao na mesma linha
@@ -438,7 +438,12 @@ void Montagem::trataRotulo_altoNivel(int contador_tokens, std::string word, int 
             //Se a linha atual ainda nao tiver sido encontrada uma diretiva ou instrucao na linha e o token nao for nennhuma delas, 
             //portanto ele eh um token invalido
             if((!this->lineIsConst) && (!this->lineIsInstruction) && (!this->lineIsSpace)){
-                std::cout << "Erro lexico na linha " << contador_de_linhas << ", o token " << tokensList[contador_tokens].nome << " eh invalido.\n";
+                if(now_section_data){
+                    std::cout << "Erro lexico na linha " << contador_de_linhas << ", o token " << tokensList[contador_tokens].nome << " eh uma diretiva invalida.\n";
+                }
+                if(now_section_text){
+                    std::cout << "Erro lexico na linha " << contador_de_linhas << ", o token " << tokensList[contador_tokens].nome << " eh uma instrucao invalida.\n";
+                }
                 return;
             }
 

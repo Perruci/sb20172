@@ -70,7 +70,7 @@ public:
     void declaracao_de_rotulo(std::string, int &, int);
     void chamada_de_rotulo(std::string, int &);
     void printRotulos();
-    void trataRotulo_altoNivel(int, std::string, int &, int);
+    void trataRotulo_altoNivel(int, std::string, int &, int, bool, bool);
     void rotuloAtualizaEnds (int);
 
      /*Erros Lexicos*/
