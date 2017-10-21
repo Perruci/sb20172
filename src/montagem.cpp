@@ -472,33 +472,58 @@ void Montagem::printOutput(){
 void Montagem::pegaValorDiretivas (std::string word){
     //Analisa se a linha era uma const
     if(lineIsConst){
-        std::string::size_type sz;   // alias of size_t, necessario para o funcionamento do stoi
-        //if (this->scannerLexico)
-        int value = std::stoi (word, &sz, 0);
-        //atualiza o rotulo de declaracao da linha com o valor da const
-        for (size_t i = 0; i < this->rotulosList.size(); i++){
-            if(this->lineRotuloName == this->rotulosList[i].name){
-                this->rotulosList[i].constValue = value;
+        try{
+            std::string::size_type sz;   // alias of size_t, necessario para o funcionamento do stoi
+            //if (this->scannerLexico)
+            int value = std::stoi (word, &sz, 0);
+            //atualiza o rotulo de declaracao da linha com o valor da const
+            for (size_t i = 0; i < this->rotulosList.size(); i++){
+                if(this->lineRotuloName == this->rotulosList[i].name){
+                    this->rotulosList[i].constValue = value;
+                }
             }
+            //decrementa a quantidade de argumentos passado para a const
+            this->numberOfArgumentsInConst--;
         }
-        //decrementa a quantidade de argumentos passado para a const
-        this->numberOfArgumentsInConst--;
+        catch (const std::invalid_argument& e)
+        {
+            std::cout << "Argumento invalido para a const: " << word << std::endl;
+            return;
+        }
+        catch (const std::out_of_range& e)
+        {
+            std::cout << "Argumento out of range: " << word << std::endl;
+            return;
+        }
         return;
     }
 
     //Analisa se a linha era um space
     if(lineIsSpace){
-        std::string::size_type sz;   // alias of size_t, necessario para o funcionamento do stoi
-        //if (this->scannerLexico)
-        int value = std::stoi (word, &sz, 0);
-        //atualiza o rotulo de declaracao da linha com o valor da const
-        for (size_t i; i < rotulosList.size(); i++){
-            if(this->lineRotuloName == this->rotulosList[i].name){
-                this->rotulosList[i].spaceQuantity = value;
+        try{
+            std::string::size_type sz;   // alias of size_t, necessario para o funcionamento do stoi
+            //if (this->scannerLexico)
+            int value = std::stoi (word, &sz, 0);
+            //atualiza o rotulo de declaracao da linha com o valor da const
+            for (size_t i; i < rotulosList.size(); i++){
+                if(this->lineRotuloName == this->rotulosList[i].name){
+                    this->rotulosList[i].spaceQuantity = value;
+                }
             }
+            //decrementa a quantidade de argumentos passados para o space
+            this->numberOfArgumentsInSpace--;
         }
-        //decrementa a quantidade de argumentos passados para o space
-        this->numberOfArgumentsInSpace--;
+
+        catch (const std::invalid_argument& e)
+        {
+            std::cout << "Argumento invalido para o space: " << word << std::endl;
+            return;
+        }
+        catch (const std::out_of_range& e)
+        {
+            std::cout << "Argumento out of range: " << word << std::endl;
+            return;
+        }
 
         return;
     }
