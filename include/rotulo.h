@@ -26,7 +26,7 @@ class Rotulo
         bool isEqu;
         int EquValue;
         bool isMem;             //caso o rotulo indique uma diretiva e nao um endereco de pulo
-        
+
         //Nao sei se eh o melhor jeito, mas e como pensei em fazer agora
         bool isConst = false;
         int constValue;
@@ -36,5 +36,6 @@ class Rotulo
         inline void addList(int endereco){this->addressList.push_back(endereco);};
         void setState(int inicial);
         bool setEQU(std::string);
+        std::string getEQU_str();
 };
 #endif
