@@ -41,6 +41,7 @@ public:
     bool run();
     /* Utilidades */
     std::string setOutputExtension(std::string);
+    std::string treat_comments(std::string);
     /* Rotulos */
     void trata_rotulos (std::string, int, int);
     void declaracao_de_rotulo(std::string, int);

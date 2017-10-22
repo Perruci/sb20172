@@ -25,6 +25,19 @@ std::string Pre_Processamento::setOutputExtension(std::string extension)
     return outputFileName;
 }
 
+// Caso encontra um char ';' em um token, retorna a substring até o caracter
+// Caso não encontre, retorna string vazia
+std::string Pre_Processamento::treat_comments(std::string str)
+{
+    // get semicollon position
+    size_t sc_pos = str.find(";");
+    // se não for encontrado, retorna a própria linha
+    if(sc_pos == std::string::npos)
+        return str;
+
+    return str.substr(0, sc_pos);
+}
+
 //Faz a etapa de pre-processamento e trata os EQU e IF, funcao criada sem utilizar a tokenizacao, pois estou com receio de que
 //se fizermos a tokenizacao nessa parte estariamos violando a regra de passagem unica
 bool Pre_Processamento::run(){
@@ -51,16 +64,16 @@ bool Pre_Processamento::run(){
         line = string_ops::minuscula(line);
         contador_de_linhas++;               //incrementa a linha
 
+        /* Trata comentários na linha */
+        line = treat_comments(line);
+
+        // Itera em cada palavra da linha
         std::stringstream lineStream (line);
         haveRotuloInLine = 0;               //prepara a variavel para  analisar o proximo rotulo
 
         //Loop para analisar cada termo um a um
         while (lineStream >> word)
         {
-            // se encontra um comentário, pula a linha
-            if (word[0] == ';')
-                break;
-
             //coloca o termo na lista
             this->tokensList.push_back(Token(word));
 
