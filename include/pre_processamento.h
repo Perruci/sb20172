@@ -42,6 +42,7 @@ public:
     /* Utilidades */
     std::string setOutputExtension(std::string);
     std::string treat_comments(std::string);
+    std::string check_equ_call(std::string, std::string);
     /* Rotulos */
     void trata_rotulos (std::string, int, int);
     void declaracao_de_rotulo(std::string, int);

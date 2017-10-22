@@ -62,3 +62,8 @@ bool Rotulo::setEQU(std::string line)
     }
     return true;
 }
+
+std::string Rotulo::getEQU_str()
+{
+    return std::to_string(this->EquValue);
+}

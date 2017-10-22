@@ -147,7 +147,7 @@ bool Pre_Processamento::run(){
     }
     //Ta aqui so pra debugar
     //this->printRotulos();
-    //this->writeTokensToOutput();
+    // this->writeTokensToOutput();
     return true;
 }
 
@@ -216,17 +216,26 @@ void Pre_Processamento::chamada_de_rotulo(std::string token, int endereco)
 {
     for (size_t i = 0; i < rotulosList.size(); i++)
     {
+        Rotulo rotulo = rotulosList[i];
         //se ele ja existir na lista, devemos colocar no lugar o endereco dele caso ja esteja declarado, ou adicionar
         //esse endereco na lista de lugares onde ele eh chamado para tratar depois
-        if (token == rotulosList[i].name)
+        if (token == rotulo.name)
         {
-            if(rotulosList[i].alreadyDeclared)
+            if(rotulo.alreadyDeclared)
             {
-                //ADD UMA ROTINA PARA TRATAR A PARTE DA MONTAGEM
+                // Caso o rotulo seja uma chamada de EQU, deve-se substitui-lo por seu valor
+                if(rotulo.isEqu)
+                {
+                    // retira o rótulo da lista
+                    this->tokensList.pop_back();
+                    // adiciona seu valor EQU
+                    this->tokensList.push_back(Token(rotulo.getEQU_str()));
+                    return;
+                }
                 return;
             } else
             {
-                rotulosList[i].addressList.push_back(endereco);
+                rotulo.addressList.push_back(endereco);
                 return;
             }
         }
@@ -314,6 +323,9 @@ void Pre_Processamento::printLine(std::string Line){
     std::string word;
 
     while (linha >> word){
+        // Confere se é a chamada de um EQU
+        Line = check_equ_call(Line, word);
+
         if (word == "equ"){
             //nao imprime a linha
             return;
@@ -346,4 +358,21 @@ void Pre_Processamento::printLine(std::string Line){
 
     //Se chegar aqui eh pq essa linha deve ser impressa
     this-> fileOutput << Line << std::endl;
+}
+
+std::string Pre_Processamento::check_equ_call(std::string line, std::string word)
+{
+    for (size_t i = 0; i < rotulosList.size(); i++)
+    {
+        Rotulo rotulo = rotulosList[i];
+        //procura o rotulo associado ao if
+        if (word == rotulo.name)
+            if(rotulo.isEqu)
+            {
+                size_t index = line.find(word);
+                if(index != std::string::npos)
+                    line.replace(index, word.size(), rotulo.getEQU_str());
+            }
+    }
+    return line;
 }
