@@ -86,6 +86,21 @@ bool Token::isInteger(const std::string & aux)
    return (*ptr == 0) ;
 }
 
+//testa se o ultimo char da string eh ',', pois isso faz parte do argumento para o copy
+bool Token::haveVirgula(std::string token){
+    char* ptr;
+    ptr = &(token[0]);
+    int tam = strlen(ptr);
+
+    for(int i = 0; i < tam; i++){
+        if ((token[i] == ',') &&(tam - i == 1)){
+            return true;
+        }
+    }
+    return false;
+}
+
+
 /* Podem ser úteis */
 // // Função teste: extrair cada token do arquivo de entrada e escrevê-los de forma padrão na saída
 // void Montador::tokenizar()

@@ -88,6 +88,17 @@ bool Montagem::run(){
             if (lineIsConst || lineIsSpace){
                 this->pegaValorDiretivas(word);
             }
+
+            //Caso ja pegamos que a linha eh uma instrucao, que essa instrucao eh a copy e que estamos analisando o primeiro argumento dela
+            //tratamos ela de maneira especial
+            if ((lineIsInstruction) && (tokensList[contador_tokens - 1].nome == "copy") && (this->numberOfOperandsInLine == 2)){
+                //Testa se o primeiro argumento da linha copy tem uma ',' no fim, como determinado pelo professor
+                if (tokensList[contador_tokens].haveVirgula(word)){
+                    word = string_ops::trunca_nome(word, ',');
+                } else {
+                    std::cout << "Erro sintatico na linha " << contador_de_linhas << ", nao ha uma virgula separando os argumentos do copy, ou essa virgula esta mal posicionada.\n";
+                }
+            }
             
             //se o token for um rotulo, trata ele
             if (this->tokensList[contador_tokens].isRotulo(word, line, instructionList)){

@@ -37,5 +37,6 @@ class Token
         bool have2points (std::string); //checa se tem : no final do token
         int KindOfRotulo(std::string);
         bool isInteger(const std::string &);
+        bool haveVirgula(std::string); //checa se tem virgula no final
 };
 #endif
