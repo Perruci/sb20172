@@ -42,6 +42,7 @@ bool Montagem::run(){
     int contador_tokens = 0;          //sera utilizado para navegar pela tokensList
     int contador_endereco = 0;        //sera utilizado para determinar o endereco de cada token do programa
     int contador_de_linhas = 0;       //Controle para saber em qual linha do programa esta algum erro
+    bool copySemVirgula = false;      //Flag para ver se faltou uma virgula entre os argumentos do copy
 
 
     //Fecha e abre o arquivo do codigo para atualizar o ponteiro de arquivo, caso alguma outra funcao tenha usado ele
@@ -70,6 +71,8 @@ bool Montagem::run(){
         this->lineIsConst = false;          
         this->numberOfArgumentsInConst = 0;   
 
+        copySemVirgula = false;     //sempre falso no comeco da linha
+
         //Loop para analisar cada termo um a um
         while (lineStream >> word)
         {
@@ -89,6 +92,14 @@ bool Montagem::run(){
                 this->pegaValorDiretivas(word);
             }
 
+            //Caso a linha seja uma instrucao copy, ja pegamos o primeiro argumento e nao achamos a virgula 'colada' nele, prcuramos
+            //ela aqui sozinha, se nao estiver indica erro
+            if((lineIsInstruction) && (tokensList[contador_tokens].nome == ",") && (this->numberOfOperandsInLine == 1)){
+                copySemVirgula = false;
+                //nao analisamos as outras coisas para a , portanto vamos para o proximo token
+                lineStream >> word;
+            }
+
             //Caso ja pegamos que a linha eh uma instrucao, que essa instrucao eh a copy e que estamos analisando o primeiro argumento dela
             //tratamos ela de maneira especial
             if ((lineIsInstruction) && (tokensList[contador_tokens - 1].nome == "copy") && (this->numberOfOperandsInLine == 2)){
@@ -96,7 +107,8 @@ bool Montagem::run(){
                 if (tokensList[contador_tokens].haveVirgula(word)){
                     word = string_ops::trunca_nome(word, ',');
                 } else {
-                    std::cout << "Erro sintatico na linha " << contador_de_linhas << ", nao ha uma virgula separando os argumentos do copy, ou essa virgula esta mal posicionada.\n";
+                    //entra aqui se o primeiro argumento do copy nao tiver uma virgula colada nele
+                    copySemVirgula = true;
                 }
             }
             
@@ -124,6 +136,10 @@ bool Montagem::run(){
         //No fim de cada linha, verifica se houve algum erro lexico por falta ou excesso de argumentos
         this-> checkLexicalError(contador_de_linhas);
 
+        //Verifica se a linha era um copy e se houve erro sintatico nela
+        if(copySemVirgula){
+            std::cout << "Erro sintatico na linha " << contador_de_linhas << ", nao ha uma virgula separando os argumentos do copy, ou essa virgula esta mal posicionada.\n";
+        }
         //Se nessa ultima linha teve uma declaracao de rotulo, atualiza os enderecos onde esse rotulo ja tinha sido declarado
         if(this->haveRotuloInLine){
             this-> rotuloAtualizaEnds (contador_de_linhas);
