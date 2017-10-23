@@ -695,7 +695,8 @@ void Montagem::rotuloAtualizaEnds (int contador_de_linhas){
 // Metodo para corrigir os endereços do arquivo .mcr com base no vetor de ajustes
 int Montagem::getOriginalLine(int lineNum)
 {
-    int adjust = this->address_adjusts[lineNum];
+    // vetor de ajustes é endereçado antes de contador_de_linhas++
+    int adjust = this->address_adjusts[lineNum-1];
     // Se o ajuste for positivo, ele aponta para a chamada de uma macro
     // logo, retorna este próprio valor
     if(adjust > 0)
