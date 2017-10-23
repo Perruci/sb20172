@@ -337,12 +337,51 @@ void Montagem::printRotulos(){
 bool Montagem::scannerLexico (std::string word, char operation){
 
     switch (operation){
+        //operation de argumento para insrtucao
         case 'a':
             //vai apresentar erro lexico se tiver algum caracter especial no token ou ele se iniciar com numero
             if ((word[0] == '0') || (word[0] == '1') || (word[0] == '2') || (word[0] == '3') || (word[0] == '4')
             || (word[0] == '5') || (word[0] == '6') || (word[0] == '7') || (word[0] == '8') || (word[0] == '9'))
             {
+                std::cout<<"Erro lexico na linha " << getOriginalLine(contador_de_linhas) << ", o token " << word << " nao eh um argumento valido para as instrucoes";
                 return false;
+            }
+            //testa se um dos caracteres nao eh letra, ou numero (sem ser o primeiro) ou underscore
+            for (size_t i = 0; word.size(); i++){
+                if(!((word[i] == 'a') || (word[i] == 'b') || (word[i] == 'c') || (word[i] == 'd') || (word[i] == 'e') || 
+                (word[i] == 'f') || (word[i] == 'g') || (word[i] == 'h') || (word[i] == 'i') || (word[i] == 'j') || 
+                (word[i] == 'k') || (word[i] == 'l') || (word[i] == 'm') || (word[i] == 'n') || (word[i] == 'o') || 
+                (word[i] == 'p') || (word[i] == 'q') || (word[i] == 'r') || (word[i] == 's') || (word[i] == 't') || 
+                (word[i] == 'u') || (word[i] == 'v') || (word[i] == 'w') || (word[i] == 'x') || (word[i] == 'y') || (word[i] == 'z') || 
+                (word[i] == '0') || (word[i] == '1') || (word[i] == '2') || (word[i] == '3') || (word[i] == '4') || (word[i] == '5') || 
+                (word[i] == '6') || (word[i] == '7') || (word[i] == '8') || (word[i] == '9') || (word[i] == '_'))){
+                    std::cout<<"Erro lexico na linha " << getOriginalLine(contador_de_linhas) << ", o token " << word << " nao eh um argumento valido para as instrucoes";
+                    return false;
+                }
+            }
+            return true;
+
+            //Mesmo tratamento do caso 'a', mas agora testa se o rotulo eh valido
+        case 'r':
+            //vai apresentar erro lexico se tiver algum caracter especial no token ou ele se iniciar com numero
+            if ((word[0] == '0') || (word[0] == '1') || (word[0] == '2') || (word[0] == '3') || (word[0] == '4')
+            || (word[0] == '5') || (word[0] == '6') || (word[0] == '7') || (word[0] == '8') || (word[0] == '9'))
+            {
+                std::cout<<"Erro lexico na linha " << getOriginalLine(contador_de_linhas) << ", o token " << word << " nao eh um rotulo valido";
+                return false;
+            }
+            //testa se um dos caracteres nao eh letra, ou numero (sem ser o primeiro) ou underscore
+            for (size_t i = 0; word.size(); i++){
+                if(!((word[i] == 'a') || (word[i] == 'b') || (word[i] == 'c') || (word[i] == 'd') || (word[i] == 'e') || 
+                (word[i] == 'f') || (word[i] == 'g') || (word[i] == 'h') || (word[i] == 'i') || (word[i] == 'j') || 
+                (word[i] == 'k') || (word[i] == 'l') || (word[i] == 'm') || (word[i] == 'n') || (word[i] == 'o') || 
+                (word[i] == 'p') || (word[i] == 'q') || (word[i] == 'r') || (word[i] == 's') || (word[i] == 't') || 
+                (word[i] == 'u') || (word[i] == 'v') || (word[i] == 'w') || (word[i] == 'x') || (word[i] == 'y') || (word[i] == 'z') || 
+                (word[i] == '0') || (word[i] == '1') || (word[i] == '2') || (word[i] == '3') || (word[i] == '4') || (word[i] == '5') || 
+                (word[i] == '6') || (word[i] == '7') || (word[i] == '8') || (word[i] == '9') || (word[i] == '_'))){
+                    std::cout<<"Erro lexico na linha " << getOriginalLine(contador_de_linhas) << ", o token " << word << " nao eh um rotulo valido";
+                    return false;
+                }
             }
             return true;
     }
