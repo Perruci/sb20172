@@ -4,6 +4,7 @@
 #include <iostream>
 #include <string.h>
 #include <vector>
+#include <algorithm>
 #include <sstream>
 
 //Declaracao da classe Macro
@@ -13,10 +14,10 @@ class Macro
         std::string name;
         std::string codigo;
         int address;
-        int num_lines;
+        size_t num_lines;
 
         Macro(std::string, std::string, int);
-        int get_numlines();
+        size_t get_numlines();
         int get_address();
         void set_address(int);
 };

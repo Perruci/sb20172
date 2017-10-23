@@ -180,7 +180,8 @@ void Processamento::printLineToOutput(std::string line){
 int Processamento::get_address()
 {
     int address = this->contador_endereco + 1;
-    address += this->previous_adjusts[contador_de_linhas];
+    // previous_adjusts e enderecado por contador_de_linhas - 1
+    address += this->previous_adjusts[contador_de_linhas - 1];
     return address;
 }
 
@@ -190,20 +191,18 @@ void Processamento::update_address_adjusts()
     int adjust = contador_endereco - contador_de_linhas;
     // add it to previous adjusts
     // obs: há um elemento em address_adjusts para cada linha
-    adjust = adjust + this->previous_adjusts[contador_de_linhas];
+    adjust = adjust + this->previous_adjusts[contador_de_linhas - 1];
     this->address_adjusts.push_back(adjust);
-    std::cout << adjust << '\n';
 }
 
 void Processamento::update_address_macros(Macro macro)
 {
-    int numLines = macro.get_numlines();
+    size_t numLines = macro.get_numlines();
     int address = macro.get_address();
     // Imprime o endereço de chamada da macro
     for(size_t i = 0; i < numLines; i++)
     {
         this->address_adjusts.push_back(address);
-        std::cout << address << '\n';
     }
     // Atualiza o contador de endereço com o número de linhas
     contador_endereco += numLines;

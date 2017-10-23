@@ -8,7 +8,7 @@ Macro::Macro(std::string nome, std::string code, int address){
     set_address(address);
 }
 
-int Macro::get_numlines()
+size_t Macro::get_numlines()
 {
     std::string str = this->codigo;
     return std::count(str.begin(), str.end(), '\n');
