@@ -555,11 +555,11 @@ void Montagem::trataRotulo_altoNivel(int contador_tokens, std::string word, int 
 
 //Imprime a lista de saida para o arquivo final
 void Montagem::printOutput(){
-    for(size_t i = 0; i < this->outputFileList.size(); i++){
-        this->fileOutput << this->outputFileList[i] << " ";
-        std::cout << this->outputFileList[i] << " ";
+    for(size_t i = 0; i < outputFileList.size(); i++)
+    {
+        this->fileOutput << outputFileList[i] << ' ';
     }
-    std::cout<< std::endl;
+    this->fileOutput << std::endl;
 }
 
 //Metodo para pegar os valores das diretivas
