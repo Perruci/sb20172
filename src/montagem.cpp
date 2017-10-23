@@ -124,8 +124,10 @@ bool Montagem::run(std::vector<int> adjusts_vec){
                 //Se achar o +
                 if(found != std::string::npos){
                     this->argumentIsVector = true;
+                    std::cout<< "O token " << word << " tem +\n";
                     //Testa se o + eh o ultimo caractere da linha, se nao for, pega o numero que vem depois dele
                     if(!tokensList[contador_tokens].haveSoma(word)){
+                        std::cout<<"A SOMA NAO ESTA NO FIM\n";
                         //Caso ela nao esteja no fim do token, vou pegar o que esta depois dela que provavelmente eh o numero
                         std::string numero = word.substr(found+1);
                         int numberOfVector = this->getNumber (numero);
@@ -133,10 +135,12 @@ bool Montagem::run(std::vector<int> adjusts_vec){
                             std::cout << "Erro lexico na linha " << contador_de_linhas << ", o argumento somado ao label nao eh valido para um vetor\n";
                             this->VectorValue = 0;
                         } else {
+                            std::cout << "O numero associado ao token " << word << " eh " << numberOfVector << std::endl;
                             this->VectorValue = numberOfVector;
                         }
                         //Trunca o token no +
-                        word == string_ops::trunca_nome(word,'+');
+                        word = string_ops::trunca_nome(word,'+');
+                        std::cout << "A WROD TRUNCADA PASSA A SER " << word << std::endl;
                     } else{
                         std::cout<<"A SOMA ESTA NO FIM\n";
                     }
@@ -202,7 +206,7 @@ void Montagem::trata_rotulos (std::string token, int tipo_rotulo, int &endereco,
     //se for chamada de um rotulo, chama a rotina pra tratar isso
     if (tipo_rotulo == tipo_rotulo::chamada)
     {
-        this->chamada_de_rotulo(token, endereco);
+        this->chamada_de_rotulo(token, endereco, contador_de_linhas);
         return;
     }
 
@@ -232,7 +236,7 @@ void Montagem::declaracao_de_rotulo(std::string token, int &endereco, int contad
     return;
 }
 
-void Montagem::chamada_de_rotulo(std::string token, int &endereco)
+void Montagem::chamada_de_rotulo(std::string token, int &endereco, int contador_de_linhas)
 {
     for (size_t i = 0; i < this->rotulosList.size(); i++)
     {
@@ -251,24 +255,32 @@ void Montagem::chamada_de_rotulo(std::string token, int &endereco)
 
                 //se for um space, coloca o endereco de declaracao do rotulo (NAO FUNCIONARA PARA SPACES DIFERENTES DE 1, TRATAR DEPOIS)
                 if(this->rotulosList[i].isSpace){
+                    if(this->argumentIsVector){
+                        std::cout << "ENTROU AQUI\n";
+                        this->outputFileList.push_back(rotulosList[i].spaceQuantity + this->VectorValue);
+                        if (!(this->VectorValue < this->rotulosList[i].spaceQuantity )){
+                            std::cout << "Erro lexico na linha " << contador_de_linhas << ", espaco do vetor " << this->rotulosList[i].name << " estourado.\n";
+                        }
+                    } else{
                     this->outputFileList.push_back(rotulosList[i].address);
+                    }
                     endereco++;
                     return;
                 }
 
                 //caso contrario, eh um rotulo qualquer, adiciona o endereco de declaracao dele
-                if(this->argumentIsVector){
-                    this->outputFileList.push_back(this->VectorValue);
-                } else{
                     this->outputFileList.push_back(rotulosList[i].address);
-                }
                 endereco++;
                 return;
             } else
             {
                 //Coloca na lista desse rotulo aquele endereco para ele ser arrumado posteriormente e incrementa o contador de enderecos e coloca 0 na lista de saida
                 this->rotulosList[i].addressList.push_back(endereco);
-                this->outputFileList.push_back(0);
+                if(this->argumentIsVector){
+                    this->outputFileList.push_back(this->VectorValue);
+                } else{
+                    this->outputFileList.push_back(0);
+                }
                 endereco++;
                 return;
             }
@@ -279,7 +291,11 @@ void Montagem::chamada_de_rotulo(std::string token, int &endereco)
     Rotulo rotulo (token, false, 0);
     rotulo.addressList.push_back(endereco);
     this->rotulosList.push_back(rotulo);
-    this->outputFileList.push_back(0);
+    if(this->argumentIsVector){
+        this->outputFileList.push_back(this->VectorValue);
+    } else{
+        this->outputFileList.push_back(0);
+    }
     endereco++;
     return;
 }
