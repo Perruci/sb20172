@@ -5,6 +5,9 @@ Rotulo::Rotulo(std::string nome, bool flag, int inicio){
     this->name = nome;
     this->alreadyDeclared = flag;
 
+    this->isEqu = false;
+    this->EquValue = 0;
+
     if (flag){
         this->address = inicio;
     } else {

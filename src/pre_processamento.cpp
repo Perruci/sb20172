@@ -324,7 +324,7 @@ void Pre_Processamento::printLine(std::string Line){
 
     while (linha >> word){
         // Confere se é a chamada de um EQU
-        // Line = check_equ_call(Line, word);
+        Line = check_equ_call(Line, word);
 
         if (word == "equ"){
             //nao imprime a linha
