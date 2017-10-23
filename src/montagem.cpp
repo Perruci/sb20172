@@ -80,6 +80,26 @@ bool Montagem::run(std::vector<int> adjusts_vec){
         //Loop para analisar cada termo um a um
         while (lineStream >> word)
         {
+            //Se o token da linha for so um +
+            if(word == "+"){
+                this->argumentIsVector = true;
+                continue;
+            }
+            //Se a linha estiver esperando os termos finais de um vetor nao queremos analisar todos os tokens
+            if(this->argumentIsVector){
+                int numberOfVector = this->getNumber (word);
+                if (numberOfVector == -1){
+                    std::cout << "Erro lexico na linha " << contador_de_linhas << ", o argumento somado ao label nao eh valido para um vetor\n";
+                    this->VectorValue = 0;
+                } else {
+                    std::cout << "O numero associado ao token " << word << " eh     " << numberOfVector << std::endl;
+                    this->VectorValue = numberOfVector;
+                }
+                int tam = this->outputFileList.size();
+                this->outputFileList[tam-1] = numberOfVector;
+                continue;
+            }
+
             //coloca o termo na lista
             this->tokensList.push_back(Token(word));
 
@@ -143,6 +163,7 @@ bool Montagem::run(std::vector<int> adjusts_vec){
                         std::cout << "A WROD TRUNCADA PASSA A SER " << word << std::endl;
                     } else{
                         std::cout<<"A SOMA ESTA NO FIM\n";
+                        word = string_ops::trunca_nome(word,'+');
                     }
 
                 }
@@ -255,7 +276,7 @@ void Montagem::chamada_de_rotulo(std::string token, int &endereco, int contador_
                 if(this->rotulosList[i].isSpace){
                     if(this->argumentIsVector){
                         std::cout << "ENTROU AQUI\n";
-                        this->outputFileList.push_back(this->VectorValue);
+                        this->outputFileList.push_back(this->VectorValue + rotulosList[i].address);
                         if (!(this->VectorValue < this->rotulosList[i].spaceQuantity )){
                             std::cout << "Erro lexico na linha " << contador_de_linhas << ", espaco do vetor " << this->rotulosList[i].name << " estourado.\n";
                         }
