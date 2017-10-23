@@ -196,7 +196,7 @@ void Processamento::update_address_adjusts()
 
 void Processamento::update_address_macros(Macro macro)
 {
-    int numLines = macro.get_numlines();
+    size_t numLines = macro.get_numlines();
     int address = macro.get_address();
     // Imprime o endereço de chamada da macro
     for(size_t i = 0; i < numLines; i++)
