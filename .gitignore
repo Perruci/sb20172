@@ -30,4 +30,9 @@
 *.exe
 *.out
 *.app
+
+# Especificos
 montador
+*.pre
+*.mcr
+*.o
