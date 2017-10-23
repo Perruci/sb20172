@@ -69,6 +69,8 @@ public:
     bool run();
     void printOutput();
 
+    int getNumber (std::string);
+
     /* Rotulos */
     void trata_rotulos (std::string, int, int &, int);
     void declaracao_de_rotulo(std::string, int &, int);

@@ -73,6 +73,9 @@ bool Montagem::run(){
 
         copySemVirgula = false;     //sempre falso no comeco da linha
 
+        this->argumentIsVector = false;
+        this->VectorValue = 0;
+
         //Loop para analisar cada termo um a um
         while (lineStream >> word)
         {
@@ -114,9 +117,31 @@ bool Montagem::run(){
             
             //se o token for um rotulo, trata ele
             if (this->tokensList[contador_tokens].isRotulo(word, line, instructionList)){
-                if(tokensList[contador_tokens].haveSoma(word)){
-                    std::cout << "O token " << tokensList[contador_tokens].nome << " tem o sinal de +\n";
+                //Procura se tem um + na string
+                std::size_t found = word.find("+");
+                
+                //Se achar o +
+                if(found != std::string::npos){
+                    this->argumentIsVector = true;
+                    //Testa se o + eh o ultimo caractere da linha, se nao for, pega o numero que vem depois dele
+                    if(!tokensList[contador_tokens].haveSoma(word)){
+                        //Caso ela nao esteja no fim do token, vou pegar o que esta depois dela que provavelmente eh o numero
+                        std::string numero = word.substr(found+1);
+                        int numberOfVector = this->getNumber (numero);
+                        if (numberOfVector == -1){
+                            std::cout << "Erro lexico na linha " << contador_de_linhas << ", o argumento somado ao label nao eh valido para um vetor\n";
+                            this->VectorValue = 0;
+                        } else {
+                            this->VectorValue = numberOfVector;
+                        }
+                        //Trunca o token no +
+                        word == string_ops::trunca_nome(word,'+');
+                    } else{
+                        std::cout<<"A SOMA ESTA NO FIM\n";
+                    }
+
                 }
+
                 this ->trataRotulo_altoNivel(contador_tokens, word, contador_endereco, contador_de_linhas, now_section_data, now_section_text);
             }
 
@@ -231,7 +256,11 @@ void Montagem::chamada_de_rotulo(std::string token, int &endereco)
                 }
 
                 //caso contrario, eh um rotulo qualquer, adiciona o endereco de declaracao dele
-                this->outputFileList.push_back(rotulosList[i].address);
+                if(this->argumentIsVector){
+                    this->outputFileList.push_back(this->VectorValue);
+                } else{
+                    this->outputFileList.push_back(rotulosList[i].address);
+                }
                 endereco++;
                 return;
             } else
@@ -623,5 +652,29 @@ void Montagem::checkRotulos(){
         if(!this->rotulosList[i].alreadyDeclared){
             std::cout<< "Erro semantico, o rotulo " << rotulosList[i].name << " nao foi declarado em lugar algum do arquivo.\n";
         }
+    }
+}
+
+//Metodo que recebe uma string e retorna o numero que ela representa
+int Montagem::getNumber (std::string numero){
+    try{
+        std::string::size_type sz;   // alias of size_t, necessario para o funcionamento do stoi
+        int value = std::stoi (numero, &sz, 0);
+        if(value < 0){
+            return -1;
+        }
+        return value;
+        
+    }
+
+    catch (const std::invalid_argument& e)
+    {
+        std::cout << "Argumento invalido para um vetor: " << numero << std::endl;
+        return -1;
+    }
+    catch (const std::out_of_range& e)
+    {
+        std::cout << "Argumento out of range: " << numero << std::endl;
+        return -1;
     }
 }

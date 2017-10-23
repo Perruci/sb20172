@@ -107,7 +107,7 @@ bool Token::haveSoma(std::string token){
     int tam = strlen(ptr);
 
     for(int i = 0; i < tam; i++){
-        if ((token[i] == '+')){
+        if ((token[i] == '+')&&(tam - i == 1)){
             return true;
         }
     }
