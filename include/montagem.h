@@ -29,6 +29,8 @@ private:
 
     //lista de inteiros para preparar o arquivo objeto em memoria antes de imprimir no arquivo
     std::vector<int> outputFileList;
+    //lista de inteiros para corrigir o número da linha do arquivo .mcr para o .asm
+    std::vector<int> address_adjusts;;
 
     /***********************************************************************************************************************************************************/
     //Serie de variaveis booleanas para indicar do que a linha atual do programa se trata e facilitar a decisao do que deve ser feito
@@ -95,6 +97,9 @@ public:
 
      /*Section*/
      void trata_section(bool &, bool &, bool &, std::stringstream &, std::string &, int &);
+
+     /*Correção de linhas */
+     int getOriginalLine(int);
 
     std::string setOutputExtension(std::string);
     std::string setInputExtension(std::string);
