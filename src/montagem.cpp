@@ -92,7 +92,6 @@ bool Montagem::run(std::vector<int> adjusts_vec){
                     std::cout << "Erro lexico na linha " << contador_de_linhas << ", o argumento somado ao label nao eh valido para um vetor\n";
                     this->VectorValue = 0;
                 } else {
-                    std::cout << "O numero associado ao token " << word << " eh     " << numberOfVector << std::endl;
                     this->VectorValue = numberOfVector;
                 }
                 int tam = this->outputFileList.size();
@@ -679,14 +678,12 @@ void Montagem::rotuloAtualizaEnds (int contador_de_linhas){
             }
             //Coloca os valores das diretivas no arquivo de saida
             if (this->rotulosList[i].isSpace){
-                std::cout << "DEBBUG = o rotulo " << rotulosList[i].name << " eh um space e foi declarado na linha " << getOriginalLine(contador_de_linhas)<< " e tem " << rotulosList[i].spaceQuantity << " espacos" << std::endl;
                 for(int h = 0; h < rotulosList[i].spaceQuantity; h++){
                     this->outputFileList.push_back(0);
                 }
             }
 
             if (this->rotulosList[i].isConst){
-                std::cout << "DEBBUG = o rotulo " << rotulosList[i].name << " eh uma const e foi declarado na linha " << getOriginalLine(contador_de_linhas)<<std::endl;
                 this->outputFileList.push_back(this->rotulosList[i].constValue);
             }
 
