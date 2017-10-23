@@ -192,7 +192,6 @@ void Processamento::update_address_adjusts()
     // obs: há um elemento em address_adjusts para cada linha
     adjust = adjust + this->previous_adjusts[contador_de_linhas];
     this->address_adjusts.push_back(adjust);
-    std::cout << adjust << '\n';
 }
 
 void Processamento::update_address_macros(Macro macro)
@@ -203,7 +202,6 @@ void Processamento::update_address_macros(Macro macro)
     for(size_t i = 0; i < numLines; i++)
     {
         this->address_adjusts.push_back(address);
-        std::cout << address << '\n';
     }
     // Atualiza o contador de endereço com o número de linhas
     contador_endereco += numLines;
