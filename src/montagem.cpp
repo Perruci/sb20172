@@ -89,7 +89,7 @@ bool Montagem::run(std::vector<int> adjusts_vec){
             if(this->argumentIsVector){
                 int numberOfVector = this->getNumber (word);
                 if (numberOfVector == -1){
-                    std::cout << "Erro lexico na linha " << contador_de_linhas << ", o argumento somado ao label nao eh valido para um vetor\n";
+                    std::cout << "Erro léxico na linha " << getOriginalLine(contador_de_linhas) << ", o argumento somado ao label não é válido para um vetor\n";
                     this->VectorValue = 0;
                 } else {
                     this->VectorValue = numberOfVector;
@@ -139,7 +139,7 @@ bool Montagem::run(std::vector<int> adjusts_vec){
             if (this->tokensList[contador_tokens].isRotulo(word, line, instructionList)){
                 //Procura se tem um + na string
                 std::size_t found = word.find("+");
-                
+
                 //Se achar o +
                 if(found != std::string::npos){
                     this->argumentIsVector = true;
@@ -151,7 +151,7 @@ bool Montagem::run(std::vector<int> adjusts_vec){
                         std::string numero = word.substr(found+1);
                         int numberOfVector = this->getNumber (numero);
                         if (numberOfVector == -1){
-                            std::cout << "Erro lexico na linha " << contador_de_linhas << ", o argumento somado ao label nao eh valido para um vetor\n";
+                            std::cout << "Erro léxico na linha " << getOriginalLine(contador_de_linhas) << ", o argumento somado ao label não é valido para um vetor\n";
                             this->VectorValue = 0;
                         } else {
                             std::cout << "O numero associado ao token " << word << " eh " << numberOfVector << std::endl;
@@ -189,7 +189,7 @@ bool Montagem::run(std::vector<int> adjusts_vec){
 
         //Verifica se a linha era um copy e se houve erro sintatico nela
         if(copySemVirgula){
-            std::cout << "Erro sintatico na linha " << getOriginalLine(contador_de_linhas) << ", nao ha uma virgula separando os argumentos do copy, ou essa virgula esta mal posicionada.\n";
+            std::cout << "Erro sintático na linha " << getOriginalLine(contador_de_linhas) << ", não há uma virgula separando os argumentos do copy, ou essa virgula está mal posicionada.\n";
         }
         //Se nessa ultima linha teve uma declaracao de rotulo, atualiza os enderecos onde esse rotulo ja tinha sido declarado
         if(this->haveRotuloInLine){
@@ -198,7 +198,7 @@ bool Montagem::run(std::vector<int> adjusts_vec){
     }
     //Se nao encontrarmos a secao de text no arquivo, temos um erro
     if (!check_section_text){
-        std::cout << "Erro semantico, nao ha secao text no arquivo\n";
+        std::cout << "Erro semântico, não ha seção text no arquivo\n";
     }
     //checa se teve algum rotulo que foi chamado, mas nao foi declarado
     this->checkRotulos();
@@ -240,7 +240,7 @@ void Montagem::declaracao_de_rotulo(std::string token, int &endereco, int contad
         {
             //Se ele ja existir e ja tiver sido declarado antes, significa que houve repeticao de rotulo
             if(rotulosList[i].alreadyDeclared){
-                std::cout << "Erro semantico na linha " << getOriginalLine(contador_de_linhas) << ", o rotulo declarado nessa linha ja tinha sido declarado antes\n";
+                std::cout << "Erro semântico na linha " << getOriginalLine(contador_de_linhas) << ", o rótulo declarado nessa linha já tinha sido declarado antes\n";
                 //caso ocorram rotulos repetidos, o primeiro endereco encontrado para ele sera o endereco de declaracao do mesmo
                 return;
             }
@@ -277,7 +277,7 @@ void Montagem::chamada_de_rotulo(std::string token, int &endereco, int contador_
                         std::cout << "ENTROU AQUI\n";
                         this->outputFileList.push_back(this->VectorValue + rotulosList[i].address);
                         if (!(this->VectorValue < this->rotulosList[i].spaceQuantity )){
-                            std::cout << "Erro lexico na linha " << contador_de_linhas << ", espaco do vetor " << this->rotulosList[i].name << " estourado.\n";
+                            std::cout << "Erro léxico na linha " << contador_de_linhas << ", espaco do vetor " << this->rotulosList[i].name << " estourado.\n";
                         }
                     } else{
                     this->outputFileList.push_back(rotulosList[i].address);
@@ -395,12 +395,12 @@ void Montagem::checkLexicalError(int line){
         }
         //se a quantidade de operandos estiver positiva eh pq faltam operandos na linha
         if(this->numberOfOperandsInLine > 0){
-            std::cout<< "Erro sintatico na linha " << line << ", faltaram " << this->numberOfOperandsInLine << " operandos.\n";
+            std::cout<< "Erro sintático na linha " << getOriginalLine(line) << ", faltaram " << this->numberOfOperandsInLine << " operandos.\n";
             return;
         }
         ////se a quantidade de operandos estiver negativa eh pq foram passados operandos a mais na linha
         if (this->numberOfOperandsInLine < 0){
-            std::cout<< "Erro sintatico na linha " << line << ", foram passados mais operandos que o esperado para a instrucao.\n";
+            std::cout<< "Erro sintático na linha " << getOriginalLine(line) << ", foram passados mais operandos que o esperado para a instrução.\n";
             return;
         }
     }
@@ -411,7 +411,7 @@ void Montagem::checkLexicalError(int line){
             return;
         }
         if (this->numberOfArgumentsInSpace < 0){
-            std::cout<< "Erro sintatico na linha " << line << ", foram passados mais operandos que o esperado para a diretiva space.\n";
+            std::cout<< "Erro sintático na linha " << getOriginalLine(line) << ", foram passados mais operandos que o esperado para a diretiva space.\n";
         }
 
     }
@@ -423,11 +423,11 @@ void Montagem::checkLexicalError(int line){
         }
         //Se a qtd de operadnos dor maior que 0, eh pq nao foi passado nenhum operando
         if (this->numberOfArgumentsInConst > 0){
-            std::cout<< "Erro sintatico na linha "<< line << ", nao foi passado nenhum valor para a diretiva const.\n";
+            std::cout<< "Erro sintático na linha "<< getOriginalLine(line) << ", não foi passado nenhum valor para a diretiva const.\n";
         }
         //Se a qtd de operandos for menor que 0, eh pq passaram operandos ate demais
         if (this-> numberOfArgumentsInConst < 0){
-            std::cout<< "Erro sintatico na linha "<< line << ", foram passados mais operandos que o esperado para a diretiva const.\n";
+            std::cout<< "Erro sintático na linha "<< getOriginalLine(line) << ", foram passados mais operandos que o esperado para a diretiva const.\n";
         }
     }
 }
@@ -437,7 +437,7 @@ void Montagem::trata_instructions (int line, bool now_section_text, int contador
     //Se nao estivermos na secao de texto e uma instrucao aparecer, isso indica um erro
     //P.S: desculpa pela logica invertida no if
     if (!now_section_text){
-        std::cout << "Erro semantico na linha " << line << " instrucao fora da secao de texto\n";
+        std::cout << "Erro semântico na linha " << getOriginalLine(line) << " instrucao fora da seção de texto\n";
     }
 
     this->lineIsInstruction = true;
@@ -461,7 +461,7 @@ bool Montagem::isDiretiva(Token token){
 void Montagem::trata_diretivas(int line, bool now_section_data, int contador_tokens){
     //Caso esteja fora da secao de data, isso representa um erro
     if(!now_section_data){
-        std::cout << "Erro semantico na linha " << line << " diretiva fora da secao de data\n";
+        std::cout << "Erro semântico na linha " << getOriginalLine(line) << " diretiva fora da seção de data\n";
     }
 
     //Se for uma const, prepara as variaveis para const
@@ -508,12 +508,12 @@ void Montagem::trata_section(bool &check_section_text, bool &now_section_data, b
         now_section_text = false;
     }
     else {
-        std::cout << "Erro semantico na linha " << getOriginalLine(contador_de_linhas) << " nao existe esse tipo de section\n";
+        std::cout << "Erro semântico na linha " << getOriginalLine(contador_de_linhas) << " não existe esse tipo de section\n";
     }
 
     //testa se ha algum token indesejado na linha do section
     if (lineStream >> word){
-        std::cout << "Erro sintatico na linha " << getOriginalLine(contador_de_linhas) << ", ha muitos termos na linha de section\n";
+        std::cout << "Erro sintatico na linha " << getOriginalLine(contador_de_linhas) << ", há muitos termos na linha de section\n";
     }
 }
 
@@ -525,7 +525,7 @@ void Montagem::trataRotulo_altoNivel(int contador_tokens, std::string word, int 
     if (tipo == tipo_rotulo::declaracao){
         //se ja tiver uma declaracao na linha sera erro
         if (this->haveRotuloInLine == 1){
-            std::cout << "Erro lexico, declaracao de mais de um Rotulo na linha " << getOriginalLine(contador_de_linhas) << "\n";
+            std::cout << "Erro léxico, declaração de mais de um rótulo na linha " << getOriginalLine(contador_de_linhas) << "\n";
             } else
             {
                 this->haveRotuloInLine = 1;
@@ -537,10 +537,10 @@ void Montagem::trataRotulo_altoNivel(int contador_tokens, std::string word, int 
             //portanto ele eh um token invalido
             if((!this->lineIsConst) && (!this->lineIsInstruction) && (!this->lineIsSpace)){
                 if(now_section_data){
-                    std::cout << "Erro lexico na linha " << getOriginalLine(contador_de_linhas) << ", o token " << tokensList[contador_tokens].nome << " eh uma diretiva invalida.\n";
+                    std::cout << "Erro léxico na linha " << getOriginalLine(contador_de_linhas) << ", o token " << tokensList[contador_tokens].nome << " é uma diretiva invalida.\n";
                 }
                 if(now_section_text){
-                    std::cout << "Erro lexico na linha " << getOriginalLine(contador_de_linhas) << ", o token " << tokensList[contador_tokens].nome << " eh uma instrucao invalida.\n";
+                    std::cout << "Erro léxico na linha " << getOriginalLine(contador_de_linhas) << ", o token " << tokensList[contador_tokens].nome << " é uma instrução invalida.\n";
                 }
                 return;
             }
@@ -581,7 +581,7 @@ void Montagem::pegaValorDiretivas (std::string word, int &endereco){
         }
         catch (const std::invalid_argument& e)
         {
-            std::cout << "Argumento invalido para a const: " << word << std::endl;
+            std::cout << "Argumento inválido para a const: " << word << std::endl;
             return;
         }
         catch (const std::out_of_range& e)
@@ -641,16 +641,16 @@ void Montagem::rotuloAtualizaEnds (int contador_de_linhas){
                     this->outputFileList[this->rotulosList[i].addressList[j]] = this->rotulosList[i].constValue;
                     //Se a const for 0 e a instrucao que chama ela for div, erro
                     if ((this->rotulosList[i].constValue == 0) && (this->outputFileList[this->rotulosList[i].addressList[j] - 1] == 4)){
-                        std::cout << "Erro semantico na linha " << getOriginalLine(contador_de_linhas) << ", tentativa de divisao por 0\n";
+                        std::cout << "Erro semântico na linha " << getOriginalLine(contador_de_linhas) << ", tentativa de divisao por 0\n";
                     }
                     //Se for uma constante e em algum lugar tentaram pular para esse label,isso eh um pulo invalido e para secao invalida
                     if((this->outputFileList[this->rotulosList[i].addressList[j] - 1] == 5) || (this->outputFileList[this->rotulosList[i].addressList[j] - 1] == 6) ||
                        (this->outputFileList[this->rotulosList[i].addressList[j] - 1] == 7) || (this->outputFileList[this->rotulosList[i].addressList[j] - 1] == 8)){
-                        std::cout << "Erro semantico na linha " << getOriginalLine(contador_de_linhas) << ", tentativa de pulo para uma constante\n";
+                        std::cout << "Erro semântico na linha " << getOriginalLine(contador_de_linhas) << ", tentativa de pulo para uma constante\n";
                        }
                     //Se for uma constante e tentarem alterar esse valor
                     if ((this->outputFileList[this->rotulosList[i].addressList[j] - 1] == 11)){
-                        std::cout << "Erro semantico na linha " << getOriginalLine(contador_de_linhas) << ", tentativa de alteracao de um valor constante\n";
+                        std::cout << "Erro semântico na linha " << getOriginalLine(contador_de_linhas) << ", tentativa de alteração de um valor constante\n";
                     }
                 }
 
@@ -660,14 +660,14 @@ void Montagem::rotuloAtualizaEnds (int contador_de_linhas){
                     if (this->outputFileList[this->rotulosList[i].addressList[j]] <= (this->rotulosList[i].spaceQuantity - 1)){
                         this->outputFileList[this->rotulosList[i].addressList[j]] += this->rotulosList[i].address;
                     } else {
-                        std::cout << "Erro semantico, espaco da diretiva space foi estourado\n";
+                        std::cout << "Erro semântico, espaço da diretiva space foi estourado\n";
                         this->outputFileList[this->rotulosList[i].addressList[j]] += this->rotulosList[i].address;
                     }
 
                     //Se for um space e em algum lugar tentaram pular para esse label,isso eh um pulo invalido e para secao invalida
                     if((this->outputFileList[this->rotulosList[i].addressList[j] - 1] == 5) || (this->outputFileList[this->rotulosList[i].addressList[j] - 1] == 6) ||
                     (this->outputFileList[this->rotulosList[i].addressList[j] - 1] == 7) || (this->outputFileList[this->rotulosList[i].addressList[j] - 1] == 8)){
-                     std::cout << "Erro semantico na linha " << getOriginalLine(contador_de_linhas) << ", tentativa de pulo para um space\n";
+                     std::cout << "Erro semântico na linha " << getOriginalLine(contador_de_linhas) << ", tentativa de pulo para um space\n";
                     }
                 }
                 //No caso normal, so coloca o endereco de declaracao la
@@ -709,7 +709,7 @@ void Montagem::checkRotulos(){
     //percorre a lista de rotulos e verifica se algum dos rotulos foi criado por chamada, mas nao foi declarado em lugar algun
     for (size_t i = 0; i < this->rotulosList.size(); i++){
         if(!this->rotulosList[i].alreadyDeclared){
-            std::cout<< "Erro semantico, o rotulo " << rotulosList[i].name << " nao foi declarado em lugar algum do arquivo.\n";
+            std::cout<< "Erro semântico, o rótulo " << rotulosList[i].name << " não foi declarado em lugar algum do arquivo.\n";
         }
     }
 }
@@ -723,12 +723,12 @@ int Montagem::getNumber (std::string numero){
             return -1;
         }
         return value;
-        
+
     }
 
     catch (const std::invalid_argument& e)
     {
-        std::cout << "Argumento invalido para um vetor: " << numero << std::endl;
+        std::cout << "Argumento inválido para um vetor: " << numero << std::endl;
         return -1;
     }
     catch (const std::out_of_range& e)
