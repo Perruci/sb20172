@@ -50,7 +50,6 @@ bool Rotulo::setEQU(std::string line)
         // extrai-se um valor inteiro e recebe sua posição seguinte
         size_t pos_int;
         int value = std::stoi(substring, &pos_int);
-        std::cout << "EQU value: " << value << '\n';
         this->EquValue = value;
     }
     catch (const std::invalid_argument& e)
