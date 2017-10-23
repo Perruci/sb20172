@@ -43,9 +43,9 @@ std::string Pre_Processamento::treat_comments(std::string str)
 bool Pre_Processamento::run(){
     //bool check_section_text = false;  //passa a ser true quando acharmos a secao text
     int contador_tokens = 0;          //sera utilizado para navegar pela tokensList
-    int contador_endereco = 0;        //sera utilizado para determinar o endereco de cada token do programa
     int haveRotuloInLine = 0;            //controle para caso aparecam dois rotulos na mesma linha
-    int contador_de_linhas = 0;       //Controle para saber em qual linha do programa esta algum erro
+    this->contador_endereco = 0;        //sera utilizado para determinar o endereco de cada token do programa
+    this->contador_de_linhas = 0;       //Controle para saber em qual linha do programa esta algum erro
 
     //inicializa as condicoes de IF como falsas
     this->lastIF = false;
@@ -355,9 +355,15 @@ void Pre_Processamento::printLine(std::string Line){
         return;
 
     }
-
     //Se chegar aqui eh pq essa linha deve ser impressa
     this-> fileOutput << Line << std::endl;
+    this->contador_endereco++;
+    this->update_address_to_line();
+}
+
+void Pre_Processamento::update_address_to_line()
+{
+    this->address_to_line.push_back(contador_endereco - contador_de_linhas);
 }
 
 std::string Pre_Processamento::check_equ_call(std::string line, std::string word)

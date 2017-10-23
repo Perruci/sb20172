@@ -28,6 +28,11 @@ private:
     std::vector<Mnemonic> instructionList;
     std::vector<Rotulo> rotulosList;
 
+    int contador_de_linhas;
+    int contador_endereco;
+    std::vector<int> address_to_line;
+    void update_address_to_line();
+
     //Fecha e abre o arquivo do codigo para atualizar o ponteiro de arquivo, caso alguma outra funcao tenha usado ele
     inline bool reopenCodeFile()
     {
