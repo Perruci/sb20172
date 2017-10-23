@@ -29,7 +29,7 @@ public:
     Processamento(std::string, std::string);
     ~Processamento();
 
-    bool run();
+    bool run(std::vector<int>);
 
     /*Macros*/
     void printMacros();

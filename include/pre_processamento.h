@@ -30,8 +30,8 @@ private:
 
     int contador_de_linhas;
     int contador_endereco;
-    std::vector<int> address_to_line;
-    void update_address_to_line();
+    std::vector<int> address_adjusts;
+    void update_address_adjusts();
 
     //Fecha e abre o arquivo do codigo para atualizar o ponteiro de arquivo, caso alguma outra funcao tenha usado ele
     inline bool reopenCodeFile()
@@ -44,6 +44,7 @@ public:
     Pre_Processamento(std::string, std::string, std::vector<Mnemonic>&);
     ~Pre_Processamento();
     bool run();
+    std::vector<int> get_addresses_adjusts();
     /* Utilidades */
     std::string setOutputExtension(std::string);
     std::string treat_comments(std::string);

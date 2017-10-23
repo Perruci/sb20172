@@ -358,12 +358,17 @@ void Pre_Processamento::printLine(std::string Line){
     //Se chegar aqui eh pq essa linha deve ser impressa
     this-> fileOutput << Line << std::endl;
     this->contador_endereco++;
-    this->update_address_to_line();
+    this->update_address_adjusts();
 }
 
-void Pre_Processamento::update_address_to_line()
+void Pre_Processamento::update_address_adjusts()
 {
-    this->address_to_line.push_back(contador_endereco - contador_de_linhas);
+    this->address_adjusts.push_back(contador_endereco - contador_de_linhas);
+}
+
+std::vector<int> Pre_Processamento::get_addresses_adjusts()
+{
+    return this->address_adjusts;
 }
 
 std::string Pre_Processamento::check_equ_call(std::string line, std::string word)

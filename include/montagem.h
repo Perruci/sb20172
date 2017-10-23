@@ -26,7 +26,7 @@ private:
     std::vector<Mnemonic> instructionList;
     std::vector<Rotulo> rotulosList;
     std::vector<Token> tokensList;
-    
+
     //lista de inteiros para preparar o arquivo objeto em memoria antes de imprimir no arquivo
     std::vector<int> outputFileList;
 
@@ -62,7 +62,7 @@ public:
     Montagem(std::string, std::string, std::vector<Mnemonic>&);
     ~Montagem();
 
-    bool run();
+    bool run(std::vector<int>);
     void printOutput();
 
     /* Rotulos */

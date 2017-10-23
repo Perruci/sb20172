@@ -32,7 +32,7 @@ std::string Processamento::setInputExtension(std::string extension)
 }
 
 //Metodo principal que vai realizar o processamento
-bool Processamento::run(){
+bool Processamento::run(std::vector<int> address_adjusts){
     std::string line;
     std::string word;
 
@@ -80,7 +80,7 @@ std::string Processamento::getRotulo(std::string line){
 
     //cria um token com a primeira palavra da linha
     Token token(word);
-    
+
     //caso os dois pontos estejam na string
     if (token.have2points(token.nome)){
         word = string_ops::trunca_nome(word, ':');
@@ -97,7 +97,7 @@ std::string Processamento::getRotulo(std::string line){
 
     //Se chegar aqui eh pq algum erro ocorreu
     std::cout << "Token invalido para declarar a macro\n";
-    return "erro";   
+    return "erro";
 }
 
 //Metodo para pegar o codigo relativo a macro, utiliza-se do fileText que ja esta aberto
