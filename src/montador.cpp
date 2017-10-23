@@ -14,6 +14,8 @@ Montador::Montador(std::string inputFile, std::string outputFile, std::string ta
 Montador::~Montador()
 {
     delete _pre_process;
+    delete _processamento;
+    delete _montagem;
 }
 
 /* Carrega instruções a partir da tabela de instruções */
