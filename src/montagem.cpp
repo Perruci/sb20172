@@ -75,7 +75,7 @@ bool Montagem::run(std::vector<int> adjusts_vec){
         copySemVirgula = false;     //sempre falso no comeco da linha
 
         this->argumentIsVector = false;
-        this->VectorValue = 0;
+        this->VectorValue = 1;
 
         //Loop para analisar cada termo um a um
         while (lineStream >> word)
@@ -255,7 +255,7 @@ void Montagem::chamada_de_rotulo(std::string token, int &endereco, int contador_
                 if(this->rotulosList[i].isSpace){
                     if(this->argumentIsVector){
                         std::cout << "ENTROU AQUI\n";
-                        this->outputFileList.push_back(rotulosList[i].spaceQuantity + this->VectorValue);
+                        this->outputFileList.push_back(this->VectorValue);
                         if (!(this->VectorValue < this->rotulosList[i].spaceQuantity )){
                             std::cout << "Erro lexico na linha " << contador_de_linhas << ", espaco do vetor " << this->rotulosList[i].name << " estourado.\n";
                         }

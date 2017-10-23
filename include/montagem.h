@@ -50,7 +50,7 @@ private:
 
     //Variaveis para tratar vetores
     bool argumentIsVector;
-    int VectorValue;
+    int VectorValue = 1;
 
     int haveRotuloInLine = 0;            //controle para caso aparecam dois rotulos na mesma linha
     std::string lineRotuloName = "";     //salva o nome do rotulo daquela linha, caso exista um rotulo naquela linha
