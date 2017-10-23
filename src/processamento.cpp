@@ -32,13 +32,18 @@ std::string Processamento::setInputExtension(std::string extension)
 }
 
 //Metodo principal que vai realizar o processamento
-bool Processamento::run(std::vector<int> address_adjusts){
+bool Processamento::run(std::vector<int> adjusts_vec){
+    this->previous_adjusts = adjusts_vec;
+
     std::string line;
     std::string word;
+    this->contador_endereco = 0;        //sera utilizado para determinar o endereco de cada token do programa
+    this->contador_de_linhas = 0;       //Controle para saber em qual linha do programa esta algum erro
 
     //loop linha a linha para analisar o arquivo de entrada
     while (getline(this->fileText, line)){
         std::stringstream lineStream(line);
+        this->contador_de_linhas++;
 
         //loop palavra a palavra para procurar as macros
         while (lineStream >> word){
@@ -60,7 +65,7 @@ bool Processamento::run(std::vector<int> address_adjusts){
                 }
 
                 //Se nao houve nenhum erro, cria a Macro
-                Macro macro(rotulo, codigo);
+                Macro macro(rotulo, codigo, (this->contador_endereco + 1));
                 this->macrosList.push_back(macro);
             }
         }
@@ -109,6 +114,7 @@ std::string Processamento::getCode (){
     //como o arquivo ja esta aberto, a linha seguinte eh a linha logo abaixo da macro e sera o comeco do seu codigo
     while(getline(this->fileText,line)){
         std::stringstream lineStream(line);
+        this->contador_de_linhas++;
 
         //pega token a token e vai salvando no code, ate achar end
         while (lineStream >> word){
@@ -150,6 +156,7 @@ void Processamento::printLineToOutput(std::string line){
     for (size_t i = 0; i < this->macrosList.size(); i++){
         if (word == this->macrosList[i].name){
             this-> fileOutput << this->macrosList[i].codigo;
+            this->update_address_macros(this->macrosList[i]);
             return;
         }
     }
@@ -166,4 +173,36 @@ void Processamento::printLineToOutput(std::string line){
 
     //Se chegar aqui eh pq essa linha deve ser impressa
     this-> fileOutput << line << std::endl;
+    this->contador_endereco++;
+    this->update_address_adjusts();
+}
+
+void Processamento::update_address_adjusts()
+{
+    // get processing adjust
+    int adjust = contador_endereco - contador_de_linhas;
+    // add it to previous adjusts
+    // obs: há um elemento em address_adjusts para cada linha
+    adjust = adjust + this->previous_adjusts[contador_de_linhas];
+    this->address_adjusts.push_back(adjust);
+    std::cout << adjust << '\n';
+}
+
+void Processamento::update_address_macros(Macro macro)
+{
+    int numLines = macro.get_numlines();
+    int address = macro.get_address();
+    // Imprime o endereço de chamada da macro
+    for(size_t i = 0; i < numLines; i++)
+    {
+        this->address_adjusts.push_back(address);
+        std::cout << address << '\n';
+    }
+    // Atualiza o contador de endereço com o número de linhas
+    contador_endereco += numLines;
+}
+
+std::vector<int> Processamento::get_addresses_adjusts()
+{
+    return this->address_adjusts;
 }

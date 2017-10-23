@@ -25,11 +25,20 @@ private:
 
     std::vector <Macro> macrosList;
 
+    int contador_de_linhas;
+    int contador_endereco;
+    std::vector<int> previous_adjusts;
+    std::vector<int> address_adjusts;
+    void update_address_adjusts();
+    void update_address_macros(Macro);
+
 public:
     Processamento(std::string, std::string);
     ~Processamento();
 
     bool run(std::vector<int>);
+
+    std::vector<int> get_addresses_adjusts();
 
     /*Macros*/
     void printMacros();
