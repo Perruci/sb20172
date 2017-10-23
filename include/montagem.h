@@ -46,6 +46,10 @@ private:
                                         //Da suporte a variavel lineIsConst
     /***********************************************************************************************************************************************************/
 
+    //Variaveis para tratar vetores
+    bool argumentIsVector;
+    int VectorValue;
+
     int haveRotuloInLine = 0;            //controle para caso aparecam dois rotulos na mesma linha
     std::string lineRotuloName = "";     //salva o nome do rotulo daquela linha, caso exista um rotulo naquela linha
 

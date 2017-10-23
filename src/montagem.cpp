@@ -114,6 +114,9 @@ bool Montagem::run(){
             
             //se o token for um rotulo, trata ele
             if (this->tokensList[contador_tokens].isRotulo(word, line, instructionList)){
+                if(tokensList[contador_tokens].haveSoma(word)){
+                    std::cout << "O token " << tokensList[contador_tokens].nome << " tem o sinal de +\n";
+                }
                 this ->trataRotulo_altoNivel(contador_tokens, word, contador_endereco, contador_de_linhas, now_section_data, now_section_text);
             }
 

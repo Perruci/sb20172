@@ -38,5 +38,6 @@ class Token
         int KindOfRotulo(std::string);
         bool isInteger(const std::string &);
         bool haveVirgula(std::string); //checa se tem virgula no final
+        bool haveSoma(std::string); //checa se tem +
 };
 #endif

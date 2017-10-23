@@ -100,6 +100,19 @@ bool Token::haveVirgula(std::string token){
     return false;
 }
 
+//Testa se tem o + na string
+bool Token::haveSoma(std::string token){
+    char* ptr;
+    ptr = &(token[0]);
+    int tam = strlen(ptr);
+
+    for(int i = 0; i < tam; i++){
+        if ((token[i] == '+')){
+            return true;
+        }
+    }
+    return false;
+}
 
 /* Podem ser úteis */
 // // Função teste: extrair cada token do arquivo de entrada e escrevê-los de forma padrão na saída
