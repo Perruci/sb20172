@@ -65,7 +65,7 @@ bool Processamento::run(std::vector<int> adjusts_vec){
                 }
 
                 //Se nao houve nenhum erro, cria a Macro
-                Macro macro(rotulo, codigo, (this->contador_endereco + 1));
+                Macro macro(rotulo, codigo, this->get_address());
                 this->macrosList.push_back(macro);
             }
         }
@@ -175,6 +175,13 @@ void Processamento::printLineToOutput(std::string line){
     this-> fileOutput << line << std::endl;
     this->contador_endereco++;
     this->update_address_adjusts();
+}
+
+int Processamento::get_address()
+{
+    int address = this->contador_endereco + 1;
+    address += this->previous_adjusts[contador_de_linhas];
+    return address;
 }
 
 void Processamento::update_address_adjusts()

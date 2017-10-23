@@ -39,7 +39,7 @@ public:
     bool run(std::vector<int>);
 
     std::vector<int> get_addresses_adjusts();
-
+    int get_address();
     /*Macros*/
     void printMacros();
     std::string getCode ();
