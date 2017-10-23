@@ -35,7 +35,7 @@ std::string Montagem::setInputExtension(std::string extension)
 }
 
 //Metodo principal que vai realizar a montagem
-bool Montagem::run(){
+bool Montagem::run(std::vector<int> address_adjusts){
     bool check_section_text = false;  //passa a ser true quando acharmos a secao text
     bool now_section_text = false;    //indica que atualmente o programa esta na secao de texto
     bool now_section_data = false;    //indica que atualmente o programa esta na secao de data
@@ -64,12 +64,12 @@ bool Montagem::run(){
         this->lineRotuloName = "";
 
         //antes de analisar cada linha, inicializa novamente as variaveis de controle do erro lexico
-        this->lineIsInstruction = false;     
-        this->numberOfOperandsInLine = 0;     
-        this->lineIsSpace = false;           
-        this->numberOfArgumentsInSpace = 0;   
-        this->lineIsConst = false;          
-        this->numberOfArgumentsInConst = 0;   
+        this->lineIsInstruction = false;
+        this->numberOfOperandsInLine = 0;
+        this->lineIsSpace = false;
+        this->numberOfArgumentsInSpace = 0;
+        this->lineIsConst = false;
+        this->numberOfArgumentsInConst = 0;
 
         copySemVirgula = false;     //sempre falso no comeco da linha
 
@@ -111,7 +111,7 @@ bool Montagem::run(){
                     copySemVirgula = true;
                 }
             }
-            
+
             //se o token for um rotulo, trata ele
             if (this->tokensList[contador_tokens].isRotulo(word, line, instructionList)){
                 if(tokensList[contador_tokens].haveSoma(word)){
@@ -162,7 +162,7 @@ bool Montagem::run(){
 void Montagem::trata_rotulos (std::string token, int tipo_rotulo, int &endereco, int contador_de_linhas){
     //Retira, caso tenha, o :
     token = string_ops::trunca_nome(token, ':');
-    
+
 
     //se for a declaracao de um rotulo, chama a rotina pra tratar isso
     if(tipo_rotulo == tipo_rotulo::declaracao)
@@ -271,7 +271,7 @@ void Montagem::printRotulos(){
 //argumento(op = a) = espera um rotulo
 //rotulo = espera
 bool Montagem::scannerLexico (std::string word, char operation){
-    
+
     switch (operation){
         case 'a':
             //vai apresentar erro lexico se tiver algum caracter especial no token ou ele se iniciar com numero
@@ -285,7 +285,7 @@ bool Montagem::scannerLexico (std::string word, char operation){
 
     //default
     return false;
-    
+
 }
 
 //Confere se um certo token eh uma instrucao
@@ -379,7 +379,7 @@ void Montagem::trata_instructions (int line, bool now_section_text, int contador
     this->lineIsInstruction = true;
     //Pega a quantidade de operandos que essa instrucao requere
     this->numberOfOperandsInLine = this-> InstructionOperand(this->tokensList[contador_tokens]);
-                    
+
     //Coloca o opcode da instrucao na lista para impressao e incrementa o contador de endereco
     this->outputFileList.push_back(this->instructionOpcode(this->tokensList[contador_tokens]));
 }
@@ -399,7 +399,7 @@ void Montagem::trata_diretivas(int line, bool now_section_data, int contador_tok
     if(!now_section_data){
         std::cout << "Erro semantico na linha " << line << " diretiva fora da secao de data\n";
     }
-    
+
     //Se for uma const, prepara as variaveis para const
     if (this->tokensList[contador_tokens].nome == "const"){
         this->lineIsConst = true;
@@ -431,8 +431,8 @@ void Montagem::trata_diretivas(int line, bool now_section_data, int contador_tok
 void Montagem::trata_section(bool &check_section_text, bool &now_section_data, bool &now_section_text, std::stringstream &lineStream, std::string &word, int &contador_de_linhas){
     //pega o proximo token e analisa se ele eh data, text ou algum erro
     lineStream >> word;
-    
-    // esta na secao texto, atualiza variaveis 
+
+    // esta na secao texto, atualiza variaveis
     if (word == "text"){
         check_section_text = true;
         now_section_text = true;
@@ -446,7 +446,7 @@ void Montagem::trata_section(bool &check_section_text, bool &now_section_data, b
     else {
         std::cout << "Erro semantico na linha " << contador_de_linhas << " nao existe esse tipo de section\n";
     }
-    
+
     //testa se ha algum token indesejado na linha do section
     if (lineStream >> word){
         std::cout << "Erro sintatico na linha " << contador_de_linhas << ", ha muitos termos na linha de section\n";
@@ -469,7 +469,7 @@ void Montagem::trataRotulo_altoNivel(int contador_tokens, std::string word, int 
             }
         }
         if (tipo == tipo_rotulo::chamada){
-            //Se a linha atual ainda nao tiver sido encontrada uma diretiva ou instrucao na linha e o token nao for nennhuma delas, 
+            //Se a linha atual ainda nao tiver sido encontrada uma diretiva ou instrucao na linha e o token nao for nennhuma delas,
             //portanto ele eh um token invalido
             if((!this->lineIsConst) && (!this->lineIsInstruction) && (!this->lineIsSpace)){
                 if(now_section_data){
@@ -566,7 +566,7 @@ void Montagem::rotuloAtualizaEnds (int contador_de_linhas){
         //se ele ja existir na lista, devemos apenas atualizar o endereco de declaracao dele e o estado
         if (this->lineRotuloName == this->rotulosList[i].name)
         {
-            
+
             //Vai na saida e atualiza todos os lugares onde o rotulo foi chamado, colocando o endereco real dele
             //Ainda nao vai tratar as consts e o sppaces com mais de 1 space
             for (size_t j = 0; j < this->rotulosList[i].addressList.size(); j++){
@@ -608,9 +608,9 @@ void Montagem::rotuloAtualizaEnds (int contador_de_linhas){
                 else {
                     this->outputFileList[this->rotulosList[i].addressList[j]] = this->rotulosList[i].address;
                 }
-                
+
             }
-            
+
             return;
         }
     }
