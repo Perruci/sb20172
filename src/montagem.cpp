@@ -328,12 +328,12 @@ void Montagem::checkLexicalError(int line){
         }
         //se a quantidade de operandos estiver positiva eh pq faltam operandos na linha
         if(this->numberOfOperandsInLine > 0){
-            std::cout<< "Erro lexico na linha " << line << ", faltaram " << this->numberOfOperandsInLine << " operandos.\n";
+            std::cout<< "Erro sintatico na linha " << line << ", faltaram " << this->numberOfOperandsInLine << " operandos.\n";
             return;
         }
         ////se a quantidade de operandos estiver negativa eh pq foram passados operandos a mais na linha
         if (this->numberOfOperandsInLine < 0){
-            std::cout<< "Erro lexico na linha " << line << ", foram passados mais operandos que o esperado para a instrucao.\n";
+            std::cout<< "Erro sintatico na linha " << line << ", foram passados mais operandos que o esperado para a instrucao.\n";
             return;
         }
     }
@@ -344,7 +344,7 @@ void Montagem::checkLexicalError(int line){
             return;
         }
         if (this->numberOfArgumentsInSpace < 0){
-            std::cout<< "Erro lexico na linha " << line << ", foram passados mais operandos que o esperado para a diretiva space.\n";
+            std::cout<< "Erro sintatico na linha " << line << ", foram passados mais operandos que o esperado para a diretiva space.\n";
         }
 
     }
@@ -356,11 +356,11 @@ void Montagem::checkLexicalError(int line){
         }
         //Se a qtd de operadnos dor maior que 0, eh pq nao foi passado nenhum operando
         if (this->numberOfArgumentsInConst > 0){
-            std::cout<< "Erro lexico na linha "<< line << ", nao foi passado nenhum valor para a diretiva const.\n";
+            std::cout<< "Erro sintatico na linha "<< line << ", nao foi passado nenhum valor para a diretiva const.\n";
         }
         //Se a qtd de operandos for menor que 0, eh pq passaram operandos ate demais
         if (this-> numberOfArgumentsInConst < 0){
-            std::cout<< "Erro lexico na linha "<< line << ", foram passados mais operandos que o esperado para a diretiva const.\n";
+            std::cout<< "Erro sintatico na linha "<< line << ", foram passados mais operandos que o esperado para a diretiva const.\n";
         }
     }
 }
