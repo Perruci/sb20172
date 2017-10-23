@@ -78,20 +78,11 @@ bool Montador::pre_processamento()
 /* processamento ----------------------------------------------------- */
 bool Montador::processamento()
 {
-    std::cout << "Ajustes do pre-processamento" << '\n';
-    auto ajustes = this->_pre_process->get_addresses_adjusts();
-    for(size_t i = 0; i < ajustes.size(); i++)
-        std::cout << ajustes[i] << '\n';
-
     return this->_processamento->run(this->_pre_process->get_addresses_adjusts());
 }
 
 /* montagem ----------------------------------------------------------- */
 bool Montador::montagem()
 {
-    std::cout << "Ajustes do processamento" << '\n';
-    auto ajustes = this->_processamento->get_addresses_adjusts();
-    for(size_t i = 0; i < ajustes.size(); i++)
-        std::cout << ajustes[i] << '\n';
     return this->_montagem->run(this->_processamento->get_addresses_adjusts());
 }
