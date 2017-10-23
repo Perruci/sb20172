@@ -95,7 +95,7 @@ public:
      /*Diretivas*/
      bool isDiretiva(Token);
      void trata_diretivas(int, bool, int);
-     void pegaValorDiretivas (std::string);
+     void pegaValorDiretivas (std::string, int&);
 
      /*Section*/
      void trata_section(bool &, bool &, bool &, std::stringstream &, std::string &, int &);

@@ -93,7 +93,7 @@ bool Montagem::run(std::vector<int> adjusts_vec){
 
             //Caso ja tenhamos a informacao que a linha eh uma diretiva, chamamos uma funcao auxiliar para pegar o valor correto dessa diretiva
             if (lineIsConst || lineIsSpace){
-                this->pegaValorDiretivas(word);
+                this->pegaValorDiretivas(word, contador_endereco);
             }
 
             //Caso a linha seja uma instrucao copy, ja pegamos o primeiro argumento e nao achamos a virgula 'colada' nele, prcuramos
@@ -163,8 +163,6 @@ bool Montagem::run(std::vector<int> adjusts_vec){
                 contador_endereco++;
             }
             contador_tokens++;
-            if (this->haveRotuloInLine){
-            }
         }
         //No fim de cada linha, verifica se houve algum erro lexico por falta ou excesso de argumentos
         this-> checkLexicalError(contador_de_linhas);
@@ -545,7 +543,7 @@ void Montagem::printOutput(){
 }
 
 //Metodo para pegar os valores das diretivas
-void Montagem::pegaValorDiretivas (std::string word){
+void Montagem::pegaValorDiretivas (std::string word, int &endereco){
     //Analisa se a linha era uma const
     if(lineIsConst){
         try{
@@ -581,13 +579,15 @@ void Montagem::pegaValorDiretivas (std::string word){
             //if (this->scannerLexico)
             int value = std::stoi (word, &sz, 0);
             //atualiza o rotulo de declaracao da linha com o valor da const
-            for (size_t i; i < rotulosList.size(); i++){
+            for (size_t i = 0; i < rotulosList.size(); i++){
                 if(this->lineRotuloName == this->rotulosList[i].name){
                     this->rotulosList[i].spaceQuantity = value;
                 }
             }
             //decrementa a quantidade de argumentos passados para o space
             this->numberOfArgumentsInSpace--;
+            //Incrementa o endereco na qantidade dde espacos que tiver
+            endereco = endereco + value - 1;
         }
 
         catch (const std::invalid_argument& e)
@@ -655,6 +655,18 @@ void Montagem::rotuloAtualizaEnds (int contador_de_linhas){
                     this->outputFileList[this->rotulosList[i].addressList[j]] = this->rotulosList[i].address;
                 }
 
+            }
+            //Coloca os valores das diretivas no arquivo de saida
+            if (this->rotulosList[i].isSpace){
+                std::cout << "DEBBUG = o rotulo " << rotulosList[i].name << " eh um space e foi declarado na linha " << getOriginalLine(contador_de_linhas)<< " e tem " << rotulosList[i].spaceQuantity << " espacos" << std::endl;
+                for(int h = 0; h < rotulosList[i].spaceQuantity; h++){
+                    this->outputFileList.push_back(0);
+                }
+            }
+
+            if (this->rotulosList[i].isConst){
+                std::cout << "DEBBUG = o rotulo " << rotulosList[i].name << " eh uma const e foi declarado na linha " << getOriginalLine(contador_de_linhas)<<std::endl;
+                this->outputFileList.push_back(this->rotulosList[i].constValue);
             }
 
             return;
