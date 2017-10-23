@@ -112,7 +112,14 @@ bool Montagem::run(std::vector<int> adjusts_vec){
 
             //Caso ja tenhamos a informacao que a linha eh uma diretiva, chamamos uma funcao auxiliar para pegar o valor correto dessa diretiva
             if (lineIsConst || lineIsSpace){
+                //Roda o scanner lexico antes
+                this->scannerLexico(word, 'd',contador_de_linhas);
                 this->pegaValorDiretivas(word, contador_endereco);
+                continue;
+            }
+
+            if((lineIsInstruction) && (word != ",")){
+                this->scannerLexico(word,'a',contador_de_linhas);
             }
 
             //Caso a linha seja uma instrucao copy, ja pegamos o primeiro argumento e nao achamos a virgula 'colada' nele, prcuramos
@@ -143,10 +150,8 @@ bool Montagem::run(std::vector<int> adjusts_vec){
                 //Se achar o +
                 if(found != std::string::npos){
                     this->argumentIsVector = true;
-                    std::cout<< "O token " << word << " tem +\n";
                     //Testa se o + eh o ultimo caractere da linha, se nao for, pega o numero que vem depois dele
                     if(!tokensList[contador_tokens].haveSoma(word)){
-                        std::cout<<"A SOMA NAO ESTA NO FIM\n";
                         //Caso ela nao esteja no fim do token, vou pegar o que esta depois dela que provavelmente eh o numero
                         std::string numero = word.substr(found+1);
                         int numberOfVector = this->getNumber (numero);
@@ -154,14 +159,11 @@ bool Montagem::run(std::vector<int> adjusts_vec){
                             std::cout << "Erro léxico na linha " << getOriginalLine(contador_de_linhas) << ", o argumento somado ao label não é valido para um vetor\n";
                             this->VectorValue = 0;
                         } else {
-                            std::cout << "O numero associado ao token " << word << " eh " << numberOfVector << std::endl;
                             this->VectorValue = numberOfVector;
                         }
                         //Trunca o token no +
                         word = string_ops::trunca_nome(word,'+');
-                        std::cout << "A WROD TRUNCADA PASSA A SER " << word << std::endl;
                     } else{
-                        std::cout<<"A SOMA ESTA NO FIM\n";
                         word = string_ops::trunca_nome(word,'+');
                     }
 
@@ -334,7 +336,9 @@ void Montagem::printRotulos(){
 //space = espera um numero
 //argumento(op = a) = espera um rotulo
 //rotulo = espera
-bool Montagem::scannerLexico (std::string word, char operation){
+void Montagem::scannerLexico (std::string word, char operation, int contador_de_linhas){
+
+    bool isHexadecimal = false;
 
     switch (operation){
         //operation de argumento para insrtucao
@@ -343,35 +347,39 @@ bool Montagem::scannerLexico (std::string word, char operation){
             if ((word[0] == '0') || (word[0] == '1') || (word[0] == '2') || (word[0] == '3') || (word[0] == '4')
             || (word[0] == '5') || (word[0] == '6') || (word[0] == '7') || (word[0] == '8') || (word[0] == '9'))
             {
-                std::cout<<"Erro lexico na linha " << getOriginalLine(contador_de_linhas) << ", o token " << word << " nao eh um argumento valido para as instrucoes";
-                return false;
+                std::cout<<"Erro lexico na linha " << getOriginalLine(contador_de_linhas) << ", o token " << word << " nao eh um argumento valido para as instrucoes\n";
+                return;
             }
             //testa se um dos caracteres nao eh letra, ou numero (sem ser o primeiro) ou underscore
-            for (size_t i = 0; word.size(); i++){
-                if(!((word[i] == 'a') || (word[i] == 'b') || (word[i] == 'c') || (word[i] == 'd') || (word[i] == 'e') || 
+            for (size_t i = 0; i < word.size(); i++){
+                if(((word[i] == 'a') || (word[i] == 'b') || (word[i] == 'c') || (word[i] == 'd') || (word[i] == 'e') || 
                 (word[i] == 'f') || (word[i] == 'g') || (word[i] == 'h') || (word[i] == 'i') || (word[i] == 'j') || 
                 (word[i] == 'k') || (word[i] == 'l') || (word[i] == 'm') || (word[i] == 'n') || (word[i] == 'o') || 
                 (word[i] == 'p') || (word[i] == 'q') || (word[i] == 'r') || (word[i] == 's') || (word[i] == 't') || 
                 (word[i] == 'u') || (word[i] == 'v') || (word[i] == 'w') || (word[i] == 'x') || (word[i] == 'y') || (word[i] == 'z') || 
                 (word[i] == '0') || (word[i] == '1') || (word[i] == '2') || (word[i] == '3') || (word[i] == '4') || (word[i] == '5') || 
                 (word[i] == '6') || (word[i] == '7') || (word[i] == '8') || (word[i] == '9') || (word[i] == '_'))){
-                    std::cout<<"Erro lexico na linha " << getOriginalLine(contador_de_linhas) << ", o token " << word << " nao eh um argumento valido para as instrucoes";
-                    return false;
+                } else{
+                   std::cout << "DEBBUG - entrou aqui qunado o caractere analisado foi " << word[i] << std::endl;
+                std::cout<<"Erro lexico na linha " << getOriginalLine(contador_de_linhas) << ", o token " << word << " nao eh um argumento valido para as instrucoes\n";
+                    return;
                 }
             }
-            return true;
+            return;
 
             //Mesmo tratamento do caso 'a', mas agora testa se o rotulo eh valido
         case 'r':
+            //Trunca o : do rotulo antes de testar
+            word = string_ops::trunca_nome(word,':');
             //vai apresentar erro lexico se tiver algum caracter especial no token ou ele se iniciar com numero
             if ((word[0] == '0') || (word[0] == '1') || (word[0] == '2') || (word[0] == '3') || (word[0] == '4')
             || (word[0] == '5') || (word[0] == '6') || (word[0] == '7') || (word[0] == '8') || (word[0] == '9'))
             {
-                std::cout<<"Erro lexico na linha " << getOriginalLine(contador_de_linhas) << ", o token " << word << " nao eh um rotulo valido";
-                return false;
+                std::cout<<"Erro lexico na linha " << getOriginalLine(contador_de_linhas) << ", o token " << word << " nao eh um rotulo valido\n";
+                return;
             }
             //testa se um dos caracteres nao eh letra, ou numero (sem ser o primeiro) ou underscore
-            for (size_t i = 0; word.size(); i++){
+            for (size_t i = 0; i < word.size(); i++){
                 if(!((word[i] == 'a') || (word[i] == 'b') || (word[i] == 'c') || (word[i] == 'd') || (word[i] == 'e') || 
                 (word[i] == 'f') || (word[i] == 'g') || (word[i] == 'h') || (word[i] == 'i') || (word[i] == 'j') || 
                 (word[i] == 'k') || (word[i] == 'l') || (word[i] == 'm') || (word[i] == 'n') || (word[i] == 'o') || 
@@ -379,15 +387,51 @@ bool Montagem::scannerLexico (std::string word, char operation){
                 (word[i] == 'u') || (word[i] == 'v') || (word[i] == 'w') || (word[i] == 'x') || (word[i] == 'y') || (word[i] == 'z') || 
                 (word[i] == '0') || (word[i] == '1') || (word[i] == '2') || (word[i] == '3') || (word[i] == '4') || (word[i] == '5') || 
                 (word[i] == '6') || (word[i] == '7') || (word[i] == '8') || (word[i] == '9') || (word[i] == '_'))){
-                    std::cout<<"Erro lexico na linha " << getOriginalLine(contador_de_linhas) << ", o token " << word << " nao eh um rotulo valido";
-                    return false;
+                    std::cout<<"Erro lexico na linha " << getOriginalLine(contador_de_linhas) << ", o token " << word << " nao eh um rotulo valido\n";
+                    return;
                 }
             }
-            return true;
+            return;
+
+        //Tratamento de argumentos para diretivas
+        case 'd':
+            //testa se o primeiro caractere nao eh um numero ou um sinal
+            if(!((word[0] == '0') || (word[0] == '1') || (word[0] == '2') || (word[0] == '3') || (word[0] == '4') || 
+            (word[0] == '5') || (word[0] == '6') || (word[0] == '7') || (word[0] == '8') || (word[0] == '9') || 
+            (word[0] == '-') || (word[0] == '+'))){
+                std::cout<<"Erro lexico na linha " << getOriginalLine(contador_de_linhas) << ", o token " << word << " nao eh um argumento de diretiva valido\n";
+                return;
+            }
+
+            //Testa se eh um hexadecimal
+            if((word[1] == 'x') || ((word[2] == 'x') && (word[1] == '0'))){
+                isHexadecimal = true;
+            }
+
+            //Se for hexa, pode aceitar valores extras
+            if(isHexadecimal){
+                for (size_t i = 1; i < word.size(); i++){
+                    if(!((word[0] == '0') || (word[0] == '1') || (word[0] == '2') || (word[0] == '3') || (word[0] == '4') || 
+                    (word[0] == '5') || (word[0] == '6') || (word[0] == '7') || (word[0] == '8') || (word[0] == '9') || 
+                    (word[0] == 'x') || (word[0] == 'a') || (word[0] == 'b') || (word[0] == 'c') || (word[0] == 'd') || (word[0] == 'e') || 
+                    (word[0] == 'f'))){
+                        std::cout<<"Erro lexico na linha " << getOriginalLine(contador_de_linhas) << ", o token " << word << " nao eh um argumento de diretiva valido\n";
+                        return;
+                    }
+                }
+            } else {
+                for (size_t i = 1; i < word.size(); i++){
+                    if(!((word[0] == '0') || (word[0] == '1') || (word[0] == '2') || (word[0] == '3') || (word[0] == '4') || 
+                    (word[0] == '5') || (word[0] == '6') || (word[0] == '7') || (word[0] == '8') || (word[0] == '9'))){
+                        std::cout<<"Erro lexico na linha " << getOriginalLine(contador_de_linhas) << ", o token " << word << " nao eh um argumento de diretiva valido\n";
+                        return;
+                    }
+                }
+            }
     }
 
     //default
-    return false;
+    return;
 
 }
 
@@ -562,6 +606,8 @@ void Montagem::trataRotulo_altoNivel(int contador_tokens, std::string word, int 
 
     //testa se eh uma declaracao de rotulo e se ja tem outra declaracao na mesma linha
     if (tipo == tipo_rotulo::declaracao){
+        //Antes de qualquer coisa, roda o scanner lexico no rotulo
+        this->scannerLexico(word, 'r', contador_de_linhas);
         //se ja tiver uma declaracao na linha sera erro
         if (this->haveRotuloInLine == 1){
             std::cout << "Erro léxico, declaração de mais de um rótulo na linha " << getOriginalLine(contador_de_linhas) << "\n";

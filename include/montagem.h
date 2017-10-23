@@ -83,7 +83,7 @@ public:
     void checkRotulos();
 
      /*Erros Lexicos*/
-     bool scannerLexico (std::string, char);
+     void scannerLexico (std::string, char, int);
      void checkLexicalError(int);
 
      /*Instrucoes*/
