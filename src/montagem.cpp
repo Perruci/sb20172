@@ -283,10 +283,14 @@ void Montagem::chamada_de_rotulo(std::string token, int &endereco, int contador_
                     (this->outputFileList[endereco-1] == 7) || (this->outputFileList[endereco-1] == 8)){
                      std::cout << "Erro semântico na linha " << getOriginalLine(contador_de_linhas) << ", tentativa de pulo para uma constante\n";
                     }
-                 //Se for uma constante e tentarem alterar esse valor
-                 if ((this->outputFileList[endereco-1] == 11)){
-                     std::cout << "Erro semântico na linha " << getOriginalLine(contador_de_linhas) << ", tentativa de alteração de um valor constante\n";
-                 }
+                    //Se for uma constante e tentarem alterar esse valor
+                    if ((this->outputFileList[endereco-1] == 11)){
+                        std::cout << "Erro semântico na linha " << getOriginalLine(contador_de_linhas) << ", tentativa de alteração de um valor constante\n";
+                    }
+                    //Se for uma constante e tentarem alterar esse valor
+                    if ((this->outputFileList[endereco-2] == 9)){
+                        std::cout << "Erro semântico na linha " << getOriginalLine(contador_de_linhas) << ", tentativa de alteração de um valor constante\n";
+                    }
                     this->outputFileList.push_back(rotulosList[i].constValue);
                     endereco++;
                     return;
@@ -757,6 +761,11 @@ void Montagem::rotuloAtualizaEnds (int contador_de_linhas){
                        }
                     //Se for uma constante e tentarem alterar esse valor
                     if ((this->outputFileList[this->rotulosList[i].addressList[j] - 1] == 11)){
+                        std::cout << "Erro semântico na linha " << getOriginalLine(contador_de_linhas) << ", tentativa de alteração de um valor constante\n";
+                    }
+                    //Se for const e tentarem alterar o valor pela instrucao copy
+                    //Se for uma constante e tentarem alterar esse valor
+                    if ((this->outputFileList[this->rotulosList[i].addressList[j] - 2] == 9)){
                         std::cout << "Erro semântico na linha " << getOriginalLine(contador_de_linhas) << ", tentativa de alteração de um valor constante\n";
                     }
                 }
