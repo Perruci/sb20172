@@ -375,12 +375,12 @@ void Montagem::scannerLexico (std::string word, char operation, int contador_de_
             }
             //testa se um dos caracteres nao eh letra, ou numero (sem ser o primeiro) ou underscore
             for (size_t i = 0; i < word.size(); i++){
-                if(((word[i] == 'a') || (word[i] == 'b') || (word[i] == 'c') || (word[i] == 'd') || (word[i] == 'e') || 
-                (word[i] == 'f') || (word[i] == 'g') || (word[i] == 'h') || (word[i] == 'i') || (word[i] == 'j') || 
-                (word[i] == 'k') || (word[i] == 'l') || (word[i] == 'm') || (word[i] == 'n') || (word[i] == 'o') || 
-                (word[i] == 'p') || (word[i] == 'q') || (word[i] == 'r') || (word[i] == 's') || (word[i] == 't') || 
-                (word[i] == 'u') || (word[i] == 'v') || (word[i] == 'w') || (word[i] == 'x') || (word[i] == 'y') || (word[i] == 'z') || 
-                (word[i] == '0') || (word[i] == '1') || (word[i] == '2') || (word[i] == '3') || (word[i] == '4') || (word[i] == '5') || 
+                if(((word[i] == 'a') || (word[i] == 'b') || (word[i] == 'c') || (word[i] == 'd') || (word[i] == 'e') ||
+                (word[i] == 'f') || (word[i] == 'g') || (word[i] == 'h') || (word[i] == 'i') || (word[i] == 'j') ||
+                (word[i] == 'k') || (word[i] == 'l') || (word[i] == 'm') || (word[i] == 'n') || (word[i] == 'o') ||
+                (word[i] == 'p') || (word[i] == 'q') || (word[i] == 'r') || (word[i] == 's') || (word[i] == 't') ||
+                (word[i] == 'u') || (word[i] == 'v') || (word[i] == 'w') || (word[i] == 'x') || (word[i] == 'y') || (word[i] == 'z') ||
+                (word[i] == '0') || (word[i] == '1') || (word[i] == '2') || (word[i] == '3') || (word[i] == '4') || (word[i] == '5') ||
                 (word[i] == '6') || (word[i] == '7') || (word[i] == '8') || (word[i] == '9') || (word[i] == '_'))){
                 } else{
                 std::cout<<"Erro lexico na linha " << getOriginalLine(contador_de_linhas) << ", o token " << word << " nao eh um argumento valido para as instrucoes\n";
@@ -402,12 +402,12 @@ void Montagem::scannerLexico (std::string word, char operation, int contador_de_
             }
             //testa se um dos caracteres nao eh letra, ou numero (sem ser o primeiro) ou underscore
             for (size_t i = 0; i < word.size(); i++){
-                if(!((word[i] == 'a') || (word[i] == 'b') || (word[i] == 'c') || (word[i] == 'd') || (word[i] == 'e') || 
-                (word[i] == 'f') || (word[i] == 'g') || (word[i] == 'h') || (word[i] == 'i') || (word[i] == 'j') || 
-                (word[i] == 'k') || (word[i] == 'l') || (word[i] == 'm') || (word[i] == 'n') || (word[i] == 'o') || 
-                (word[i] == 'p') || (word[i] == 'q') || (word[i] == 'r') || (word[i] == 's') || (word[i] == 't') || 
-                (word[i] == 'u') || (word[i] == 'v') || (word[i] == 'w') || (word[i] == 'x') || (word[i] == 'y') || (word[i] == 'z') || 
-                (word[i] == '0') || (word[i] == '1') || (word[i] == '2') || (word[i] == '3') || (word[i] == '4') || (word[i] == '5') || 
+                if(!((word[i] == 'a') || (word[i] == 'b') || (word[i] == 'c') || (word[i] == 'd') || (word[i] == 'e') ||
+                (word[i] == 'f') || (word[i] == 'g') || (word[i] == 'h') || (word[i] == 'i') || (word[i] == 'j') ||
+                (word[i] == 'k') || (word[i] == 'l') || (word[i] == 'm') || (word[i] == 'n') || (word[i] == 'o') ||
+                (word[i] == 'p') || (word[i] == 'q') || (word[i] == 'r') || (word[i] == 's') || (word[i] == 't') ||
+                (word[i] == 'u') || (word[i] == 'v') || (word[i] == 'w') || (word[i] == 'x') || (word[i] == 'y') || (word[i] == 'z') ||
+                (word[i] == '0') || (word[i] == '1') || (word[i] == '2') || (word[i] == '3') || (word[i] == '4') || (word[i] == '5') ||
                 (word[i] == '6') || (word[i] == '7') || (word[i] == '8') || (word[i] == '9') || (word[i] == '_'))){
                     std::cout<<"Erro lexico na linha " << getOriginalLine(contador_de_linhas) << ", o token " << word << " nao eh um rotulo valido\n";
                     return;
@@ -418,8 +418,8 @@ void Montagem::scannerLexico (std::string word, char operation, int contador_de_
         //Tratamento de argumentos para diretivas
         case 'd':
             //testa se o primeiro caractere nao eh um numero ou um sinal
-            if(!((word[0] == '0') || (word[0] == '1') || (word[0] == '2') || (word[0] == '3') || (word[0] == '4') || 
-            (word[0] == '5') || (word[0] == '6') || (word[0] == '7') || (word[0] == '8') || (word[0] == '9') || 
+            if(!((word[0] == '0') || (word[0] == '1') || (word[0] == '2') || (word[0] == '3') || (word[0] == '4') ||
+            (word[0] == '5') || (word[0] == '6') || (word[0] == '7') || (word[0] == '8') || (word[0] == '9') ||
             (word[0] == '-') || (word[0] == '+'))){
                 std::cout<<"Erro lexico na linha " << getOriginalLine(contador_de_linhas) << ", o token " << word << " nao eh um argumento de diretiva valido\n";
                 return;
@@ -433,9 +433,9 @@ void Montagem::scannerLexico (std::string word, char operation, int contador_de_
             //Se for hexa, pode aceitar valores extras
             if(isHexadecimal){
                 for (size_t i = 1; i < word.size(); i++){
-                    if(!((word[0] == '0') || (word[0] == '1') || (word[0] == '2') || (word[0] == '3') || (word[0] == '4') || 
-                    (word[0] == '5') || (word[0] == '6') || (word[0] == '7') || (word[0] == '8') || (word[0] == '9') || 
-                    (word[0] == 'x') || (word[0] == 'a') || (word[0] == 'b') || (word[0] == 'c') || (word[0] == 'd') || (word[0] == 'e') || 
+                    if(!((word[0] == '0') || (word[0] == '1') || (word[0] == '2') || (word[0] == '3') || (word[0] == '4') ||
+                    (word[0] == '5') || (word[0] == '6') || (word[0] == '7') || (word[0] == '8') || (word[0] == '9') ||
+                    (word[0] == 'x') || (word[0] == 'a') || (word[0] == 'b') || (word[0] == 'c') || (word[0] == 'd') || (word[0] == 'e') ||
                     (word[0] == 'f'))){
                         std::cout<<"Erro lexico na linha " << getOriginalLine(contador_de_linhas) << ", o token " << word << " nao eh um argumento de diretiva valido\n";
                         return;
@@ -443,7 +443,7 @@ void Montagem::scannerLexico (std::string word, char operation, int contador_de_
                 }
             } else {
                 for (size_t i = 1; i < word.size(); i++){
-                    if(!((word[0] == '0') || (word[0] == '1') || (word[0] == '2') || (word[0] == '3') || (word[0] == '4') || 
+                    if(!((word[0] == '0') || (word[0] == '1') || (word[0] == '2') || (word[0] == '3') || (word[0] == '4') ||
                     (word[0] == '5') || (word[0] == '6') || (word[0] == '7') || (word[0] == '8') || (word[0] == '9'))){
                         std::cout<<"Erro lexico na linha " << getOriginalLine(contador_de_linhas) << ", o token " << word << " nao eh um argumento de diretiva valido\n";
                         return;
