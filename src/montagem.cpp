@@ -142,6 +142,19 @@ bool Montagem::run(std::vector<int> adjusts_vec){
                 }
             }
 
+            //Testa se o token atual eh uma diretiva, caso seja prepara as variaveis para analisar o resto da linha
+            if(this->isDiretiva(this->tokensList[contador_tokens])){
+                this->trata_diretivas(contador_de_linhas, now_section_data, contador_tokens);
+                //adiciona 1 no contador de enderecos, caso seja space com mais de um "campo" eh importante incrementar Y-1 enderecos depois
+                contador_endereco++;
+            }
+
+            //Testa se o token atual eh uma instrucao, caso seja prepara as variaveis para receber os argumentos
+            if (this-> isInstruction(this->tokensList[contador_tokens])){
+                this->trata_instructions(contador_de_linhas, now_section_text, contador_tokens);
+                contador_endereco++;
+            }
+
             //se o token for um rotulo, trata ele
             if (this->tokensList[contador_tokens].isRotulo(word, line, instructionList)){
                 //Procura se tem um + na string
@@ -170,19 +183,6 @@ bool Montagem::run(std::vector<int> adjusts_vec){
                 }
 
                 this ->trataRotulo_altoNivel(contador_tokens, word, contador_endereco, contador_de_linhas, now_section_data, now_section_text);
-            }
-
-            //Testa se o token atual eh uma diretiva, caso seja prepara as variaveis para analisar o resto da linha
-            if(this->isDiretiva(this->tokensList[contador_tokens])){
-                this->trata_diretivas(contador_de_linhas, now_section_data, contador_tokens);
-                //adiciona 1 no contador de enderecos, caso seja space com mais de um "campo" eh importante incrementar Y-1 enderecos depois
-                contador_endereco++;
-            }
-
-            //Testa se o token atual eh uma instrucao, caso seja prepara as variaveis para receber os argumentos
-            if (this-> isInstruction(this->tokensList[contador_tokens])){
-                this->trata_instructions(contador_de_linhas, now_section_text, contador_tokens);
-                contador_endereco++;
             }
             contador_tokens++;
         }
