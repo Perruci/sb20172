@@ -367,7 +367,6 @@ void Montagem::scannerLexico (std::string word, char operation, int contador_de_
                 (word[i] == '0') || (word[i] == '1') || (word[i] == '2') || (word[i] == '3') || (word[i] == '4') || (word[i] == '5') || 
                 (word[i] == '6') || (word[i] == '7') || (word[i] == '8') || (word[i] == '9') || (word[i] == '_'))){
                 } else{
-                   std::cout << "DEBBUG - entrou aqui qunado o caractere analisado foi " << word[i] << std::endl;
                 std::cout<<"Erro lexico na linha " << getOriginalLine(contador_de_linhas) << ", o token " << word << " nao eh um argumento valido para as instrucoes\n";
                     return;
                 }
