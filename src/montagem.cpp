@@ -115,11 +115,18 @@ bool Montagem::run(std::vector<int> adjusts_vec){
                 //Roda o scanner lexico antes
                 this->scannerLexico(word, 'd',contador_de_linhas);
                 this->pegaValorDiretivas(word, contador_endereco);
-                continue;
+                //continue;
             }
 
             if((lineIsInstruction) && (word != ",")){
+                bool argCopy = tokensList[contador_tokens].haveVirgula(word);
+                if(argCopy){
+                    word = string_ops::trunca_nome(word,',');
+                }
                 this->scannerLexico(word,'a',contador_de_linhas);
+                if(argCopy){
+                    word = word + ',';
+                }
             }
 
             //Caso a linha seja uma instrucao copy, ja pegamos o primeiro argumento e nao achamos a virgula 'colada' nele, prcuramos
