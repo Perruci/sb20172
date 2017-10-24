@@ -29,7 +29,7 @@ std::string Montagem::setOutputExtension(std::string extension)
 
 std::string Montagem::setInputExtension(std::string extension)
 {
-    this->inputFileName = string_ops::setOutputExtension(inputFileName, extension);
+    this->inputFileName = string_ops::setOutputExtension(outputFileName, extension);
 
     return inputFileName;
 }
