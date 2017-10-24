@@ -275,6 +275,18 @@ void Montagem::chamada_de_rotulo(std::string token, int &endereco, int contador_
             {
                 //se for uma constante, adiciona o valor dela no arquivo final e incrementa o contador de enderecos
                 if(this->rotulosList[i].isConst){
+                    if((this-> outputFileList[endereco-1] == 4) && (this->rotulosList[i].constValue == 0)){
+                        std::cout << "Erro semantico na linha " << getOriginalLine(contador_de_linhas) << ", tentativa de divisao por 0\n";
+                    }
+                    //Se for uma constante e em algum lugar tentaram pular para esse label,isso eh um pulo invalido e para secao invalida
+                    if((this->outputFileList[endereco-1] == 5) || (this->outputFileList[endereco-1] == 6) ||
+                    (this->outputFileList[endereco-1] == 7) || (this->outputFileList[endereco-1] == 8)){
+                     std::cout << "Erro semântico na linha " << getOriginalLine(contador_de_linhas) << ", tentativa de pulo para uma constante\n";
+                    }
+                 //Se for uma constante e tentarem alterar esse valor
+                 if ((this->outputFileList[endereco-1] == 11)){
+                     std::cout << "Erro semântico na linha " << getOriginalLine(contador_de_linhas) << ", tentativa de alteração de um valor constante\n";
+                 }
                     this->outputFileList.push_back(rotulosList[i].constValue);
                     endereco++;
                     return;
@@ -282,8 +294,12 @@ void Montagem::chamada_de_rotulo(std::string token, int &endereco, int contador_
 
                 //se for um space, coloca o endereco de declaracao do rotulo (NAO FUNCIONARA PARA SPACES DIFERENTES DE 1, TRATAR DEPOIS)
                 if(this->rotulosList[i].isSpace){
+                    //Se for um space e em algum lugar tentaram pular para esse label,isso eh um pulo invalido e para secao invalida
+                    if((this->outputFileList[endereco-1] == 5) || (this->outputFileList[endereco-1] == 6) ||
+                    (this->outputFileList[endereco-1] == 7) || (this->outputFileList[endereco-1] == 8)){
+                     std::cout << "Erro semântico na linha " << getOriginalLine(contador_de_linhas) << ", tentativa de pulo para um space\n";
+                    }
                     if(this->argumentIsVector){
-                        std::cout << "ENTROU AQUI\n";
                         this->outputFileList.push_back(this->VectorValue + rotulosList[i].address);
                         if (!(this->VectorValue < this->rotulosList[i].spaceQuantity )){
                             std::cout << "Erro léxico na linha " << contador_de_linhas << ", espaco do vetor " << this->rotulosList[i].name << " estourado.\n";
