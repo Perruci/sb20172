@@ -1,4 +1,4 @@
-#include "../include/mnemonic.h"
+#include "../../include/montador/mnemonic.h"
 
 /* Construtor Mnemonico */
 Mnemonic::Mnemonic()

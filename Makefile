@@ -2,7 +2,7 @@ TARGET=montador
 CC=g++ -std=c++11 -Wall
 CFLAGS=-I
 HEADERS=include/
-SRC=src/*.cpp
+SRC=src/montador/*.cpp
 
 default: main
 

@@ -4,8 +4,8 @@
 #include <sstream>
 #include <string.h>
 
-#include "include/montador.h"
-#include "include/token.h"
+#include "include/montador/montador.h"
+#include "include/montador/token.h"
 
 using namespace std;
 

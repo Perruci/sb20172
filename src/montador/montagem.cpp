@@ -1,4 +1,4 @@
-#include "../include/montagem.h"
+#include "../../include/montador/montagem.h"
 
 Montagem::Montagem(std::string inputFile, std::string outputFile, std::vector<Mnemonic>& instructionList)
 {

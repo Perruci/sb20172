@@ -1,4 +1,4 @@
-#include "../include/montador.h"
+#include "../../include/montador/montador.h"
 
 // Contructor do montador
 Montador::Montador(std::string inputFile, std::string outputFile, std::string tablePath)

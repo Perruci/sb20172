@@ -1,4 +1,4 @@
-#include "../include/token.h"
+#include "../../include/montador/token.h"
 
 //Declaracao do construtor da classe Token
 Token::Token(std::string a){

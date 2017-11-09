@@ -32,7 +32,6 @@
 *.app
 
 # Especificos
-montador
 *.pre
 *.mcr
 *.o
