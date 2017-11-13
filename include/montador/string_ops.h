@@ -3,6 +3,7 @@
 
 #include <algorithm>
 #include <string>
+#include <string.h>
 
 /* Utilidades */
 namespace string_ops
@@ -31,6 +32,22 @@ namespace string_ops
         return str;
     }
 
+    inline bool isAsmFile (char* arg){
+        int tam = strlen(arg);
+        int n = tam - 4;
+        std::string terminacao;
+        for(n;n < tam; n++){
+            terminacao = terminacao + arg[n];
+        }
+
+        std::cout << "A terminacao do segundo argumento eh " << terminacao << std::endl;
+
+        if(terminacao == ".asm"){
+            return true;
+        }
+
+        return false;
+    }
 }
 
 #endif
