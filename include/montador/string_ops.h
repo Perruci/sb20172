@@ -33,15 +33,15 @@ namespace string_ops
     }
 
     inline bool isAsmFile (char* arg){
-        int tam = strlen(arg);
-        int n = tam - 4;
-        std::string terminacao;
-        for(n;n < tam; n++){
+        int tam = strlen(arg);  //pega a qtd de caracteres que tem na string
+        std::string terminacao; // cria uma string de suporte para armazenar a terminacao da string original
+
+        //Pega os 4 ultimos caracteres da string original e salva na string terminacao
+        for(int n = tam - 4 ; n < tam ; n++){
             terminacao = terminacao + arg[n];
         }
 
-        std::cout << "A terminacao do segundo argumento eh " << terminacao << std::endl;
-
+        //Se a string representar um arquivo asm
         if(terminacao == ".asm"){
             return true;
         }
