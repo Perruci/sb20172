@@ -40,5 +40,7 @@ public:
     bool processamento();
     /* Montagem */
     bool montagem();
+    /* Todos os Processos */
+    bool run();
 };
 #endif
