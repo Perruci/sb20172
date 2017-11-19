@@ -58,17 +58,19 @@ void trabalho_2(int argc, char* argv[]){
     //Mas se tiver so 1 arquivo .asm vamos fazer diferente pq nesse caso ele nao pode ter begin e end
     if(argc == 2){
         string inputFile = argv[1]; //pega o nome do arquivo de entrada
-        string outputFile = string_ops::trunca_nome(inputFile, '.');   //Trunca o nome do arquivo de entrada no . para termos o radicao do arquivo de saida
+        string outputFile = string_ops::setOutputExtension(inputFile, ".o");  //Trunca o nome do arquivo de entrada no . para termos o radicao do arquivo de saida
         Montador montador(inputFile, outputFile);
         montador.pre_processamento();
+        montador.processamento();
         montador.montagem(); //Precisamos passar um argumento aqui para fazer a analise sem poder ter begin e end
     } else{
         //Caso tenha mais de 1 arquivo .asm devemos fazer o pre-processamento e a montagem de todos
         for(int i = 1; i < argc ; i++){
             string inputFile = argv[i];
-            string outputFile = string_ops::trunca_nome(inputFile,'.');
+            string outputFile = string_ops::setOutputExtension(inputFile, ".o");  //Trunca o nome do arquivo de entrada no . para termos o radicao do arquivo de saida
             Montador montador(inputFile, outputFile);
             montador.pre_processamento();
+            montador.processamento();
             montador.montagem(); //Precisamos passar um argumento aqui pra fazer a analise procurando o begin e o end
             }
         }
