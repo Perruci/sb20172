@@ -37,7 +37,6 @@ std::string Montagem::setInputExtension(std::string extension)
 //Metodo principal que vai realizar a montagem
 bool Montagem::run(std::vector<int> adjusts_vec, int operation){
     this->operationMode = operation;
-    std::cout << "DEBBUG - O modo de operacao da montagem é " << operation << std::endl;
     bool check_section_text = false;  //passa a ser true quando acharmos a secao text
     bool now_section_text = false;    //indica que atualmente o programa esta na secao de texto
     bool now_section_data = false;    //indica que atualmente o programa esta na secao de data
