@@ -84,7 +84,7 @@ bool Montador::processamento()
 }
 
 /* montagem ----------------------------------------------------------- */
-bool Montador::montagem()
+bool Montador::montagem(int operation)
 {
-    return this->_montagem->run(this->_processamento->get_addresses_adjusts());
+    return this->_montagem->run(this->_processamento->get_addresses_adjusts(), operation);
 }

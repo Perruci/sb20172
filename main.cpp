@@ -6,6 +6,7 @@
 
 #include "include/montador/montador.h"
 #include "include/montador/token.h"
+#include "include/montador/montagem.h"
 
 using namespace std;
 
@@ -42,7 +43,7 @@ void trabalho_1(int argc, char* argv[]){
         case 'o':
             montador.pre_processamento();
             montador.processamento();
-            montador.montagem ();
+            montador.montagem (TRABALHO_1);
             break;
         //So entrara no caso default se for uma operacao nao esperada, portanto significa que e erro
         default:
@@ -62,7 +63,7 @@ void trabalho_2(int argc, char* argv[]){
         Montador montador(inputFile, outputFile);
         montador.pre_processamento();
         montador.processamento();
-        montador.montagem(); //Precisamos passar um argumento aqui para fazer a analise sem poder ter begin e end
+        montador.montagem(TRABALHO_2_ARQ_UNICO); //Precisamos passar um argumento aqui para fazer a analise sem poder ter begin e end
     } else{
         //Caso tenha mais de 1 arquivo .asm devemos fazer o pre-processamento e a montagem de todos
         for(int i = 1; i < argc ; i++){
@@ -71,7 +72,7 @@ void trabalho_2(int argc, char* argv[]){
             Montador montador(inputFile, outputFile);
             montador.pre_processamento();
             montador.processamento();
-            montador.montagem(); //Precisamos passar um argumento aqui pra fazer a analise procurando o begin e o end
+            montador.montagem(TRABALHO_2_ARQS_MULT); //Precisamos passar um argumento aqui pra fazer a analise procurando o begin e o end
             }
         }
 }

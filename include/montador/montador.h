@@ -39,6 +39,6 @@ public:
     /* Processamento */
     bool processamento();
     /* Montagem */
-    bool montagem();
+    bool montagem(int);
 };
 #endif
