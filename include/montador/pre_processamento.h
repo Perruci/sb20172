@@ -13,6 +13,7 @@
 #include "mnemonic.h"
 #include "rotulo.h"
 #include "string_ops.h"
+#include "montagem.h"
 
 // Declaracao da classe Montador
 // Esta classe abriga os métodos desenvolvidos para traduzir e montar o programa
@@ -43,12 +44,13 @@ private:
 public:
     Pre_Processamento(std::string, std::string, std::vector<Mnemonic>&);
     ~Pre_Processamento();
-    bool run();
+    bool run(int);
     std::vector<int> get_addresses_adjusts();
     /* Utilidades */
     std::string setOutputExtension(std::string);
     std::string treat_comments(std::string);
     std::string check_equ_call(std::string, std::string);
+    void Organiza_Sections();
     /* Rotulos */
     void trata_rotulos (std::string, int, int);
     void declaracao_de_rotulo(std::string, int);

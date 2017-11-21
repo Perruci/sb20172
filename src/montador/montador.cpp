@@ -72,9 +72,9 @@ void Montador::printIntstructions()
 }
 
 /* pre-processamento ----------------------------------------------------- */
-bool Montador::pre_processamento()
+bool Montador::pre_processamento(int operation)
 {
-    return this->_pre_process->run();
+    return this->_pre_process->run(operation);
 }
 
 /* processamento ----------------------------------------------------- */

@@ -40,7 +40,7 @@ std::string Pre_Processamento::treat_comments(std::string str)
 
 //Faz a etapa de pre-processamento e trata os EQU e IF, funcao criada sem utilizar a tokenizacao, pois estou com receio de que
 //se fizermos a tokenizacao nessa parte estariamos violando a regra de passagem unica
-bool Pre_Processamento::run(){
+bool Pre_Processamento::run(int operation){
     //bool check_section_text = false;  //passa a ser true quando acharmos a secao text
     int contador_tokens = 0;          //sera utilizado para navegar pela tokensList
     int haveRotuloInLine = 0;            //controle para caso aparecam dois rotulos na mesma linha
@@ -49,6 +49,11 @@ bool Pre_Processamento::run(){
 
     //inicializa as condicoes de IF como falsas
     this->lastIF = false;
+
+    if((operation == TRABALHO_2_ARQ_UNICO) || (operation == TRABALHO_2_ARQS_MULT)){
+        //Chama a função para organizar a posição das seções
+        this->Organiza_Sections();
+    }
 
     //Fecha e abre o arquivo do codigo para atualizar o ponteiro de arquivo, caso alguma outra funcao tenha usado ele
     this->reopenCodeFile();
@@ -387,3 +392,96 @@ std::string Pre_Processamento::check_equ_call(std::string line, std::string word
     }
     return line;
 }
+
+//Função implementada para organizar as sections do programa, ou seja se a section data vir antes da section text
+//inverte a posição das duas e caso contrário, não faz nada.
+
+void Pre_Processamento::Organiza_Sections() {
+    //Primeiramente vamos carregar todo o arquivo texto para a memoria do pc, e vamos fazer isso quebrando ele em 4 partes
+    std::string pre_section;        //contem toda a informação que vem antes de qualquer section
+    std::string section_text;       //contem toda a informação da section text
+    std::string section_data;       //contem toda a informação da section data
+    std::string pos_section;        //contem, caso exista no arquivo o end
+
+    //Variaveis para determinar em que ponto do codigo estamos
+    bool isInSectionText = false;
+    bool isInSectionData = false;
+    bool finalOfText = false;
+    
+    //Fecha e abre o arquivo do codigo para atualizar o ponteiro de arquivo, caso alguma outra funcao tenha usado ele
+    this->reopenCodeFile();
+
+    std::string line;
+    std::string word;
+
+    //Percorre todo o arquivo separando as seções desejadas
+    while (getline(this->fileText, line)){
+
+        // transforma para minuscula
+        line = string_ops::minuscula(line);
+
+        /* Trata comentários na linha */
+        line = treat_comments(line);
+        
+        // Itera em cada palavra da linha
+        std::stringstream lineStream (line);
+        
+        //Loop para analisar cada termo um a um
+        while (lineStream >> word){
+            if(word == "section"){
+                //Analisa se é seção text ou data
+                lineStream >> word;
+                if(word == "text"){
+                    isInSectionText = true;
+                    isInSectionData = false;
+                    finalOfText = false;
+                } else if (word == "data"){
+                    isInSectionText = false;
+                    isInSectionData = true;
+                    finalOfText = false;
+                }
+            }
+            
+            //Como não analisamos macros no trabalho 2, se aparecer a palavra end significa o final do arquivo
+            if(word == "end"){
+                finalOfText = true;
+                isInSectionText = false;
+                isInSectionData = false;
+            }
+        }
+        //Após analisarmos a linha inteira, já sabemos em que parte do arquivo estamos, portanto colocamos essa linha na nossa string
+        if(!(finalOfText || isInSectionText || isInSectionData)){
+            pre_section = pre_section + line + '\n';
+        }
+
+        if(isInSectionText){
+            section_text = section_text + line + '\n';
+        }
+
+        if(isInSectionData){
+            section_data = section_data + line + '\n';
+        }
+
+         if(finalOfText){
+            pos_section = pos_section + line + '\n';
+        }
+
+    }
+    //std::cout << "O arquivo organizado fica com a seguinte cara:\n" << pre_section << section_text << section_data << pos_section;
+
+    //Agora precisamos atualizar o nosso arquivo contendo o código, logo vamos fechar os dois arquivos de entrada e saida
+    this->fileText.close();
+    this->fileOutput.close();
+    
+    //Agora vamos abrir o arquivo de entrada em formato de saída e vamos limpar tudo que tiver nele
+    this->fileOutput.open(inputFileName, std::ofstream::out | std::ofstream::trunc);
+    
+    //Agora vamos escrever o que desejamos nele
+    this->fileOutput << pre_section << section_text << section_data << pos_section;
+    this->fileOutput.close();
+
+    //Por fim, deixamos os dois arquivos abertos para não termos problemas em funções futuras
+    this->fileText.open(inputFileName);
+    this->fileOutput.open(outputFileName);
+
+} 
