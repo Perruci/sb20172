@@ -407,6 +407,7 @@ void Pre_Processamento::Organiza_Sections() {
     bool isInSectionText = false;
     bool isInSectionData = false;
     bool finalOfText = false;
+    bool isMacro = false;
     
     //Fecha e abre o arquivo do codigo para atualizar o ponteiro de arquivo, caso alguma outra funcao tenha usado ele
     this->reopenCodeFile();
@@ -441,12 +442,21 @@ void Pre_Processamento::Organiza_Sections() {
                     finalOfText = false;
                 }
             }
+
+            //Funcionamento para poder expandir macros
+            if(word == "macro"){
+                isMacro = true;
+            }
             
             //Como não analisamos macros no trabalho 2, se aparecer a palavra end significa o final do arquivo
             if(word == "end"){
-                finalOfText = true;
-                isInSectionText = false;
-                isInSectionData = false;
+                if(isMacro){
+                    isMacro = false;
+                } else{
+                    finalOfText = true;
+                    isInSectionText = false;
+                    isInSectionData = false;
+                }
             }
         }
         //Após analisarmos a linha inteira, já sabemos em que parte do arquivo estamos, portanto colocamos essa linha na nossa string
@@ -467,7 +477,7 @@ void Pre_Processamento::Organiza_Sections() {
         }
 
     }
-    //std::cout << "O arquivo organizado fica com a seguinte cara:\n" << pre_section << section_text << section_data << pos_section;
+    std::cout << "O arquivo organizado fica com a seguinte cara:\n" << pre_section << section_text << section_data << pos_section;
 
     //Agora precisamos atualizar o nosso arquivo contendo o código, logo vamos fechar os dois arquivos de entrada e saida
     this->fileText.close();
