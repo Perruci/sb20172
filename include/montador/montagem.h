@@ -30,6 +30,7 @@ private:
     std::vector<Mnemonic> instructionList;
     std::vector<Rotulo> rotulosList;
     std::vector<Token> tokensList;
+    std::vector<int> mapaDeBits;            //Mapa de bits contendo informações de realocação
 
     //lista de inteiros para preparar o arquivo objeto em memoria antes de imprimir no arquivo
     std::vector<int> outputFileList;

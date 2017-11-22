@@ -374,6 +374,7 @@ void Montagem::chamada_de_rotulo(std::string token, int &endereco, int contador_
                             std::cout << "Erro semântico na linha " << getOriginalLine(contador_de_linhas) << ", tentativa de alteração de um valor constante\n";
                         }
                     }
+                    this->mapaDeBits.push_back(0);
                     this->outputFileList.push_back(rotulosList[i].constValue);
                     endereco++;
                     return;
@@ -389,6 +390,7 @@ void Montagem::chamada_de_rotulo(std::string token, int &endereco, int contador_
                         }
                     }
                     if(this->argumentIsVector){
+                        this->mapaDeBits.push_back(1);
                         this->outputFileList.push_back(this->VectorValue + rotulosList[i].address);
                         if (!(this->VectorValue < this->rotulosList[i].spaceQuantity )){
                             if(this->operationMode == TRABALHO_1){
@@ -396,13 +398,15 @@ void Montagem::chamada_de_rotulo(std::string token, int &endereco, int contador_
                             }
                         }
                     } else{
-                    this->outputFileList.push_back(rotulosList[i].address);
+                        this->mapaDeBits.push_back(1);
+                        this->outputFileList.push_back(rotulosList[i].address);
                     }
                     endereco++;
                     return;
                 }
 
                 //caso contrario, eh um rotulo qualquer, adiciona o endereco de declaracao dele
+                    this->mapaDeBits.push_back(1);
                     this->outputFileList.push_back(rotulosList[i].address);
                 endereco++;
                 return;
@@ -411,8 +415,10 @@ void Montagem::chamada_de_rotulo(std::string token, int &endereco, int contador_
                 //Coloca na lista desse rotulo aquele endereco para ele ser arrumado posteriormente e incrementa o contador de enderecos e coloca 0 na lista de saida
                 this->rotulosList[i].addressList.push_back(endereco);
                 if(this->argumentIsVector){
+                    this->mapaDeBits.push_back(1);
                     this->outputFileList.push_back(this->VectorValue);
                 } else{
+                    this->mapaDeBits.push_back(1);
                     this->outputFileList.push_back(0);
                 }
                 endereco++;
@@ -426,8 +432,10 @@ void Montagem::chamada_de_rotulo(std::string token, int &endereco, int contador_
     rotulo.addressList.push_back(endereco);
     this->rotulosList.push_back(rotulo);
     if(this->argumentIsVector){
+        this->mapaDeBits.push_back(1);
         this->outputFileList.push_back(this->VectorValue);
     } else{
+        this->mapaDeBits.push_back(1);
         this->outputFileList.push_back(0);
     }
     endereco++;
@@ -667,6 +675,7 @@ void Montagem::trata_instructions (int line, bool now_section_text, int contador
     this->numberOfOperandsInLine = this-> InstructionOperand(this->tokensList[contador_tokens]);
 
     //Coloca o opcode da instrucao na lista para impressao e incrementa o contador de endereco
+    this->mapaDeBits.push_back(0);
     this->outputFileList.push_back(this->instructionOpcode(this->tokensList[contador_tokens]));
 }
 
@@ -814,6 +823,12 @@ void Montagem::printOutput(){
             " este rotulo é declarado no endereço " << this->rotulosList[i].address << " desse arquivo\n";
         }
     }
+
+    std::cout << "O mapa de bits desse arquivo é ";
+    for(size_t i = 0; i < this->mapaDeBits.size(); i++){
+        std::cout << this->mapaDeBits[i];
+    }
+    std::cout << std::endl;
 }
 
 //Metodo para pegar os valores das diretivas
@@ -950,11 +965,13 @@ void Montagem::rotuloAtualizaEnds (int contador_de_linhas){
             //Coloca os valores das diretivas no arquivo de saida
             if (this->rotulosList[i].isSpace){
                 for(int h = 0; h < rotulosList[i].spaceQuantity; h++){
+                    this->mapaDeBits.push_back(0);
                     this->outputFileList.push_back(0);
                 }
             }
 
             if (this->rotulosList[i].isConst){
+                this->mapaDeBits.push_back(0);
                 this->outputFileList.push_back(this->rotulosList[i].constValue);
             }
 
