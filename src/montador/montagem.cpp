@@ -94,6 +94,34 @@ bool Montagem::run(std::vector<int> adjusts_vec, int operation){
             //Testa as palavras chaves do trabalho 2
             if (word == "begin"){
                 haveBegin = true;
+                //Procura na lista de rotulos o rotulo dessa linha para determinar ele como o inicio do modulo
+                for(size_t i = 0 ; i < this->rotulosList.size() ; i++){
+                    if(this->rotulosList[i].name == this->lineRotuloName){
+                        this->rotulosList[i].isBegin = true;
+                    }
+                }
+                continue;
+            }
+
+            if (word == "extern"){
+                //Procura na lista de rotulos o rotulo dessa linha para determinar ele como o inicio do modulo
+                for(size_t i = 0 ; i < this->rotulosList.size() ; i++){
+                    if(this->rotulosList[i].name == this->lineRotuloName){
+                        this->rotulosList[i].isExtern = true;
+                    }
+                }
+                continue;
+            }
+
+            if (word == "public"){
+                //pega o próximo token que é o token que irá conter o nome do rotulo público
+                lineStream >> word;
+
+                // Cria um novo rótulo e adiciona-o a lista
+                Rotulo rotulo (word, false, 0);
+                rotulo.isPublic = true;
+                this->rotulosList.push_back(rotulo);
+                
                 continue;
             }
 
@@ -317,6 +345,9 @@ void Montagem::chamada_de_rotulo(std::string token, int &endereco, int contador_
         {
             if(this->rotulosList[i].alreadyDeclared)
             {
+                //Coloca na lista desse rotulo aquele endereco 
+                this->rotulosList[i].addressList.push_back(endereco);
+
                 //se for uma constante, adiciona o valor dela no arquivo final e incrementa o contador de enderecos
                 if(this->rotulosList[i].isConst){
                     if((this-> outputFileList[endereco-1] == 4) && (this->rotulosList[i].constValue == 0)){
@@ -765,6 +796,24 @@ void Montagem::printOutput(){
         this->fileOutput << outputFileList[i] << ' ';
     }
     this->fileOutput << std::endl;
+
+    for(size_t i = 0; i < this->rotulosList.size() ; i++){
+        if(this->rotulosList[i].isBegin){
+            std::cout << "O rotulo de inicio do modulo é: " << this->rotulosList[i].name << std::endl;
+            std::cout << "Ele é declarado no endereço " << this->rotulosList[i].address << std::endl;
+        }
+        if(this->rotulosList[i].isExtern){
+            std::cout << "O rotulo " << this->rotulosList[i].name << " é um rotulo externo e ele é chamado nos endereços ";
+            for(size_t j = 0; j < this->rotulosList[i].addressList.size(); j++){
+                std::cout << this->rotulosList[i].addressList[j] << " ";
+            }
+            std::cout << std::endl;
+        }
+        if(this->rotulosList[i].isPublic){
+            std::cout << "O rotulo " << this->rotulosList[i].name << " é um rotulo publico e pode ser usado em outros arquivos modularizados," <<
+            " este rotulo é declarado no endereço " << this->rotulosList[i].address << " desse arquivo\n";
+        }
+    }
 }
 
 //Metodo para pegar os valores das diretivas
