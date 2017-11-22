@@ -45,6 +45,10 @@ bool Montagem::run(std::vector<int> adjusts_vec, int operation){
     int contador_de_linhas = 0;       //Controle para saber em qual linha do programa esta algum erro
     bool copySemVirgula = false;      //Flag para ver se faltou uma virgula entre os argumentos do copy
 
+    //Variaveis de controle para o trabalho 2
+    bool haveBegin = false;
+    bool haveEnd = false;
+
     this->address_adjusts = adjusts_vec; // carrega em variável da classe o vetor de ajustes de linhas
 
     //Fecha e abre o arquivo do codigo para atualizar o ponteiro de arquivo, caso alguma outra funcao tenha usado ele
@@ -86,6 +90,18 @@ bool Montagem::run(std::vector<int> adjusts_vec, int operation){
                 this->argumentIsVector = true;
                 continue;
             }
+            
+            //Testa as palavras chaves do trabalho 2
+            if (word == "begin"){
+                haveBegin = true;
+                continue;
+            }
+
+            if (word == "end"){
+                haveEnd = true;
+                continue;
+            }
+
             //Se a linha estiver esperando os termos finais de um vetor nao queremos analisar todos os tokens
             if(this->argumentIsVector){
                 int numberOfVector = this->getNumber (word);
@@ -218,6 +234,23 @@ bool Montagem::run(std::vector<int> adjusts_vec, int operation){
             std::cout << "Erro semântico, não ha seção text no arquivo\n";
         }
     }
+
+    //Erros gerados pelas palavras begin e end
+    if((this->operationMode == TRABALHO_1) || (this->operationMode == TRABALHO_2_ARQ_UNICO)){
+        if ((haveBegin) || (haveEnd)){
+            std::cout << "Erro semântico, há apenas um arquivo de entrada e ele contém diretivas de arquivo modularizado\n";
+        }
+    }
+
+    if(this->operationMode == TRABALHO_2_ARQS_MULT){
+        if(!haveBegin){
+            std::cout << "Erro semântico, montador sendo usado em modo que espera arquivos modularizados, mas o código passado não contém Begin\n";
+        }
+        if(!haveEnd){
+            std::cout << "Erro semântico, montador sendo usado em modo que espera arquivos modularizados, mas o código passado não contém End\n";
+        }
+    }
+
     //checa se teve algum rotulo que foi chamado, mas nao foi declarado
     this->checkRotulos();
     //this->printRotulos();

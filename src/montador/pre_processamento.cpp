@@ -477,7 +477,7 @@ void Pre_Processamento::Organiza_Sections() {
         }
 
     }
-    std::cout << "O arquivo organizado fica com a seguinte cara:\n" << pre_section << section_text << section_data << pos_section;
+    //std::cout << "O arquivo organizado fica com a seguinte cara:\n" << pre_section << section_text << section_data << pos_section;
 
     //Agora precisamos atualizar o nosso arquivo contendo o código, logo vamos fechar os dois arquivos de entrada e saida
     this->fileText.close();
