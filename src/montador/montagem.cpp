@@ -803,6 +803,19 @@ void Montagem::trataRotulo_altoNivel(int contador_tokens, std::string word, int 
 
 //Imprime a lista de saida para o arquivo final
 void Montagem::printOutput(){
+
+    //Se for executado como trabalho 2, imprime cabeçalho
+    if ((this->operationMode == TRABALHO_2_ARQ_UNICO) || (this->operationMode == TRABALHO_2_ARQS_MULT)){
+        this->fileOutput << "H: " << this->inputFileName << std::endl;
+        this->fileOutput << "H: tam: " << this->outputFileList.size() << std::endl;
+        this->fileOutput << "H: mapa_bits: ";
+        for(size_t i = 0; i < this->mapaDeBits.size(); i++){
+            this->fileOutput << mapaDeBits[i];
+        }
+        this->fileOutput << std::endl;
+    }
+
+
     for(size_t i = 0; i < outputFileList.size(); i++)
     {
         this->fileOutput << outputFileList[i] << ' ';
