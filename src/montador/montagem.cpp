@@ -278,7 +278,10 @@ bool Montagem::run(std::vector<int> adjusts_vec, int operation){
             std::cout << "Erro semântico, montador sendo usado em modo que espera arquivos modularizados, mas o código passado não contém End\n";
         }
     }
-
+    //Deleta arquivos desnecessários para o trabalho 2
+    if ((this->operationMode == TRABALHO_2_ARQ_UNICO) || (this->operationMode == TRABALHO_2_ARQS_MULT)){
+        string_ops::deleteUnusedFiles(this->inputFileName);
+    }
     //checa se teve algum rotulo que foi chamado, mas nao foi declarado
     this->checkRotulos();
     //this->printRotulos();
