@@ -5,7 +5,7 @@ CFLAGS=-I
 HEADERS=include/
 SRC=src/carregador/*.cpp src/ligador/*.cpp src/montador/*.cpp src/mem_sim/*.cpp
 
-default: main
+default: all
 
 main:
 	clear
@@ -13,6 +13,11 @@ main:
 
 simulador:
 	clear
+	$(CC) -o $(TARGET_CARREGADOR) carregador.cpp $(SRC) $(CFLAGS) $(HEADERS)
+
+all:
+	clear
+	$(CC) -o $(TARGET_MONTADOR) main.cpp $(SRC) $(CFLAGS) $(HEADERS)
 	$(CC) -o $(TARGET_CARREGADOR) carregador.cpp $(SRC) $(CFLAGS) $(HEADERS)
 
 clean:
