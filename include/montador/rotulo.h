@@ -27,6 +27,11 @@ class Rotulo
         int EquValue;
         bool isMem;             //caso o rotulo indique uma diretiva e nao um endereco de pulo
 
+         //Variaveis importantes para a análise de arquivos modularizados
+        bool isExtern = false;
+        bool isPublic = false;
+        bool isBegin = false;
+
         //Nao sei se eh o melhor jeito, mas e como pensei em fazer agora
         bool isConst = false;
         int constValue;

@@ -4,6 +4,8 @@
 #include <algorithm>
 #include <string>
 #include <string.h>
+#include <iostream>
+#include <stdio.h>
 
 /* Utilidades */
 namespace string_ops
@@ -47,6 +49,18 @@ namespace string_ops
         }
 
         return false;
+    }
+
+    inline void deleteUnusedFiles(std::string fileName){
+        
+        //deleta o arquivo com extensão .mcr
+        fileName = string_ops::setOutputExtension(fileName, ".mcr");
+        remove(fileName.c_str());
+
+        //deleta o arquivo com extensão .pre
+        fileName = string_ops::setOutputExtension(fileName, ".pre");
+        remove(fileName.c_str());
+
     }
 }
 

@@ -72,9 +72,9 @@ void Montador::printIntstructions()
 }
 
 /* pre-processamento ----------------------------------------------------- */
-bool Montador::pre_processamento()
+bool Montador::pre_processamento(int operation)
 {
-    return this->_pre_process->run();
+    return this->_pre_process->run(operation);
 }
 
 /* processamento ----------------------------------------------------- */
@@ -84,9 +84,9 @@ bool Montador::processamento()
 }
 
 /* montagem ----------------------------------------------------------- */
-bool Montador::montagem()
+bool Montador::montagem(int operation)
 {
-    return this->_montagem->run(this->_processamento->get_addresses_adjusts());
+    return this->_montagem->run(this->_processamento->get_addresses_adjusts(), operation);
 }
 /* todos juntos -------------------------------------------------------- */
 bool Montador::run()

@@ -6,6 +6,7 @@
 
 #include "include/montador/montador.h"
 #include "include/montador/token.h"
+#include "include/montador/montagem.h"
 
 using namespace std;
 
@@ -28,19 +29,21 @@ void trabalho_1(int argc, char* argv[]){
         //Operação de preprocessamento, coloca a estensão “.pre” no arquivo e somente
         //avalia as diretivas EQU e IF.
         case 'p':
-            montador.pre_processamento();
+            montador.pre_processamento(TRABALHO_1);
             break;
 
         //Operação de processamento de macros, coloca a estensão “.mcr” no arquivo e somente avalia
         //as diretivas EQU e IF e substitue as MACROS.
         case 'm':
-            montador.pre_processamento();
+            montador.pre_processamento(TRABALHO_1);
             montador.processamento();
             break;
 
         //Operação de motagem, coloca a estensão “.o” realiza a montagem de programa usando o PROCESSO DE PASSAGEM ÚNICA.
         case 'o':
-            montador.run();
+            montador.pre_processamento(TRABALHO_1);
+            montador.processamento();
+            montador.montagem (TRABALHO_1);
             break;
         //So entrara no caso default se for uma operacao nao esperada, portanto significa que e erro
         default:
@@ -58,14 +61,18 @@ void trabalho_2(int argc, char* argv[]){
         string inputFile = argv[1]; //pega o nome do arquivo de entrada
         string outputFile = string_ops::setOutputExtension(inputFile, ".o");  //Trunca o nome do arquivo de entrada no . para termos o radicao do arquivo de saida
         Montador montador(inputFile, outputFile);
-        montador.run(); //Precisamos passar um argumento aqui para fazer a analise sem poder ter begin e end
+        montador.pre_processamento(TRABALHO_2_ARQ_UNICO);
+        montador.processamento();
+        montador.montagem(TRABALHO_2_ARQ_UNICO); //Precisamos passar um argumento aqui para fazer a analise sem poder ter begin e end
     } else{
         //Caso tenha mais de 1 arquivo .asm devemos fazer o pre-processamento e a montagem de todos
         for(int i = 1; i < argc ; i++){
             string inputFile = argv[i];
             string outputFile = string_ops::setOutputExtension(inputFile, ".o");  //Trunca o nome do arquivo de entrada no . para termos o radicao do arquivo de saida
             Montador montador(inputFile, outputFile);
-            montador.run(); //Precisamos passar um argumento aqui pra fazer a analise procurando o begin e o end
+            montador.pre_processamento(TRABALHO_2_ARQS_MULT);
+            montador.processamento();
+            montador.montagem(TRABALHO_2_ARQS_MULT); //Precisamos passar um argumento aqui pra fazer a analise procurando o begin e o end
             }
         }
 }

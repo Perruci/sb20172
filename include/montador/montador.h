@@ -35,12 +35,10 @@ public:
     void loadInstructions(std::string);
     void printIntstructions();
     /* pre-processamento */
-    bool pre_processamento();
+    bool pre_processamento(int);
     /* Processamento */
     bool processamento();
     /* Montagem */
-    bool montagem();
-    /* Todos os Processos */
-    bool run();
+    bool montagem(int);
 };
 #endif
