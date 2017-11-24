@@ -88,10 +88,3 @@ bool Montador::montagem(int operation)
 {
     return this->_montagem->run(this->_processamento->get_addresses_adjusts(), operation);
 }
-/* todos juntos -------------------------------------------------------- */
-bool Montador::run()
-{
-    this->pre_processamento();
-    this->processamento();
-    return this->montagem();
-}
