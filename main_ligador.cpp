@@ -8,6 +8,7 @@
 
 int main (int argc, char* argv[]){
 
-    //ligador Ligador()
+    Ligador ligador;
+    ligador.teste();
     std::cout << "Hello world, I'm the linker\n";
 }

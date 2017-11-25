@@ -16,4 +16,4 @@ ligador:
 	$(CC) -o $(TARGET_L) main_ligador.cpp $(SRC) $(CFLAGS) $(HEADERS)
 
 clean:
-	rm -f montador
+	rm -f montador ligador
