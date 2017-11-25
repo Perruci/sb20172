@@ -34,6 +34,10 @@
         {
             "taskName": "clean",
             "problemMatcher": []
+        },
+        {
+            "taskName": "ligador",
+            "problemMatcher": []
         }
     ]
 }

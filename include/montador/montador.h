@@ -40,5 +40,7 @@ public:
     bool processamento();
     /* Montagem */
     bool montagem(int);
+
+    bool run(int);
 };
 #endif
