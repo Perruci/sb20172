@@ -37,11 +37,31 @@ bool MemorySimulator::set_chunk_sizes(char* argv[])
         // check for existance
         if(!argv[i])
         {
-            std::cout << "Expected " << this->num_chunks << " chunk sizes, but recieved " << i << '\n';
+            std::cout << "Expected " << this->num_chunks << " chunk sizes, but recieved " << i-2 << '\n';
             return false;
         }
         std::string str(argv[i]);
         this->chunk_sizes.push_back(std::stoi(str));
+    }
+    return true;
+}
+
+bool MemorySimulator::set_chunk_addresses(char* argv[])
+{
+    // Converts function parameters to integer chunk_addresses
+    // Loop begining in num_chunks+2, until 2*num_chunks+2
+    auto start = this->num_chunks + 2;      // end of chunk sizes
+    auto end = start + this->num_chunks;    // end of chunk addresses
+    for(auto idx = start; idx < end; idx++)
+    {
+        // check for existance
+        if(!argv[idx])
+        {
+            std::cout << "Expected " << this->num_chunks << " chunk addresses, but recieved " << idx-start << '\n';
+            return false;
+        }
+        std::string str(argv[idx]);
+        this->chunk_addresses.push_back(std::stoi(str));
     }
     return true;
 }
@@ -54,6 +74,16 @@ void MemorySimulator::print_chunk_sizes()
         std::cout << size_i << '\n';
     }
 }
+
+void MemorySimulator::print_chunk_addresses()
+{
+    // Loop through each element and print it out
+    for(auto const addr_i : this->chunk_addresses)
+    {
+        std::cout << addr_i << '\n';
+    }
+}
+
 
 bool MemorySimulator::process_arguments(int argc, char* argv[])
 {
@@ -68,8 +98,12 @@ bool MemorySimulator::process_arguments(int argc, char* argv[])
     if(!set_chunk_sizes(argv))
         return false;
 
+    if(!set_chunk_addresses(argv))
+        return false;
+
     std::cout << "num_chunks: " << this->num_chunks << '\n';
     this->print_chunk_sizes();
+    this->print_chunk_addresses();
 
     return true;
 }
