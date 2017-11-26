@@ -15,6 +15,39 @@ bool MemorySimulator::init(int argc, char* argv[])
     return this->process_arguments(argc, argv);
 }
 
+bool MemorySimulator::process_arguments(int argc, char* argv[])
+{
+    if(argc < 3)
+    {
+        std::cout << "Too few arguments on execution" << '\n';
+        return false;
+    }
+    if(!set_num_chunks(argv[1]))
+        return false;
+
+    if(!set_chunk_sizes(argv))
+        return false;
+
+    if(!set_chunk_addresses(argv))
+        return false;
+
+    this->initMemoryChunks();
+
+    this->print_chunks();
+
+    return true;
+}
+
+void MemorySimulator::initMemoryChunks()
+{
+    for(auto idx = 0; idx < this->num_chunks; idx++)
+    {
+        MemoryChunk chunk(this->chunk_addresses[idx], this->chunk_sizes[idx]);
+        this->memory_chunk_pile.push_back(chunk);
+    }
+}
+
+/* Arguments Processing ------------------------------------ */
 bool MemorySimulator::set_num_chunks(char* c_str)
 {
     if(!c_str)
@@ -85,25 +118,12 @@ void MemorySimulator::print_chunk_addresses()
 }
 
 
-bool MemorySimulator::process_arguments(int argc, char* argv[])
+void MemorySimulator::print_chunks()
 {
-    if(argc < 3)
+    // Loop through each element and print it out
+    for(auto idx = 0; idx < this->num_chunks; idx++)
     {
-        std::cout << "Too few arguments on execution" << '\n';
-        return false;
+        std::cout << "Chunk " << idx+1 << '\n';
+        this->memory_chunk_pile[idx].print();
     }
-    if(!set_num_chunks(argv[1]))
-        return false;
-
-    if(!set_chunk_sizes(argv))
-        return false;
-
-    if(!set_chunk_addresses(argv))
-        return false;
-
-    std::cout << "num_chunks: " << this->num_chunks << '\n';
-    this->print_chunk_sizes();
-    this->print_chunk_addresses();
-
-    return true;
 }
