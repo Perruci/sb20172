@@ -23,11 +23,38 @@ void Carregador::openIOFiles()
 
 void Carregador::processObjectFile()
 {
-    std::string bin_value;
-    while (this->fileObject >> bin_value)
+    std::string word;
+    int expected_args = 0;
+    bool foundStop = false;
+    while (this->fileObject >> word)
     {
-        std::cout << bin_value << '\n';
+        int value = std::stoi(word);
+        // get index for instruction, -1 for not instruction
+        int idx = this->identifyInstruction(value);
+        if(idx == -1 | expected_args > 0 | foundStop)
+        {
+            std::cout << value << " " << "Data" <<'\n';
+            // If a variable was expected subtract one from expected_args, keeps in 0, otherwise
+            expected_args = expected_args <= 0? 0 : expected_args-1;
+        }
+        else
+        {
+            std::cout << value << " " << this->instructionList[idx].nome <<'\n';
+            expected_args = this->instructionList[idx].noperands;
+            if(this->instructionList[idx].nome == "stop")
+                foundStop = true;
+        }
     }
+}
+
+int Carregador::identifyInstruction(int value)
+{
+    for(int idx = 0; idx < this->instructionList.size(); idx++)
+    {
+        if(value == this->instructionList[idx].opcode)
+            return idx;
+    }
+    return -1;
 }
 
 void Carregador::setFileNames(char* argv[])

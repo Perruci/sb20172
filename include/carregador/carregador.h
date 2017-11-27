@@ -19,6 +19,7 @@ public:
     ~Carregador();
     void openIOFiles();
     void processObjectFile();
+    int identifyInstruction(int);
     void setFileNames(char**);
     void loadInstructions(std::string tablePath = "tables/instructions.txt");
     void printIntstructions();
