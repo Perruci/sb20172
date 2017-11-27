@@ -9,12 +9,16 @@
 class Carregador
 {
 private:
-    std::vector<Mnemonic> instructionList;
     std::string objFileName;
     std::string outputFileName;
+    std::ifstream fileObject;
+    std::ofstream fileOutput;
+    std::vector<Mnemonic> instructionList;
 public:
     Carregador(int, char**);
     ~Carregador();
+    void openIOFiles();
+    void processObjectFile();
     void setFileNames(char**);
     void loadInstructions(std::string tablePath = "tables/instructions.txt");
     void printIntstructions();

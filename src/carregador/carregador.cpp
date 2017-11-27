@@ -4,11 +4,30 @@ Carregador::Carregador(int argc, char* argv[])
 {
     this->setFileNames(argv);
     this->loadInstructions();
+    this->openIOFiles();
+    this->processObjectFile();
 }
 
 Carregador::~Carregador()
 {
+    // Sem preocupações com o close
+    fileObject.close();
+    fileOutput.close();
+}
 
+void Carregador::openIOFiles()
+{
+    this->fileObject.open(objFileName);
+    this->fileOutput.open(outputFileName);
+}
+
+void Carregador::processObjectFile()
+{
+    std::string bin_value;
+    while (this->fileObject >> bin_value)
+    {
+        std::cout << bin_value << '\n';
+    }
 }
 
 void Carregador::setFileNames(char* argv[])
