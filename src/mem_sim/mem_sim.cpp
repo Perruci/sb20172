@@ -17,12 +17,12 @@ bool MemorySimulator::init(int argc, char* argv[])
 
 bool MemorySimulator::process_arguments(int argc, char* argv[])
 {
-    if(argc < 3)
+    if(argc < 4)
     {
         std::cout << "Too few arguments on execution" << '\n';
         return false;
     }
-    if(!set_num_chunks(argv[1]))
+    if(!set_num_chunks(argv[2]))
         return false;
 
     if(!set_chunk_sizes(argv))
@@ -50,6 +50,7 @@ void MemorySimulator::initMemoryChunks()
 /* Arguments Processing ------------------------------------ */
 bool MemorySimulator::set_num_chunks(char* c_str)
 {
+    // Expected input: ./carregador prog1 [num_chunks] ...
     if(!c_str)
     {
         std::cout << "Expected number of chunks, recieved Null" << '\n';
@@ -64,16 +65,19 @@ bool MemorySimulator::set_num_chunks(char* c_str)
 bool MemorySimulator::set_chunk_sizes(char* argv[])
 {
     // Converts function parameters to integer chunk_sizes
-    // Loop begining in the third parameter, until num_chunks+2
-    for(size_t i = 2; i < this->num_chunks+2; i++)
+    // Expected input: ./carregador prog1 [num_chunks] [chunk_sizes]*num_chunks ...
+    // Loop begining in the forth parameter, until num_chunks+3
+    auto start = 3;      // end of chunk sizes
+    auto end = start + this->num_chunks;    // end of chunk addresses
+    for(auto idx = start; idx < end; idx++)
     {
         // check for existance
-        if(!argv[i])
+        if(!argv[idx])
         {
-            std::cout << "Expected " << this->num_chunks << " chunk sizes, but recieved " << i-2 << '\n';
+            std::cout << "Expected " << this->num_chunks << " chunk sizes, but recieved " << idx-3 << '\n';
             return false;
         }
-        std::string str(argv[i]);
+        std::string str(argv[idx]);
         this->chunk_sizes.push_back(std::stoi(str));
     }
     return true;
@@ -82,8 +86,9 @@ bool MemorySimulator::set_chunk_sizes(char* argv[])
 bool MemorySimulator::set_chunk_addresses(char* argv[])
 {
     // Converts function parameters to integer chunk_addresses
+    // Expected input: ./carregador prog1 [num_chunks] [chunk_sizes]*num_chunks [chunk_addresses]*num_chunks
     // Loop begining in num_chunks+2, until 2*num_chunks+2
-    auto start = this->num_chunks + 2;      // end of chunk sizes
+    auto start = this->num_chunks + 3;      // end of chunk sizes
     auto end = start + this->num_chunks;    // end of chunk addresses
     for(auto idx = start; idx < end; idx++)
     {
