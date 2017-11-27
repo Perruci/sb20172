@@ -2,13 +2,20 @@
 
 Carregador::Carregador(int argc, char* argv[])
 {
-    this->objFileName = std::string(argv[1]);
+    this->setFileNames(argv);
     this->loadInstructions();
 }
 
 Carregador::~Carregador()
 {
 
+}
+
+void Carregador::setFileNames(char* argv[])
+{
+    this->objFileName = std::string(argv[1]);
+    this->outputFileName = string_ops::setOutputExtension(this->objFileName, ".im");
+    std::cout << this->outputFileName << '\n';
 }
 
 void Carregador::loadInstructions(std::string tablePath)
@@ -37,7 +44,7 @@ void Carregador::loadInstructions(std::string tablePath)
         /* Push to instructionList */
         this->instructionList.push_back(instruction);
     }
-    this->printIntstructions();
+    // this->printIntstructions();
 }
 
 /* Imprime Tokens guardades em tokensList */
