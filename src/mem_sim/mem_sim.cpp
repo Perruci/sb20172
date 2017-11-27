@@ -1,8 +1,8 @@
 #include "../../include/mem_sim/mem_sim.h"
 
-MemorySimulator::MemorySimulator()
+MemorySimulator::MemorySimulator(int argc, char* argv[])
 {
-
+    this->init(argc, argv);
 }
 
 MemorySimulator::~MemorySimulator()

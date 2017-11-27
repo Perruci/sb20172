@@ -9,8 +9,9 @@ class Carregador
 {
 private:
     std::vector<Mnemonic> instructionList;
+    std::string objFileName;
 public:
-    Carregador();
+    Carregador(int, char**);
     ~Carregador();
     void loadInstructions(std::string tablePath = "tables/instructions.txt");
     void printIntstructions();

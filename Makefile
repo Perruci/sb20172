@@ -13,12 +13,12 @@ main:
 
 simulador:
 	clear
-	$(CC) -o $(TARGET_CARREGADOR) carregador.cpp $(SRC) $(CFLAGS) $(HEADERS)
+	$(CC) -o $(TARGET_CARREGADOR) main_carregador.cpp $(SRC) $(CFLAGS) $(HEADERS)
 
 all:
 	clear
 	$(CC) -o $(TARGET_MONTADOR) main.cpp $(SRC) $(CFLAGS) $(HEADERS)
-	$(CC) -o $(TARGET_CARREGADOR) carregador.cpp $(SRC) $(CFLAGS) $(HEADERS)
+	$(CC) -o $(TARGET_CARREGADOR) main_carregador.cpp $(SRC) $(CFLAGS) $(HEADERS)
 
 clean:
 	rm -f montador carregador

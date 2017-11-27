@@ -3,8 +3,7 @@
 
 int main(int argc, char* argv[])
 {
-    MemorySimulator sim;
-    sim.init(argc, argv);
-    Carregador carregador;
+    Carregador carregador(argc, argv);
+    MemorySimulator sim(argc, argv);
     return 0;
 }

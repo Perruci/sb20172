@@ -29,7 +29,7 @@ private:
     void print_chunks();
     std::vector<MemoryChunk> memory_chunk_pile;
 public:
-    MemorySimulator();
+    MemorySimulator(int, char**);
     ~MemorySimulator();
 
     bool init(int, char**);

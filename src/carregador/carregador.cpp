@@ -1,7 +1,8 @@
 #include "../../include/carregador/carregador.h"
 
-Carregador::Carregador()
+Carregador::Carregador(int argc, char* argv[])
 {
+    this->objFileName = std::string(argv[1]);
     this->loadInstructions();
 }
 
