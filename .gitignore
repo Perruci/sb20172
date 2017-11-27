@@ -35,3 +35,7 @@
 *.pre
 *.mcr
 *.o
+*.im
+/montador
+/ligador
+/carregador
