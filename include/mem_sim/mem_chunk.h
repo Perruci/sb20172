@@ -41,6 +41,7 @@ public:
         for(auto const mem_space : this->memory_pile)
             std::cout << mem_space.get_address() << " " << mem_space.load() << '\n';
     }
+    inline int get_size() const{return this->size;};
 };
 
 #endif

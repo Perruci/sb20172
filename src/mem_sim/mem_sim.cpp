@@ -123,7 +123,7 @@ void MemorySimulator::print_chunks()
     // Loop through each element and print it out
     for(auto idx = 0; idx < this->num_chunks; idx++)
     {
-        std::cout << "Chunk " << idx+1 << '\n';
+        std::cout << "Chunk " << idx+1 << ", Size: " << this->memory_chunk_pile[idx].get_size() <<'\n';
         this->memory_chunk_pile[idx].print();
     }
 }
