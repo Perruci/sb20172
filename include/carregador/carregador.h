@@ -16,17 +16,23 @@ private:
     std::vector<Mnemonic> instructionList; // Instruction list for decoding
     std::vector<MemorySpace> memoryBuffer; // Memory Spaces buffer to create subChunks
     std::vector<MemoryChunk> subChunks;    // List of minimal chunks for deployment
+    void createSubChunk();
 public:
     Carregador(int, char**);
     ~Carregador();
     void openIOFiles();
     void processObjectFile();
+    /* MemorySpace */
     void addToBuffer(int, int);
+    /* MemoryChunk */
     bool assignChunk(int);
+    void print_subChunks();
+    /* Mnemonic */
     int identifyInstruction(int);
+    void printIntstructions();
+    /* Generic functions */
     void setFileNames(char**);
     void loadInstructions(std::string tablePath = "tables/instructions.txt");
-    void printIntstructions();
 };
 
 #endif

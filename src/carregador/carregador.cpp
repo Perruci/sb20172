@@ -29,7 +29,13 @@ void Carregador::processObjectFile()
     unsigned int current_address = 0;
     while (this->fileObject >> word)
     {
+        // Get integer opcode
         int value = std::stoi(word);
+        // Add instruction to buffer
+        this->addToBuffer(current_address, value);
+        // Update address
+        current_address++;
+        /* instruction processing */
         // get index for instruction, -1 for not instruction
         int idx = this->identifyInstruction(value);
         // If has found the stop instruction, its surely a data declaration
@@ -50,12 +56,15 @@ void Carregador::processObjectFile()
             expected_args = this->instructionList[idx].noperands;
             // If instruction is stop, update found stop
             if(this->instructionList[idx].nome == "stop")
+            {
+                this->createSubChunk(); // create a subChunk with instructions untill stop
                 foundStop = true;
+            }
         }
-        this->addToBuffer(current_address, value);
-        current_address++;
     }
-    this->assignChunk(current_address);
+    this->createSubChunk();
+    std::cout << "Sub Chunks Print!" << '\n';
+    this->print_subChunks();
 }
 
 void Carregador::addToBuffer(int address, int value)
@@ -64,16 +73,37 @@ void Carregador::addToBuffer(int address, int value)
     this->memoryBuffer.push_back(mem_space);
 }
 
+/* Creates a minimal subChunk based on what is stored in memoryBuffer.
+Then resets the memory buffer */
+void Carregador::createSubChunk()
+{
+    assignChunk(this->memoryBuffer.size());
+    this->memoryBuffer.clear();
+}
+
+/* Assign a new subChunk  based on its size */
 bool Carregador::assignChunk(int size)
 {
+    // Create auxiliar chunk variable () always starts on 0
     MemoryChunk aux_chunk(0, size);
+    // Assign memoryBuffer to aux_chunk
     bool no_overflow = aux_chunk.assign(this->memoryBuffer);
-    if(no_overflow)
-        aux_chunk.print();
-    else
-        std::cout << "Error, internal chunk out of memory" << '\n';
+    // Detect overflow
+    if(!no_overflow)
+        std::cout << "Error, carregador internal chunk out of memory" << '\n';
+    // Add a new subChunk
     this->subChunks.push_back(aux_chunk);
     return no_overflow;
+}
+
+void Carregador::print_subChunks()
+{
+    // Loop through each element and print it out
+    for(auto idx = 0; idx < this->subChunks.size(); idx++)
+    {
+        std::cout << "Chunk " << idx+1 << ", Size: " << this->subChunks[idx].get_size() <<'\n';
+        this->subChunks[idx].print();
+    }
 }
 
 int Carregador::identifyInstruction(int value)
