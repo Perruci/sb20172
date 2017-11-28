@@ -24,8 +24,9 @@ void Carregador::openIOFiles()
 void Carregador::processObjectFile()
 {
     std::string word;
-    int expected_args = 0;
     bool foundStop = false;
+    unsigned int expected_args = 0;
+    unsigned int current_address = 0;
     while (this->fileObject >> word)
     {
         int value = std::stoi(word);
@@ -51,7 +52,28 @@ void Carregador::processObjectFile()
             if(this->instructionList[idx].nome == "stop")
                 foundStop = true;
         }
+        this->addToBuffer(current_address, value);
+        current_address++;
     }
+    this->assignChunk(current_address);
+}
+
+void Carregador::addToBuffer(int address, int value)
+{
+    MemorySpace mem_space(address, value);
+    this->memoryBuffer.push_back(mem_space);
+}
+
+bool Carregador::assignChunk(int size)
+{
+    MemoryChunk aux_chunk(0, size);
+    bool no_overflow = aux_chunk.assign(this->memoryBuffer);
+    if(no_overflow)
+        aux_chunk.print();
+    else
+        std::cout << "Error, internal chunk out of memory" << '\n';
+    this->subChunks.push_back(aux_chunk);
+    return no_overflow;
 }
 
 int Carregador::identifyInstruction(int value)

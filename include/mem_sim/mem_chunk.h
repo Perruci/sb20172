@@ -35,6 +35,16 @@ public:
         this->size = size;
         this->initMemoryPile();
     };
+    inline bool assign(std::vector<MemorySpace> mem_buffer)
+    {
+        if(mem_buffer.size() > this->size)
+            return false;
+        for(auto idx = 0; idx < mem_buffer.size(); idx++)
+        {
+            this->memory_pile[idx] = mem_buffer[idx];
+        }
+        return true;
+    };
     inline void print() const
     {
         // Loop through each element and print it out
