@@ -5,6 +5,7 @@
 #include "../montador/mnemonic.h"
 #include "../mem_sim/mem_space.h"
 #include "../mem_sim/mem_chunk.h"
+#include "../mem_sim/mem_sim.h"
 
 class Carregador
 {
@@ -16,16 +17,13 @@ private:
     std::vector<Mnemonic> instructionList; // Instruction list for decoding
     std::vector<MemorySpace> memoryBuffer; // Memory Spaces buffer to create subChunks
     std::vector<MemoryChunk> subChunks;    // List of minimal chunks for deployment
-    void createSubChunk();
-public:
-    Carregador(int, char**);
-    ~Carregador();
     void openIOFiles();
-    void processObjectFile();
     /* MemorySpace */
     void addToBuffer(int, int);
     /* MemoryChunk */
+    void createSubChunk();
     bool assignChunk(int);
+    int totalChunkSize();
     void print_subChunks();
     /* Mnemonic */
     int identifyInstruction(int);
@@ -33,6 +31,11 @@ public:
     /* Generic functions */
     void setFileNames(char**);
     void loadInstructions(std::string tablePath = "tables/instructions.txt");
+public:
+    Carregador(int, char**);
+    ~Carregador();
+    void processObjectFile();
+    bool fitChunks(MemorySimulator&);
 };
 
 #endif

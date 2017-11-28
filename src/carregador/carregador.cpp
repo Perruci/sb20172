@@ -5,7 +5,6 @@ Carregador::Carregador(int argc, char* argv[])
     this->setFileNames(argv);
     this->loadInstructions();
     this->openIOFiles();
-    this->processObjectFile();
 }
 
 Carregador::~Carregador()
@@ -19,6 +18,16 @@ void Carregador::openIOFiles()
 {
     this->fileObject.open(objFileName);
     this->fileOutput.open(outputFileName);
+}
+
+bool Carregador::fitChunks(MemorySimulator& mem_sim)
+{
+    if(mem_sim.freeMemorySize() < this->totalChunkSize())
+    {
+        std::cout << "OUT OF MEMORY - YOUR PROGRAM WILL NOT BE LOADED" << '\n';
+        return false;
+    }
+    return true;
 }
 
 void Carregador::processObjectFile()
@@ -94,6 +103,17 @@ bool Carregador::assignChunk(int size)
     // Add a new subChunk
     this->subChunks.push_back(aux_chunk);
     return no_overflow;
+}
+
+int Carregador::totalChunkSize()
+{
+    int totalSize = 0;
+    // Loop through each element and print it out
+    for(auto idx = 0; idx < this->subChunks.size(); idx++)
+    {
+        totalSize += this->subChunks[idx].get_size();
+    }
+    return totalSize;
 }
 
 void Carregador::print_subChunks()

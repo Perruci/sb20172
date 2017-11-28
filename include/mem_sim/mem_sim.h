@@ -33,6 +33,8 @@ public:
     ~MemorySimulator();
 
     bool init(int, char**);
+    int freeMemorySize();
+    inline std::vector<MemoryChunk> get_chunks() {return this->memory_chunk_pile;};
 };
 
 #endif

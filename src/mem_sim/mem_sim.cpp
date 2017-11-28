@@ -33,7 +33,7 @@ bool MemorySimulator::process_arguments(int argc, char* argv[])
 
     this->initMemoryChunks();
 
-    this->print_chunks();
+    // this->print_chunks();
 
     return true;
 }
@@ -45,6 +45,16 @@ void MemorySimulator::initMemoryChunks()
         MemoryChunk chunk(this->chunk_addresses[idx], this->chunk_sizes[idx]);
         this->memory_chunk_pile.push_back(chunk);
     }
+}
+
+int MemorySimulator::freeMemorySize()
+{
+    int freeSpace = 0;
+    for(auto idx = 0; idx < this->num_chunks; idx++)
+    {
+        freeSpace += this->memory_chunk_pile[idx].getFreeSpace();
+    }
+    return freeSpace;
 }
 
 /* Arguments Processing ------------------------------------ */

@@ -16,6 +16,7 @@ class MemoryChunk
 private:
     int initial_address;
     int size;
+    int freeSize;
     std::vector<MemorySpace> memory_pile;
     /* Initialize memory_pile Memory Spaces with zero value */
     inline void initMemoryPile()
@@ -33,6 +34,7 @@ public:
     {
         this->initial_address = address;
         this->size = size;
+        this->freeSize = size;
         this->initMemoryPile();
     };
     inline bool assign(std::vector<MemorySpace> mem_buffer)
@@ -42,6 +44,7 @@ public:
         for(auto idx = 0; idx < mem_buffer.size(); idx++)
         {
             this->memory_pile[idx] = mem_buffer[idx];
+            this->freeSize -= 1;
         }
         return true;
     };
@@ -52,6 +55,7 @@ public:
             std::cout << mem_space.get_address() << " " << mem_space.load() << '\n';
     }
     inline int get_size() const{return this->size;};
+    inline int getFreeSpace() const{return this->freeSize;};
 };
 
 #endif
