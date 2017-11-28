@@ -31,16 +31,23 @@ void Carregador::processObjectFile()
         int value = std::stoi(word);
         // get index for instruction, -1 for not instruction
         int idx = this->identifyInstruction(value);
-        if(idx == -1 | expected_args > 0 | foundStop)
+        // If has found the stop instruction, its surely a data declaration
+        if(foundStop)
         {
-            std::cout << value << " " << "Data" <<'\n';
-            // If a variable was expected subtract one from expected_args, keeps in 0, otherwise
-            expected_args = expected_args <= 0? 0 : expected_args-1;
+            std::cout << value << "\t" << "Data" <<'\n';
         }
+        // If the opcode is not identified, or an argument is expected, is an argument
+        else if (idx == -1 | expected_args > 0)
+        {
+            expected_args = expected_args - 1;
+            std::cout << value << "\t" << "Argument" <<'\n';
+        }
+        // If neither, must be an instruction
         else
         {
-            std::cout << value << " " << this->instructionList[idx].nome <<'\n';
+            std::cout << value << "\t" << this->instructionList[idx].nome <<'\n';
             expected_args = this->instructionList[idx].noperands;
+            // If instruction is stop, update found stop
             if(this->instructionList[idx].nome == "stop")
                 foundStop = true;
         }
