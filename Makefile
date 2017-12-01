@@ -22,7 +22,7 @@ carregador:
 
 all:
 	clear
-	$(CC) -o $(TARGET_M) main_ligador.cpp $(SRC) $(CFLAGS) $(HEADERS)
+	$(CC) -o $(TARGET_M) main.cpp $(SRC) $(CFLAGS) $(HEADERS)
 	$(CC) -o $(TARGET_L) main_ligador.cpp $(SRC) $(CFLAGS) $(HEADERS)
 	$(CC) -o $(TARGET_C) main_carregador.cpp $(SRC) $(CFLAGS) $(HEADERS)
 
