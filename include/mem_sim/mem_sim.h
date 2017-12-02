@@ -29,12 +29,12 @@ private:
     void print_chunks();
     std::vector<MemoryChunk> memory_chunk_pile;
 public:
-    MemorySimulator(int, char**);
+    MemorySimulator();
     ~MemorySimulator();
 
     bool init(int, char**);
     int freeMemorySize();
-    inline std::vector<MemoryChunk> get_chunks() {return this->memory_chunk_pile;};
+    bool assignToMemory(MemoryChunk*);
 };
 
 #endif

@@ -5,6 +5,7 @@ Carregador::Carregador(int argc, char* argv[])
     this->setFileNames(argv);
     this->loadInstructions();
     this->openIOFiles();
+    this->objectChunkCreated = false;
 }
 
 Carregador::~Carregador()
@@ -12,6 +13,8 @@ Carregador::~Carregador()
     // Sem preocupações com o close
     fileObject.close();
     fileOutput.close();
+    if(objectChunkCreated)
+        delete this->objectChunk;
 }
 
 void Carregador::openIOFiles()
@@ -23,6 +26,12 @@ void Carregador::openIOFiles()
 bool Carregador::fitChunks(MemorySimulator& mem_sim)
 {
     if(mem_sim.freeMemorySize() < this->totalChunkSize())
+    {
+        std::cout << "OUT OF MEMORY - YOUR PROGRAM WILL NOT BE LOADED" << '\n';
+        return false;
+    }
+    // Try to assign to memory
+    if(!mem_sim.assignToMemory(this->objectChunk))
     {
         std::cout << "OUT OF MEMORY - YOUR PROGRAM WILL NOT BE LOADED" << '\n';
         return false;
@@ -66,14 +75,13 @@ void Carregador::processObjectFile()
             // If instruction is stop, update found stop
             if(this->instructionList[idx].nome == "stop")
             {
-                this->createSubChunk(); // create a subChunk with instructions untill stop
                 foundStop = true;
             }
         }
     }
-    this->createSubChunk();
-    std::cout << "Sub Chunks Print!" << '\n';
-    this->print_subChunks();
+    this->createObjectChunk();
+    std::cout << "Object file chunk Print!" << '\n';
+    this->print_objectChunk();
 }
 
 void Carregador::addToBuffer(int address, int value)
@@ -82,48 +90,36 @@ void Carregador::addToBuffer(int address, int value)
     this->memoryBuffer.push_back(mem_space);
 }
 
-/* Creates a minimal subChunk based on what is stored in memoryBuffer.
+/* Creates a minimal objectChunk based on what is stored in memoryBuffer.
 Then resets the memory buffer */
-void Carregador::createSubChunk()
+void Carregador::createObjectChunk()
 {
     assignChunk(this->memoryBuffer.size());
     this->memoryBuffer.clear();
 }
 
-/* Assign a new subChunk  based on its size */
+/* Assign a new objectChunk  based on its size */
 bool Carregador::assignChunk(int size)
 {
     // Create auxiliar chunk variable () always starts on 0
-    MemoryChunk aux_chunk(0, size);
+    this->objectChunk = new MemoryChunk(0, size);
     // Assign memoryBuffer to aux_chunk
-    bool no_overflow = aux_chunk.assign(this->memoryBuffer);
+    bool no_overflow = this->objectChunk->assign(this->memoryBuffer);
     // Detect overflow
     if(!no_overflow)
         std::cout << "Error, carregador internal chunk out of memory" << '\n';
-    // Add a new subChunk
-    this->subChunks.push_back(aux_chunk);
     return no_overflow;
 }
 
 int Carregador::totalChunkSize()
 {
-    int totalSize = 0;
-    // Loop through each element and print it out
-    for(auto idx = 0; idx < this->subChunks.size(); idx++)
-    {
-        totalSize += this->subChunks[idx].get_size();
-    }
-    return totalSize;
+    return this->objectChunk->get_size();
 }
 
-void Carregador::print_subChunks()
+void Carregador::print_objectChunk()
 {
-    // Loop through each element and print it out
-    for(auto idx = 0; idx < this->subChunks.size(); idx++)
-    {
-        std::cout << "Chunk " << idx+1 << ", Size: " << this->subChunks[idx].get_size() <<'\n';
-        this->subChunks[idx].print();
-    }
+    std::cout << "Object file chunk:" << '\n';
+    this->objectChunk->print();
 }
 
 int Carregador::identifyInstruction(int value)

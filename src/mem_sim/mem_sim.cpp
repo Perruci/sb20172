@@ -1,8 +1,8 @@
 #include "../../include/mem_sim/mem_sim.h"
 
-MemorySimulator::MemorySimulator(int argc, char* argv[])
+MemorySimulator::MemorySimulator()
 {
-    this->init(argc, argv);
+
 }
 
 MemorySimulator::~MemorySimulator()
@@ -55,6 +55,11 @@ int MemorySimulator::freeMemorySize()
         freeSpace += this->memory_chunk_pile[idx].getFreeSpace();
     }
     return freeSpace;
+}
+
+bool MemorySimulator::assignToMemory(MemoryChunk* memory_request_)
+{
+    return true;
 }
 
 /* Arguments Processing ------------------------------------ */

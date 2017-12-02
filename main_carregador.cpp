@@ -4,8 +4,10 @@
 int main(int argc, char* argv[])
 {
     Carregador carregador(argc, argv);
-    MemorySimulator sim(argc, argv);
+    MemorySimulator sim;
+    if(!sim.init(argc, argv))
+        return EXIT_FAILURE;
     carregador.processObjectFile();
     carregador.fitChunks(sim);
-    return 0;
+    return EXIT_SUCCESS;
 }

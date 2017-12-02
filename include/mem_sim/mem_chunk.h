@@ -37,6 +37,7 @@ public:
         this->freeSize = size;
         this->initMemoryPile();
     };
+    /* Assign a vector of memory spaces into the chunk */
     inline bool assign(std::vector<MemorySpace> mem_buffer)
     {
         if(mem_buffer.size() > this->size)
@@ -56,6 +57,7 @@ public:
     }
     inline int get_size() const{return this->size;};
     inline int getFreeSpace() const{return this->freeSize;};
+    inline std::vector<MemorySpace> getMemoryPile(){return this->memory_pile;};
 };
 
 #endif

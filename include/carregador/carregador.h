@@ -15,16 +15,17 @@ private:
     std::ifstream fileObject;
     std::ofstream fileOutput;
     std::vector<Mnemonic> instructionList; // Instruction list for decoding
-    std::vector<MemorySpace> memoryBuffer; // Memory Spaces buffer to create subChunks
-    std::vector<MemoryChunk> subChunks;    // List of minimal chunks for deployment
+    std::vector<MemorySpace> memoryBuffer; // Memory Spaces buffer to create objectChunk
+    MemoryChunk* objectChunk;    // Object file chunk
+    bool objectChunkCreated;
     void openIOFiles();
     /* MemorySpace */
     void addToBuffer(int, int);
     /* MemoryChunk */
-    void createSubChunk();
+    void createObjectChunk();
     bool assignChunk(int);
     int totalChunkSize();
-    void print_subChunks();
+    void print_objectChunk();
     /* Mnemonic */
     int identifyInstruction(int);
     void printIntstructions();
