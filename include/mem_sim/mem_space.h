@@ -23,6 +23,7 @@ public:
     inline int load()                   const {return this->value;};
     inline void store(int value)        {this->set_value(value);};
     inline int get_address()            const {return this->address;};
+    inline int get_value()              const {return this->value;};
 
     int address;
     int value;

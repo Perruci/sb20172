@@ -57,8 +57,30 @@ int MemorySimulator::freeMemorySize()
     return freeSpace;
 }
 
-bool MemorySimulator::assignToMemory(MemoryChunk* memory_request_)
+bool MemorySimulator::assignToMemory(MemoryChunk* chunk_request_)
 {
+    std::vector<MemorySpace> memory_pile = chunk_request_->getMemoryPile();
+    unsigned int occupied_mem = 0;
+    unsigned int requested_mem = memory_pile.size();
+    // Iterate on each memory chunk
+    for(auto idx = 0; idx < this->num_chunks; idx++)
+    {
+        /* Create subvector to match memory chunks sizes */
+        auto start = memory_pile.begin();
+        auto end = this->chunk_sizes[idx] < requested_mem?
+                   start + this->chunk_sizes[idx] :
+                   start + requested_mem;;
+
+        // Create a subvector to fit each chunk
+        std::vector<MemorySpace> aux_buffer(start, end);
+        /* Assign subvetor to chunk */
+        this->memory_chunk_pile[idx].assignValues(aux_buffer);
+        /* updates requested and occupied_mem */
+        occupied_mem += end - start;
+        requested_mem -= end - start;
+        // erase values from memory pile
+        memory_pile.erase(start, end);
+    }
     return true;
 }
 

@@ -49,6 +49,18 @@ public:
         }
         return true;
     };
+    /* Assign values from a vector of memory spaces */
+    inline bool assignValues(std::vector<MemorySpace> mem_buffer)
+    {
+        if(mem_buffer.size() > this->size)
+            return false;
+        for(auto idx = 0; idx < mem_buffer.size(); idx++)
+        {
+            this->memory_pile[idx].store(mem_buffer[idx].load());
+            this->freeSize -= 1;
+        }
+        return true;
+    };
     inline void print() const
     {
         // Loop through each element and print it out

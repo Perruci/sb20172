@@ -26,7 +26,6 @@ private:
     std::vector<int> chunk_addresses;
     /* Memory Chunks */
     void initMemoryChunks();
-    void print_chunks();
     std::vector<MemoryChunk> memory_chunk_pile;
 public:
     MemorySimulator();
@@ -35,6 +34,7 @@ public:
     bool init(int, char**);
     int freeMemorySize();
     bool assignToMemory(MemoryChunk*);
+    void print_chunks();
 };
 
 #endif

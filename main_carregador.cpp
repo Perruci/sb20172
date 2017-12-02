@@ -8,6 +8,8 @@ int main(int argc, char* argv[])
     if(!sim.init(argc, argv))
         return EXIT_FAILURE;
     carregador.processObjectFile();
-    carregador.fitChunks(sim);
+    if(!carregador.fitChunks(sim))
+        return EXIT_FAILURE;
+    sim.print_chunks();
     return EXIT_SUCCESS;
 }
