@@ -14,16 +14,16 @@
 class MemoryChunk
 {
 private:
-    int initial_address;
-    int size;
+    unsigned int initial_address;
+    unsigned int size;
     int freeSize;
     std::vector<MemorySpace> memory_pile;
     /* Initialize memory_pile Memory Spaces with zero value */
     inline void initMemoryPile()
     {
-        auto start_address  = this->initial_address;
-        auto end_address    = start_address + this->size;
-        for(auto adress = start_address; adress < end_address; adress++)
+        unsigned int start_address  = this->initial_address;
+        unsigned int end_address    = start_address + this->size;
+        for(unsigned int adress = start_address; adress < end_address; adress++)
         {
             MemorySpace mem_space(adress, 0);
             memory_pile.push_back(mem_space);
@@ -42,7 +42,7 @@ public:
     {
         if(mem_buffer.size() > this->size)
             return false;
-        for(auto idx = 0; idx < mem_buffer.size(); idx++)
+        for(unsigned int idx = 0; idx < mem_buffer.size(); idx++)
         {
             this->memory_pile[idx] = mem_buffer[idx];
             this->freeSize -= 1;
@@ -54,7 +54,7 @@ public:
     {
         if(mem_buffer.size() > this->size)
             return false;
-        for(auto idx = 0; idx < mem_buffer.size(); idx++)
+        for(unsigned int idx = 0; idx < mem_buffer.size(); idx++)
         {
             this->memory_pile[idx].store(mem_buffer[idx].load());
             this->freeSize -= 1;

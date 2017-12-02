@@ -62,7 +62,7 @@ void Carregador::processObjectFile()
             std::cout << value << "\t" << "Data" <<'\n';
         }
         // If the opcode is not identified, or an argument is expected, is an argument
-        else if (idx == -1 | expected_args > 0)
+        else if ((idx == -1) | (expected_args > 0))
         {
             expected_args = expected_args - 1;
             std::cout << value << "\t" << "Argument" <<'\n';
@@ -122,9 +122,9 @@ void Carregador::print_objectChunk()
     this->objectChunk->print();
 }
 
-int Carregador::identifyInstruction(int value)
+int Carregador::identifyInstruction(unsigned int value)
 {
-    for(int idx = 0; idx < this->instructionList.size(); idx++)
+    for(unsigned int idx = 0; idx < this->instructionList.size(); idx++)
     {
         if(value == this->instructionList[idx].opcode)
             return idx;

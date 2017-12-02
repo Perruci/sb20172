@@ -27,7 +27,7 @@ private:
     int totalChunkSize();
     void print_objectChunk();
     /* Mnemonic */
-    int identifyInstruction(int);
+    int identifyInstruction(unsigned int);
     void printIntstructions();
     /* Generic functions */
     void setFileNames(char**);

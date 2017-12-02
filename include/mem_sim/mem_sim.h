@@ -22,8 +22,8 @@ private:
     void print_chunk_sizes();
     void print_chunk_addresses();
     int num_chunks;
-    std::vector<int> chunk_sizes;
-    std::vector<int> chunk_addresses;
+    std::vector<unsigned int> chunk_sizes;
+    std::vector<unsigned int> chunk_addresses;
     /* Memory Chunks */
     void initMemoryChunks();
     std::vector<MemoryChunk> memory_chunk_pile;
