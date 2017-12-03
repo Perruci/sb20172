@@ -30,6 +30,8 @@ private:
     std::ofstream fileOutput;
     std::vector<rotulo> rotulosList;                //Lista de rotulos
 
+    int quantArgs;                                  //guarda o argc pra facilitar mais na frente
+
     std::vector<int> outputList;                    //vetor que contem a lista de saida
 
     bool processArguments(int, char**);
@@ -38,6 +40,9 @@ public:
     Ligador(int, char**);
     ~Ligador();
     bool run();
+    void applyCorrection();
+
+    void printOutput();
 
     //Rotulos
     void printRotulos();

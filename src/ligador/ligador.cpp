@@ -3,6 +3,7 @@
 Ligador::Ligador(int argc, char* argv[])
 {
     this->processArguments(argc, argv);
+    this->quantArgs = argc;
 }
 
 Ligador::~Ligador()
@@ -16,7 +17,10 @@ bool Ligador::run()
     for(size_t i = 1; i < this->nomes.size(); i++){
         this->processFile(i);
     }
-    this->printRotulos();
+    //this->printRotulos();
+    this->applyCorrection();
+    this->printOutput();
+    //this->printRotulos();
 }
 
 bool Ligador::processArguments(int argc, char* argv[])
@@ -172,12 +176,16 @@ bool Ligador::processFile(size_t file_idx)
                         this->rotulosList.push_back(aux);
                     }
                 }
+            }
 
             //Se for arquivo, temos:
             if(word == "T:"){
-
+                //vai pegando as proximas words e colocando elas na saida final
+                while(linestream >> word){
+                    int numero = std::stoi(word,nullptr);
+                    this->outputList.push_back(numero);
+                }
             }
-        }
         }
         //std::cout << line << '\n';
         
@@ -206,5 +214,70 @@ void Ligador::printRotulos(){
             std::cout << this->rotulosList[i].addressList[j] << " ";
         }
         std::cout << std::endl << std::endl;
+    }
+    std::cout << "A saida por enquanto é ";
+    for(size_t i = 0; i < this->outputList.size(); i++){
+        std::cout << this->outputList[i] << " ";
+    }
+    std::cout<< std::endl;
+}
+
+void Ligador::applyCorrection(){
+    bool EnderecoDoRotulo = false;
+    int position = 0;
+    for(size_t i = 0; i < this->outputList.size(); i++){
+        EnderecoDoRotulo = false;
+        //So altera o valor se o mapa de bits apontar que naquele endereco tem um valor realocavel
+        if(this->mapa_de_bits[i] == 1){
+            //Percorre a lista de rotulos para ver se algum dos rotulos eh utilizado naquele endereco
+            for(size_t j = 0; j < this->rotulosList.size(); j++){
+                //percorre a lista de enderecos dos rotulos
+                for(size_t k = 0; k < this-> rotulosList[j].addressList.size(); k++){
+                    if(this->rotulosList[j].addressList[k] == position){
+                        EnderecoDoRotulo = true;
+                        this->outputList[i] = this->outputList[i] + this->rotulosList[j].address;
+                    }
+                }
+            }
+            //Se nao for endereco de uso de nenhum rotulo, atualiza com o fator de correcao do modulo
+            if(!EnderecoDoRotulo){
+                //Se for um endereço que ainda esta no primeiro modulo não soma nada
+                if(position < this->tamanhos[0]){
+
+                } 
+                //Se for um endereço do segundo modulo, aplica o fator de correçao
+                if((this->quantArgs > 2) && (position >= this->tamanhos[0]) && (position < (this->tamanhos[0] + this->tamanhos[1]))){
+                    this->outputList[i] = this->outputList[i] + this->tamanhos[0];  
+                } 
+                //Se for um endereço do terceiro modulo, aplica o fator de correçao
+                if((this->quantArgs > 3) && (position >= (this->tamanhos[0] + this->tamanhos[1])) && (position < (this->tamanhos[0] + this->tamanhos[1] + this->tamanhos[2]))){
+                    this->outputList[i] = this->outputList[i] + this->tamanhos[0] + this->tamanhos[1];  
+                }
+            }
+        }
+        position++;
+    }
+    //std::cout << "A quantidade de argumentos é " << this->quantArgs << std::endl;
+}
+
+void Ligador::printOutput(){
+    std::string nome = string_ops::tira_path(this->nomes[1]);
+    this->fileOutput.open(nome);
+    int tam = 0;
+
+    for(size_t i = 0; i < this->tamanhos.size(); i++){
+        tam = tam + this->tamanhos[i];
+    }
+
+    this->fileOutput << "H: " << nome << std::endl;
+    this->fileOutput << "H: " << tam << std::endl;
+    this->fileOutput << "H: ";
+    for(size_t i = 0; i < this->mapa_de_bits.size(); i++){
+        this->fileOutput << this->mapa_de_bits[i];
+    }
+    this->fileOutput << std::endl;
+    this->fileOutput << "T: ";
+    for (size_t i = 0; i < this->outputList.size(); i++){
+        this->fileOutput << this->outputList[i] << " ";
     }
 }
