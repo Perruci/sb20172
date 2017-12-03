@@ -1,16 +1,16 @@
-MOD_A: BEGIN
-SECTION TEXT
-	MOD_B: EXTERN
-	PUBLIC FAT
-	PUBLIC N
-	INPUT N
-	LOAD N
-	FAT: SUB ONE
-	JMPZ FIM
-	JMP MOD_B
-	FIM: OUTPUT N
-	STOP
-SECTION DATA
-	N: SPACE
-	ONE: CONST 1
-END
+mod_a: begin
+section text
+	mod_b: extern
+	public fat
+	public n
+	input n
+	load n
+	fat: sub one
+	jmpz fim
+	jmp mod_b
+	fim: output n
+	stop
+section data
+	n: space
+	one: const 1
+end

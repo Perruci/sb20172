@@ -62,6 +62,15 @@ namespace string_ops
         remove(fileName.c_str());
 
     }
+
+    inline std::string tira_path(std::string FileName){
+        std::size_t pos = FileName.rfind('/');
+        std::string nome = FileName.substr(pos + 1);
+
+        nome = string_ops::trunca_nome(nome, '.');
+
+        return nome;
+    }
 }
 
 #endif
