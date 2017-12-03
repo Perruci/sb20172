@@ -813,9 +813,12 @@ void Montagem::trataRotulo_altoNivel(int contador_tokens, std::string word, int 
 //Imprime a lista de saida para o arquivo final
 void Montagem::printOutput(){
 
+    std::string Nome;
+    Nome = string_ops::tira_path(this->inputFileName);
+
     //Se for executado como trabalho 2, imprime cabeçalho
     if ((this->operationMode == TRABALHO_2_ARQ_UNICO) || (this->operationMode == TRABALHO_2_ARQS_MULT)){
-        this->fileOutput << "H: " << this->inputFileName << std::endl;
+        this->fileOutput << "H: " << Nome << std::endl;
         
         this->fileOutput << "H: " << this->outputFileList.size() << std::endl;
         
@@ -849,9 +852,6 @@ void Montagem::printOutput(){
     }
     this->fileOutput << std::endl;
 
-    for(size_t i = 0; i < rotulosList.size(); i++){
-        std::cout << rotulosList[i].name << std::endl;
-    }
 
     /*
     for(size_t i = 0; i < this->rotulosList.size() ; i++){
