@@ -7,6 +7,8 @@
 #include <string>
 #include <sstream>
 
+#include "../montador/string_ops.h"
+
 class Ligador
 {
 private:
@@ -16,8 +18,9 @@ private:
     std::vector<int> mb2;                           //¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨ segundo ¨¨¨¨¨¨¨¨
     std::vector<int> mb3;                           //¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨ terceiro¨¨¨¨¨¨¨¨
 
+    bool processArguments(int, char**);
 public:
-    Ligador();
+    Ligador(int, char**);
     ~Ligador();
 
 };

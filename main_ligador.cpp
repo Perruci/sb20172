@@ -8,8 +8,8 @@
 
 int main (int argc, char* argv[]){
 
-    Ligador ligador;
+    Ligador ligador(argc, argv);
 
     //ligador.teste();
-    
+
 }
