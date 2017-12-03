@@ -4,7 +4,7 @@ TARGET_C=carregador
 CC=g++ -std=c++11 -Wall
 CFLAGS=-I
 HEADERS=include/
-SRC=src/carregador/*.cpp src/ligador/*.cpp src/montador/*.cpp src/mem_sim/*.cpp
+SRC=src/carregador/*.cpp src/ligador/*.cpp src/montador/*.cpp src/mem_sim/*.cpp src/exec_sim/*.cpp
 
 default: all
 
@@ -27,4 +27,4 @@ all:
 	$(CC) -o $(TARGET_C) main_carregador.cpp $(SRC) $(CFLAGS) $(HEADERS)
 
 clean:
-	rm -f montador ligador
+	rm -f montador ligador carregador
