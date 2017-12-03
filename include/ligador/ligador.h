@@ -9,6 +9,14 @@
 
 #include "../montador/string_ops.h"
 
+//Cria uma estrutura que funcionará como a classe de rotulos 
+struct rotulo {
+  std::string name;
+  int address = 0;                      //indica o endereço onde ele foi declarado
+  std::vector<int> addressList;     //indica os endereços onde ele foi chamado
+  int modulo = 0;  //indica qual o modulo em que o rotulo foi definido
+} ;
+
 class Ligador
 {
 private:
@@ -20,6 +28,7 @@ private:
     std::vector<int> mb3;                           //¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨ terceiro¨¨¨¨¨¨¨¨
     std::ifstream fileInput;
     std::ofstream fileOutput;
+    std::vector<rotulo> rotulosList;                //Lista de rotulos
 
     std::vector<int> outputList;                    //vetor que contem a lista de saida
 
@@ -30,6 +39,10 @@ public:
     ~Ligador();
     bool run();
 
+    //Rotulos
+    void printRotulos();
 };
 
 #endif
+
+
