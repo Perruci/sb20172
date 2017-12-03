@@ -9,7 +9,7 @@
 int main (int argc, char* argv[]){
 
     Ligador ligador(argc, argv);
-
+    ligador.run();
     //ligador.teste();
 
 }

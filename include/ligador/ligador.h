@@ -17,11 +17,15 @@ private:
     std::vector<int> mb1;                           //mapa de bits do primeiro arquivo
     std::vector<int> mb2;                           //¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨ segundo ¨¨¨¨¨¨¨¨
     std::vector<int> mb3;                           //¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨ terceiro¨¨¨¨¨¨¨¨
+    std::ifstream fileInput;
+    std::ofstream fileOutput;
 
     bool processArguments(int, char**);
+    bool processFile(size_t);
 public:
     Ligador(int, char**);
     ~Ligador();
+    bool run();
 
 };
 
