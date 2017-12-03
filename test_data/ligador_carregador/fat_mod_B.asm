@@ -1,13 +1,13 @@
-MOD_B: BEGIN
-SECTION TEXT
-	FAT: EXTERN
-	N: EXTERN
-	PUBLIC MOD_B
-	STORE AUX
-	MULT N
-	STORE N
-	LOAD AUX
-	JMP FAT
-SECTION DATA
-	AUX: SPACE
-END
+mod_b: begin
+section text
+	fat: extern
+	n: extern
+	public mod_b
+	store aux
+	mult n
+	store n
+	load aux
+	jmp fat
+section data
+	aux: space
+end

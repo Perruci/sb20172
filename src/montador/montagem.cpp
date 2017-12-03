@@ -116,12 +116,21 @@ bool Montagem::run(std::vector<int> adjusts_vec, int operation){
             if (word == "public"){
                 //pega o próximo token que é o token que irá conter o nome do rotulo público
                 lineStream >> word;
+                bool rotuloJaExiste = false;
 
-                // Cria um novo rótulo e adiciona-o a lista
-                Rotulo rotulo (word, false, 0);
-                rotulo.isPublic = true;
-                this->rotulosList.push_back(rotulo);
-                
+                for(size_t i = 0; i < this->rotulosList.size(); i++){
+                    if (word ==  this->rotulosList[i].name){
+                        this->rotulosList[i].isPublic = true;
+                        rotuloJaExiste = true;
+                    }
+                }
+                if(!rotuloJaExiste){
+                    // Cria um novo rótulo e adiciona-o a lista
+                    Rotulo rotulo (word, false, 0);
+                    rotulo.isPublic = true;
+                    this->rotulosList.push_back(rotulo);
+                }
+
                 continue;
             }
 
@@ -807,21 +816,44 @@ void Montagem::printOutput(){
     //Se for executado como trabalho 2, imprime cabeçalho
     if ((this->operationMode == TRABALHO_2_ARQ_UNICO) || (this->operationMode == TRABALHO_2_ARQS_MULT)){
         this->fileOutput << "H: " << this->inputFileName << std::endl;
-        this->fileOutput << "H: tam: " << this->outputFileList.size() << std::endl;
-        this->fileOutput << "H: mapa_bits: ";
+        
+        this->fileOutput << "H: " << this->outputFileList.size() << std::endl;
+        
+        this->fileOutput << "H: ";
         for(size_t i = 0; i < this->mapaDeBits.size(); i++){
             this->fileOutput << mapaDeBits[i];
         }
         this->fileOutput << std::endl;
+        
+        for(size_t i = 0; i < this->rotulosList.size(); i++){
+            if(this->rotulosList[i].isExtern){
+                this->fileOutput << "H: TU: " << this->rotulosList[i].name << ": ";
+                for(size_t j = 0; j < this->rotulosList[i].addressList.size(); j++){
+                this->fileOutput << this->rotulosList[i].addressList[j] << " ";
+                }   
+                this->fileOutput << std::endl;
+            }
+        }
+
+        for (size_t i = 0; i < this->rotulosList.size(); i++){
+            if(this->rotulosList[i].isPublic){
+                this->fileOutput << "H: TD: " << this->rotulosList[i].name << ": " << this->rotulosList[i].address << std::endl;
+            }
+        }
     }
 
-
+    this-> fileOutput << "T: ";
     for(size_t i = 0; i < outputFileList.size(); i++)
     {
         this->fileOutput << outputFileList[i] << ' ';
     }
     this->fileOutput << std::endl;
 
+    for(size_t i = 0; i < rotulosList.size(); i++){
+        std::cout << rotulosList[i].name << std::endl;
+    }
+
+    /*
     for(size_t i = 0; i < this->rotulosList.size() ; i++){
         if(this->rotulosList[i].isBegin){
             std::cout << "O rotulo de inicio do modulo é: " << this->rotulosList[i].name << std::endl;
@@ -845,6 +877,7 @@ void Montagem::printOutput(){
         std::cout << this->mapaDeBits[i];
     }
     std::cout << std::endl;
+    */
 }
 
 //Metodo para pegar os valores das diretivas
