@@ -3,9 +3,9 @@
 
 #include "../montador/string_ops.h"
 #include "../montador/mnemonic.h"
-#include "../mem_sim/mem_space.h"
-#include "../mem_sim/mem_chunk.h"
-#include "../mem_sim/mem_sim.h"
+#include "mem_sim/mem_space.h"
+#include "mem_sim/mem_chunk.h"
+#include "mem_sim/mem_sim.h"
 
 class Carregador
 {

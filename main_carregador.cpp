@@ -1,5 +1,5 @@
-#include "include/mem_sim/mem_sim.h"
 #include "include/carregador/carregador.h"
+#include "include/carregador/mem_sim/mem_sim.h"
 
 int main(int argc, char* argv[])
 {
