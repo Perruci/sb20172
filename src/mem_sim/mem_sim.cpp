@@ -1,4 +1,4 @@
-#include "../../include/mem_sim/mem_sim.h"
+#include "../../include/carregador/mem_sim/mem_sim.h"
 
 MemorySimulator::MemorySimulator()
 {
