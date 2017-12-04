@@ -90,7 +90,7 @@ bool Montagem::run(std::vector<int> adjusts_vec, int operation){
                 this->argumentIsVector = true;
                 continue;
             }
-            
+
             //Testa as palavras chaves do trabalho 2
             if (word == "begin"){
                 haveBegin = true;
@@ -357,7 +357,7 @@ void Montagem::chamada_de_rotulo(std::string token, int &endereco, int contador_
         {
             if(this->rotulosList[i].alreadyDeclared)
             {
-                //Coloca na lista desse rotulo aquele endereco 
+                //Coloca na lista desse rotulo aquele endereco
                 this->rotulosList[i].addressList.push_back(endereco);
 
                 //se for uma constante, adiciona o valor dela no arquivo final e incrementa o contador de enderecos
@@ -370,7 +370,7 @@ void Montagem::chamada_de_rotulo(std::string token, int &endereco, int contador_
                     //Se for uma constante e em algum lugar tentaram pular para esse label,isso eh um pulo invalido e para secao invalida
                     if((this->outputFileList[endereco-1] == 5) || (this->outputFileList[endereco-1] == 6) ||
                     (this->outputFileList[endereco-1] == 7) || (this->outputFileList[endereco-1] == 8)){
-                        if(this->operationMode == TRABALHO_1){ 
+                        if(this->operationMode == TRABALHO_1){
                             std::cout << "Erro semântico na linha " << getOriginalLine(contador_de_linhas) << ", tentativa de pulo para uma constante\n";
                         }
                     }
@@ -819,21 +819,21 @@ void Montagem::printOutput(){
     //Se for executado como trabalho 2, imprime cabeçalho
     if ((this->operationMode == TRABALHO_2_ARQ_UNICO) || (this->operationMode == TRABALHO_2_ARQS_MULT)){
         this->fileOutput << "H: " << Nome << std::endl;
-        
+
         this->fileOutput << "H: " << this->outputFileList.size() << std::endl;
-        
+
         this->fileOutput << "H: ";
         for(size_t i = 0; i < this->mapaDeBits.size(); i++){
             this->fileOutput << mapaDeBits[i];
         }
         this->fileOutput << std::endl;
-        
+
         for(size_t i = 0; i < this->rotulosList.size(); i++){
             if(this->rotulosList[i].isExtern){
                 this->fileOutput << "H: TU: " << this->rotulosList[i].name << ": ";
                 for(size_t j = 0; j < this->rotulosList[i].addressList.size(); j++){
                 this->fileOutput << this->rotulosList[i].addressList[j] << " ";
-                }   
+                }
                 this->fileOutput << std::endl;
             }
         }
@@ -956,7 +956,7 @@ void Montagem::rotuloAtualizaEnds (int contador_de_linhas){
             for (size_t j = 0; j < this->rotulosList[i].addressList.size(); j++){
                 //se o rotulo for uma const, atualiza com o valor da constante
                 if (this->rotulosList[i].isConst){
-                    this->outputFileList[this->rotulosList[i].addressList[j]] = this->rotulosList[i].constValue;
+                    this->outputFileList[this->rotulosList[i].addressList[j]] = this->rotulosList[i].address;
                     //Se a const for 0 e a instrucao que chama ela for div, erro
                     if ((this->rotulosList[i].constValue == 0) && (this->outputFileList[this->rotulosList[i].addressList[j] - 1] == 4)){
                         if(this->operationMode == TRABALHO_1){
