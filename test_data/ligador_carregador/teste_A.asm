@@ -1,7 +1,7 @@
 mod_a: begin
 section text
-extern y
-extern mod_b
+y: extern
+mod_b: extern
 public mod_a
 public x
 input x
