@@ -1,5 +1,5 @@
 # Software Básico 2017/2
-# Trabalho 1
+# Trabalho 2
 
 ## Autores:
 * Pedro Perruci (14/0158596)
