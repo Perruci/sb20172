@@ -1,12 +1,14 @@
-;Código fonte do módulo B:
-MOD_B: BEGIN
-VAL: EXTERN
-L1: EXTERN
-PUBLIC Y
-PUBLIC MOD_B
-OUTPUT Y
-OUTPUT VAL
-OUTPUT Y + 2
-JMP L1
-Y: SPACE 3
-END
+
+mod_b: begin
+section text
+val: extern
+l1: extern
+public y
+public mod_b
+output y
+output val
+output y + 2
+jmp l1
+section data
+y: space 3
+end
