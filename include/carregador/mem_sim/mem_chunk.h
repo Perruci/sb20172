@@ -78,6 +78,7 @@ public:
         for(auto const mem_space : this->memory_pile)
             std::cout << mem_space.get_address() << " " << mem_space.load() << '\n';
     }
+    inline int get_initial_address() const {return this->initial_address;};
     inline int get_size() const{return this->size;};
     inline int getFreeSpace() const{return this->freeSize;};
     inline std::vector<MemorySpace> getMemoryPile(){return this->memory_pile;};

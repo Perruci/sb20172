@@ -57,7 +57,7 @@ int MemorySimulator::freeMemorySize()
     return freeSpace;
 }
 
-bool MemorySimulator::assignToMemory(MemoryChunk* chunk_request_)
+bool MemorySimulator::assignToMemory(MemoryChunk* chunk_request_, std::vector<int> relativeAddresses)
 {
     std::vector<MemorySpace> memory_pile = chunk_request_->getMemoryPile();
     unsigned int occupied_mem = 0;
@@ -69,10 +69,21 @@ bool MemorySimulator::assignToMemory(MemoryChunk* chunk_request_)
         auto start = memory_pile.begin();
         auto end = this->chunk_sizes[idx] < requested_mem?
                    start + this->chunk_sizes[idx] :
-                   start + requested_mem;;
+                   start + requested_mem;
 
         // Create a subvector to fit each chunk
         std::vector<MemorySpace> aux_buffer(start, end);
+        /* --- Adjust relative addresses --- */
+        for(size_t address_idx = 0; address_idx < aux_buffer.size(); address_idx++)
+        {
+            // If address_idx is listed on relativeAddresses, it must be adjusted
+            if ( std::find(relativeAddresses.begin(), relativeAddresses.end(), address_idx) != relativeAddresses.end() )
+            {
+                int old_address = aux_buffer[address_idx].load();
+                int adjusted_address = old_address + this->memory_chunk_pile[idx].get_initial_address();
+                aux_buffer[address_idx].store(adjusted_address);
+            }
+        }
         /* Assign subvetor to chunk */
         this->memory_chunk_pile[idx].assignValues(aux_buffer);
         /* updates requested and occupied_mem */

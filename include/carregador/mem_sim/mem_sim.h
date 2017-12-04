@@ -7,6 +7,7 @@
 #include <sstream>
 #include <string.h>
 #include <vector>
+#include <algorithm>
 
 #include "mem_space.h"
 #include "mem_chunk.h"
@@ -33,7 +34,7 @@ public:
 
     bool init(int, char**);
     int freeMemorySize();
-    bool assignToMemory(MemoryChunk*);
+    bool assignToMemory(MemoryChunk*, std::vector<int>);
     void print_chunks();
 };
 

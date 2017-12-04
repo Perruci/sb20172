@@ -30,7 +30,7 @@ bool Carregador::fitChunks(MemorySimulator& mem_sim)
         return false;
     }
     // Try to assign to memory
-    if(!mem_sim.assignToMemory(this->objectChunk))
+    if(!mem_sim.assignToMemory(this->objectChunk, this->relativeAddresses))
     {
         std::cout << "OUT OF MEMORY - YOUR PROGRAM WILL NOT BE LOADED" << '\n';
         return false;
