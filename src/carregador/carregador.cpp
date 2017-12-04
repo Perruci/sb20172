@@ -69,19 +69,19 @@ void Carregador::processHeaders()
         if(line_count == 0)
         {
             this->executableName = word; // get executable name
-            std::cout << "[Carregador] Executable name: " << this->executableName << '\n';
+            // std::cout << "[Carregador] Executable name: " << this->executableName << '\n';
         }
         if(line_count == 1)
         {
             this->executableSize = std::stoi(word); // get executableSize
-            std::cout << "[Carregador] Executable size: " << this->executableSize << '\n';
+            // std::cout << "[Carregador] Executable size: " << this->executableSize << '\n';
         }
         if(line_count == 2)
         {
             this->set_bitmapRelatives(word);
-            std::cout << "Relative addresses: " << '\n';
-            for(size_t idx = 0; idx < this->relativeAddresses.size(); idx++)
-                std::cout << this->relativeAddresses[idx] << '\n';
+            // std::cout << "Relative addresses: " << '\n';
+            // for(size_t idx = 0; idx < this->relativeAddresses.size(); idx++)
+                // std::cout << this->relativeAddresses[idx] << '\n';
         }
         line_count++;
     }
@@ -97,7 +97,7 @@ void Carregador::processObjectFile()
      */
     std::string line;
     getline(this->fileObject, line);
-    std::cout << "Text line: "<< line << '\n';
+    // std::cout << "Text line: "<< line << '\n';
     // Iterate on each word
     std::stringstream lineStream (line);
     std::string word;
@@ -113,8 +113,8 @@ void Carregador::processObjectFile()
         current_address++;
     }
     this->createObjectChunk();
-    std::cout << "Object file chunk Print!" << '\n';
-    this->print_objectChunk();
+    // std::cout << "Object file chunk Print!" << '\n';
+    // this->print_objectChunk();
 }
 
 void Carregador::addToBuffer(int address, int value)
@@ -160,5 +160,5 @@ void Carregador::setFileNames(char* argv[])
 {
     this->objFileName = std::string(argv[1]);
     this->outputFileName = string_ops::setOutputExtension(this->objFileName, ".im");
-    std::cout << this->outputFileName << '\n';
+    // std::cout << this->outputFileName << '\n';
 }

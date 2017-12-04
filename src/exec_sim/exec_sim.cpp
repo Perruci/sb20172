@@ -61,75 +61,75 @@ size_t ExecutionSimulator::processInstruction(std::vector<MemorySpace> obejct_me
     size_t ret_address = program_counter;
     if(this->last_instruction == "add")
     {
-        std::cout << "Add: " << this->reg_accum << " + " << obejct_memory[arguments_list[0]].load() << '\n';
+        // std::cout << "Add: " << this->reg_accum << " + " << obejct_memory[arguments_list[0]].load() << '\n';
         this->reg_accum += obejct_memory[arguments_list[0]].load();
     }
     if(this->last_instruction == "sub")
     {
-        std::cout << "Sub: " << this->reg_accum << " - " << obejct_memory[arguments_list[0]].load() << '\n';
+        // std::cout << "Sub: " << this->reg_accum << " - " << obejct_memory[arguments_list[0]].load() << '\n';
         this->reg_accum -= obejct_memory[arguments_list[0]].load();
     }
 
     if(this->last_instruction == "mult")
     {
-        std::cout << "Mult: " << this->reg_accum << " * " << obejct_memory[arguments_list[0]].load() << '\n';
+        // std::cout << "Mult: " << this->reg_accum << " * " << obejct_memory[arguments_list[0]].load() << '\n';
         this->reg_accum *= obejct_memory[arguments_list[0]].load();
     }
 
     if(this->last_instruction == "div")
     {
-        std::cout << "Div: " << this->reg_accum << " / " << obejct_memory[arguments_list[0]].load() << '\n';
+        // std::cout << "Div: " << this->reg_accum << " / " << obejct_memory[arguments_list[0]].load() << '\n';
         this->reg_accum /= obejct_memory[arguments_list[0]].load();
     }
 
     if(this->last_instruction == "jmp")
     {
-        std::cout << "Jump to " << this->arguments_list[0] << '\n';
+        // std::cout << "Jump to " << this->arguments_list[0] << '\n';
         ret_address = arguments_list[0] - 1; // adjust for program_counter--
     }
 
     if(this->last_instruction == "jmpn")
     {
-        std::cout << "Jump if 0 > " << this->reg_accum << " to " << this->arguments_list[0] << '\n';
+        // std::cout << "Jump if 0 > " << this->reg_accum << " to " << this->arguments_list[0] << '\n';
         if(this->reg_accum < 0)
             ret_address = arguments_list[0] - 1; // adjust for program_counter--
     }
 
     if(this->last_instruction == "jmpp")
     {
-        std::cout << "Jump if 0 < " << this->reg_accum << " to " << this->arguments_list[0] << '\n';
+        // std::cout << "Jump if 0 < " << this->reg_accum << " to " << this->arguments_list[0] << '\n';
         if(this->reg_accum > 0)
             ret_address = arguments_list[0] - 1; // adjust for program_counter--
     }
 
     if(this->last_instruction == "jmpz")
     {
-        std::cout << "Jump if 0 == " << this->reg_accum << " to " << this->arguments_list[0] << '\n';
+        // std::cout << "Jump if 0 == " << this->reg_accum << " to " << this->arguments_list[0] << '\n';
         if(this->reg_accum == 0)
             ret_address = arguments_list[0] - 1; // adjust for program_counter--
     }
 
     if(this->last_instruction == "copy")
     {
-        std::cout << "Copy: [" << this->arguments_list[0] << "] [" << this->arguments_list[1] << "]" << '\n';
+        // std::cout << "Copy: [" << this->arguments_list[0] << "] [" << this->arguments_list[1] << "]" << '\n';
         obejct_memory[arguments_list[0]].store(object_memory[arguments_list[1]].load());
     }
 
     if(this->last_instruction == "load")
     {
-        std::cout << "Load: " << "Accum <- " << object_memory[arguments_list[0]].load() << '\n';
+        // std::cout << "Load: " << "Accum <- " << object_memory[arguments_list[0]].load() << '\n';
         this->reg_accum = object_memory[arguments_list[0]].load();
     }
 
     if(this->last_instruction == "store")
     {
-        std::cout << "Store: [" <<  this->arguments_list[0] << "] <- Accum = " << this->reg_accum << '\n';
+        // std::cout << "Store: [" <<  this->arguments_list[0] << "] <- Accum = " << this->reg_accum << '\n';
         object_memory[this->arguments_list[0]].store(this->reg_accum);
     }
 
     if(this->last_instruction == "input")
     {
-        std::cout << "[" << this->arguments_list[0] << "] <- Input" << '\n';
+        // std::cout << "[" << this->arguments_list[0] << "] <- Input" << '\n';
         int input;
         std::cin >> input;
         object_memory[this->arguments_list[0]].store(input);
@@ -137,12 +137,14 @@ size_t ExecutionSimulator::processInstruction(std::vector<MemorySpace> obejct_me
 
     if(this->last_instruction == "output")
     {
-        std::cout << "Output <- " << "[" << this->arguments_list[0] << "]" << '\n';
+        // std::cout << "Output <- " << "[" << this->arguments_list[0] << "]" << '\n';
         std::cout << this->object_memory[this->arguments_list[0]].load() << '\n';
     }
 
     if(this->last_instruction == "stop")
-        std::cout << "Stop! " << '\n';
+    {
+        // std::cout << "Stop! " << '\n';
+    }
 
     arguments_list.clear();
     return ret_address;
