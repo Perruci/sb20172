@@ -2,9 +2,9 @@ mod_b: begin
 section text
 public mod_b
 public y
-extern x
-extern fim
-extern result
+x: extern
+fim: extern
+result: extern
 load x
 add y
 mult dois
