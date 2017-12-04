@@ -38,6 +38,14 @@
         {
             "taskName": "ligador",
             "problemMatcher": []
+        },
+        {
+            "taskName": "carregador",
+            "problemMatcher": []
+        },
+        {
+            "taskName": "all",
+            "problemMatcher": []
         }
     ]
 }
