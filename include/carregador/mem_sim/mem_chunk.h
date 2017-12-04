@@ -61,6 +61,17 @@ public:
         }
         return true;
     };
+    /*
+        Ajust relative addresses according to a vector of relative indexes and initial_address
+     */
+    inline void adjustRelatives(std::vector<int> relative_idx)
+    {
+        for(size_t idx = 0; idx < relative_idx.size(); idx++)
+        {
+            int adjustedValue = this->memory_pile[idx].load() +  this->initial_address;
+            this->memory_pile[idx].store(adjustedValue);
+        }
+    };
     inline void print() const
     {
         // Loop through each element and print it out

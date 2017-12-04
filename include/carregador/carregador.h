@@ -9,6 +9,8 @@
 class Carregador
 {
 private:
+    std::string executableName;
+    int executableSize;
     std::string objFileName;
     std::string outputFileName;
     std::ifstream fileObject;
@@ -16,7 +18,10 @@ private:
     std::vector<MemorySpace> memoryBuffer; // Memory Spaces buffer to create objectChunk
     MemoryChunk* objectChunk;    // Object file chunk
     bool objectChunkCreated;
+    /* File setup */
     void openIOFiles();
+    void set_bitmapRelatives(std::string);
+    std::vector<int> relativeAddresses;
     /* MemorySpace */
     void addToBuffer(int, int);
     /* MemoryChunk */
@@ -30,6 +35,7 @@ private:
 public:
     Carregador(int, char**);
     ~Carregador();
+    void processHeaders();
     void processObjectFile();
     bool fitChunks(MemorySimulator&);
     inline std::vector<MemorySpace> getMemoryInstructions(){return this->objectChunk->getMemoryPile();};

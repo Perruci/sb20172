@@ -38,11 +38,74 @@ bool Carregador::fitChunks(MemorySimulator& mem_sim)
     return true;
 }
 
+void Carregador::set_bitmapRelatives(std::string bitmapString)
+{
+    for(size_t bit_count = 0; bit_count < bitmapString.size(); bit_count++)
+    {
+        if(bitmapString[bit_count] == '1')
+        {
+            this->relativeAddresses.push_back(bit_count);
+        }
+    }
+}
+
+void Carregador::processHeaders()
+{
+    /*
+        Process Headers
+        Composed of tree lines:
+        H: File_Name
+        H: [file_size](int)
+        H: [relatives bitmap]
+     */
+    std::string word;
+    std::string line;
+    size_t line_count = 0;
+    while(line_count < 3 && getline(this->fileObject, line))
+    {
+        std::stringstream lineStream (line);
+        lineStream >> word; // get label
+        if(word != "H:")
+            std::cout << "[Carregador] Unexpected Header format: " << word  << '\n';
+        lineStream >> word;
+        if(line_count == 0)
+        {
+            this->executableName = word; // get executable name
+            std::cout << "[Carregador] Executable name: " << this->executableName << '\n';
+        }
+        if(line_count == 1)
+        {
+            this->executableSize = std::stoi(word); // get executableSize
+            std::cout << "[Carregador] Executable size: " << this->executableSize << '\n';
+        }
+        if(line_count == 2)
+        {
+            this->set_bitmapRelatives(word);
+            std::cout << "Relative addresses: " << '\n';
+            for(size_t idx = 0; idx < this->relativeAddresses.size(); idx++)
+                std::cout << this->relativeAddresses[idx] << '\n';
+        }
+        line_count++;
+    }
+    // Continue to process object file
+}
+
 void Carregador::processObjectFile()
 {
+    this->processHeaders();
+
+    /*
+        Process Text Section
+     */
+    std::string line;
+    getline(this->fileObject, line);
+    std::cout << "Text line: "<< line << '\n';
+    // Iterate on each word
+    std::stringstream lineStream (line);
     std::string word;
+    lineStream >> word; // get label
     unsigned int current_address = 0;
-    while (this->fileObject >> word)
+    while (lineStream >> word)
     {
         // Get integer opcode
         int value = std::stoi(word);
