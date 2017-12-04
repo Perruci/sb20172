@@ -14,7 +14,6 @@ private:
     std::string objFileName;
     std::string outputFileName;
     std::ifstream fileObject;
-    std::ofstream fileOutput;
     std::vector<MemorySpace> memoryBuffer; // Memory Spaces buffer to create objectChunk
     MemoryChunk* objectChunk;    // Object file chunk
     bool objectChunkCreated;
@@ -38,6 +37,7 @@ public:
     void processHeaders();
     void processObjectFile();
     bool fitChunks(MemorySimulator&);
+    inline std::string getOutputFileName(){return this->outputFileName;};
     inline std::vector<MemorySpace> getMemoryInstructions(){return this->objectChunk->getMemoryPile();};
 };
 

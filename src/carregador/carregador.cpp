@@ -11,7 +11,6 @@ Carregador::~Carregador()
 {
     // Sem preocupações com o close
     fileObject.close();
-    fileOutput.close();
     if(objectChunkCreated)
         delete this->objectChunk;
 }
@@ -19,7 +18,6 @@ Carregador::~Carregador()
 void Carregador::openIOFiles()
 {
     this->fileObject.open(objFileName);
-    this->fileOutput.open(outputFileName);
 }
 
 bool Carregador::fitChunks(MemorySimulator& mem_sim)

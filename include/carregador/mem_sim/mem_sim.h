@@ -36,6 +36,7 @@ public:
     int freeMemorySize();
     bool assignToMemory(MemoryChunk*, std::vector<int>);
     void print_chunks();
+    void writeMemoryToFile(std::string);
 };
 
 #endif

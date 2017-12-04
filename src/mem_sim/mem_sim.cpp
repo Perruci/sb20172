@@ -180,3 +180,17 @@ void MemorySimulator::print_chunks()
         this->memory_chunk_pile[idx].print();
     }
 }
+
+void MemorySimulator::writeMemoryToFile(std::string fileName)
+{
+    // Redirects std::cout to file
+    // inspired by https://stackoverflow.com/questions/10150468/how-to-redirect-cin-and-cout-to-files
+    std::ofstream fileOutput(fileName);
+    std::streambuf *coutbuf = std::cout.rdbuf(); //save old buf
+    std::cout.rdbuf(fileOutput.rdbuf()); //redirect std::cout to file!
+
+    this->print_chunks();
+
+    std::cout.rdbuf(coutbuf); //reset to standard output again
+    fileOutput.close();
+}

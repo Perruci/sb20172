@@ -12,7 +12,7 @@ int main(int argc, char* argv[])
     carregador.processObjectFile();
     if(!carregador.fitChunks(mem_sim))
         return EXIT_FAILURE;
-    mem_sim.print_chunks();
+    mem_sim.writeMemoryToFile(carregador.getOutputFileName());
     // Run simulation
     exec_sim.simulate(carregador.getMemoryInstructions());
     return EXIT_SUCCESS;
