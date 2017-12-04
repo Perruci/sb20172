@@ -21,7 +21,7 @@ void ExecutionSimulator::simulate(std::vector<MemorySpace> obj_memory)
         // If has found the stop instruction, its surely a data declaration
         if(foundStop)
         {
-            std::cout << value << "\t" << "Data" <<'\n';
+            // std::cout << value << "\t" << "Data" <<'\n';
         }
         // If the opcode is not identified, or an argument is expected, is an argument
         else
@@ -29,13 +29,13 @@ void ExecutionSimulator::simulate(std::vector<MemorySpace> obj_memory)
             if ((idx == -1) | (expected_args > 0))
             {
                 expected_args = expected_args - 1;
-                std::cout << value << "\t" << "Argument" <<'\n';
+                // std::cout << value << "\t" << "Argument" <<'\n';
                 arguments_list.push_back(value);
             }
             // If neither, must be an instruction
             else
             {
-                std::cout << value << "\t" << this->instructionList[idx].nome <<'\n';
+                // std::cout << value << "\t" << this->instructionList[idx].nome <<'\n';
                 this->last_instruction = this->instructionList[idx].nome;
                 expected_args = this->instructionList[idx].noperands;
                 // If instruction is stop, update found stop
@@ -61,52 +61,52 @@ size_t ExecutionSimulator::processInstruction(std::vector<MemorySpace> obejct_me
     size_t ret_address = program_counter;
     if(this->last_instruction == "add")
     {
-        std::cout << "Add " << this->reg_accum << " " << obejct_memory[arguments_list[0]].load() << '\n';
+        std::cout << "Add: " << this->reg_accum << " + " << obejct_memory[arguments_list[0]].load() << '\n';
         this->reg_accum += obejct_memory[arguments_list[0]].load();
     }
     if(this->last_instruction == "sub")
     {
-        std::cout << "Sub " << this->reg_accum << " " << obejct_memory[arguments_list[0]].load() << '\n';
+        std::cout << "Sub: " << this->reg_accum << " - " << obejct_memory[arguments_list[0]].load() << '\n';
         this->reg_accum -= obejct_memory[arguments_list[0]].load();
     }
 
     if(this->last_instruction == "mult")
     {
-        std::cout << "Mult " << this->reg_accum << " " << obejct_memory[arguments_list[0]].load() << '\n';
+        std::cout << "Mult: " << this->reg_accum << " * " << obejct_memory[arguments_list[0]].load() << '\n';
         this->reg_accum *= obejct_memory[arguments_list[0]].load();
     }
 
     if(this->last_instruction == "div")
     {
-        std::cout << "Div " << this->reg_accum << " " << obejct_memory[arguments_list[0]].load() << '\n';
+        std::cout << "Div: " << this->reg_accum << " / " << obejct_memory[arguments_list[0]].load() << '\n';
         this->reg_accum /= obejct_memory[arguments_list[0]].load();
     }
 
     if(this->last_instruction == "jmp")
     {
-        std::cout << "Jump " << this->arguments_list[0] << '\n';
-        ret_address = arguments_list[0];
+        std::cout << "Jump to " << this->arguments_list[0] << '\n';
+        ret_address = arguments_list[0] - 1; // adjust for program_counter--
     }
 
     if(this->last_instruction == "jmpn")
     {
         std::cout << "Jump if 0 > " << this->reg_accum << " to " << this->arguments_list[0] << '\n';
         if(this->reg_accum < 0)
-            ret_address = this->arguments_list[0];
+            ret_address = arguments_list[0] - 1; // adjust for program_counter--
     }
 
     if(this->last_instruction == "jmpp")
     {
         std::cout << "Jump if 0 < " << this->reg_accum << " to " << this->arguments_list[0] << '\n';
         if(this->reg_accum > 0)
-            ret_address = this->arguments_list[0];
+            ret_address = arguments_list[0] - 1; // adjust for program_counter--
     }
 
     if(this->last_instruction == "jmpz")
     {
         std::cout << "Jump if 0 == " << this->reg_accum << " to " << this->arguments_list[0] << '\n';
         if(this->reg_accum == 0)
-            ret_address = this->arguments_list[0];
+            ret_address = arguments_list[0] - 1; // adjust for program_counter--
     }
 
     if(this->last_instruction == "copy")
@@ -123,7 +123,7 @@ size_t ExecutionSimulator::processInstruction(std::vector<MemorySpace> obejct_me
 
     if(this->last_instruction == "store")
     {
-        std::cout << "Store: [" <<  this->arguments_list[0] << "] <- Accum" << '\n';
+        std::cout << "Store: [" <<  this->arguments_list[0] << "] <- Accum = " << this->reg_accum << '\n';
         object_memory[this->arguments_list[0]].store(this->reg_accum);
     }
 
