@@ -11,9 +11,9 @@ Ligador::~Ligador()
 
 }
 
-bool Ligador::run()
+void Ligador::run()
 {
-    std::cout << "Ligador run!" << '\n';
+    // std::cout << "Ligador run!" << '\n';
     for(size_t i = 1; i < this->nomes.size(); i++){
         this->processFile(i);
     }
@@ -48,15 +48,15 @@ bool Ligador::processFile(size_t file_idx)
         std::cout << "[Ligador][processFile] file_idx inválido" << '\n';
         return false;
     }
-    std::cout << "Reading file: " << this->nomes[file_idx] << '\n';
-    
+    // std::cout << "Reading file: " << this->nomes[file_idx] << '\n';
+
     // Open filestream
     this->fileInput.open(this->nomes[file_idx]);
-    
+
     std::string line;
     std::string word;
     int contador_de_linhas = 0;
-    
+
     while(getline(this->fileInput, line))
     {
         bool rotuloExistente = false;
@@ -66,7 +66,7 @@ bool Ligador::processFile(size_t file_idx)
             continue;
         }
         std::stringstream linestream (line);
-        
+
         //Vamos iterar a linha analisando palavra a palavra
         while(linestream >> word){
             //Se for cabeçalho, temos:
@@ -188,7 +188,7 @@ bool Ligador::processFile(size_t file_idx)
             }
         }
         //std::cout << line << '\n';
-        
+
     }
     this->fileInput.close();
     return true;
@@ -244,14 +244,14 @@ void Ligador::applyCorrection(){
                 //Se for um endereço que ainda esta no primeiro modulo não soma nada
                 if(position < this->tamanhos[0]){
 
-                } 
+                }
                 //Se for um endereço do segundo modulo, aplica o fator de correçao
                 if((this->quantArgs > 2) && (position >= this->tamanhos[0]) && (position < (this->tamanhos[0] + this->tamanhos[1]))){
-                    this->outputList[i] = this->outputList[i] + this->tamanhos[0];  
-                } 
+                    this->outputList[i] = this->outputList[i] + this->tamanhos[0];
+                }
                 //Se for um endereço do terceiro modulo, aplica o fator de correçao
                 if((this->quantArgs > 3) && (position >= (this->tamanhos[0] + this->tamanhos[1])) && (position < (this->tamanhos[0] + this->tamanhos[1] + this->tamanhos[2]))){
-                    this->outputList[i] = this->outputList[i] + this->tamanhos[0] + this->tamanhos[1];  
+                    this->outputList[i] = this->outputList[i] + this->tamanhos[0] + this->tamanhos[1];
                 }
             }
         }
